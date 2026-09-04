@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Collect APK artifacts
+        id: apks
+        run: |
+          mkdir -p release-assets
+          # Find every APK in the repository (e.g. apks/**, app/build/outputs/apk/**)
+          find . -path ./.git -prune -o -type f -name "*.apk" -print 2>/dev/null | while IFS= read -r f; do
+            echo "Found: $f"
+            cp "$f" release-assets/
+          done
+          echo "count=$(ls -1 release-assets 2>/dev/null | wc -l)" >> "$GITHUB_OUTPUT"
+          echo "APKs collected: $(ls -1 release-assets 2>/dev/null | wc -l)"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: release-assets/*.apk
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
