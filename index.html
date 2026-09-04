@@ -1,0 +1,1146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ANI-KUTA — Download</title>
+  <meta name="description" content="ANI-KUTA — a clean, extension-based video content app for Android. Demo page.">
+  <meta name="theme-color" content="#0A0A0F">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta property="og:title" content="ANI-KUTA — Download">
+  <meta property="og:description" content="ANI-KUTA — a clean, extension-based video content app for Android. Demo page.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://confused-creature-180.github.io/ANI-KUTA/">
+  <meta property="og:image" content="og.png">
+  <meta name="twitter:card" content="summary">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       ANI-KUTA landing page — standalone build (Task 3)
+       Spec: Task 2-a design brief (see worklog.md). Dark, violet/magenta + teal.
+       ========================================================================== */
+    :root {
+      color-scheme: dark;
+      --bg: #0A0A0F;
+      --surface: #14141B;
+      --surface-glass: rgba(20, 20, 27, 0.72);
+      --border: #23232E;
+      --border-hover: #35354A;
+      --text-1: #F2F2F7;
+      --text-2: #A0A0B0;
+      --text-3: #7E7E90;
+      --accent-1: #8B5CF6;
+      --accent-1-bright: #A78BFA;
+      --accent-2: #D946EF;
+      --accent-3: #2DD4BF;
+      --gradient-cta: linear-gradient(135deg, #7C3AED, #C026D3);
+      --gradient-text: linear-gradient(90deg, #C4B5FD, #F0ABFC);
+      --glow-violet: rgba(139, 92, 246, 0.22);
+      --glow-magenta: rgba(217, 70, 239, 0.14);
+      --ak-ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-mono-ani: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--bg);
+      scrollbar-gutter: stable;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text-1);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: clip;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, p {
+      margin: 0;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent-1-bright);
+      outline-offset: 2px;
+    }
+
+    /* --- shell / layout ----------------------------------------------------- */
+    .ak-shell {
+      --ak-font-display: var(--font-display);
+      --ak-font-body: var(--font-body);
+      --ak-font-mono: var(--font-mono-ani);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      min-height: 100svh;
+    }
+
+    .ak-container {
+      width: 100%;
+      max-width: 1120px;
+      margin-inline: auto;
+      padding-inline: 24px;
+    }
+
+    /* --- ambient decoration -------------------------------------------------- */
+    .ak-ambient {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .ak-orb {
+      position: absolute;
+      z-index: -1;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+    }
+
+    .ak-orb-a {
+      top: -180px;
+      left: -160px;
+      width: 640px;
+      height: 640px;
+      background: radial-gradient(circle closest-side, var(--glow-violet), rgba(139, 92, 246, 0));
+      opacity: 0.5;
+      animation: ak-drift-a 18s ease-in-out infinite alternate;
+    }
+
+    .ak-orb-b {
+      right: -140px;
+      bottom: -160px;
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle closest-side, var(--glow-magenta), rgba(217, 70, 239, 0));
+      opacity: 0.35;
+      animation: ak-drift-b 24s ease-in-out infinite alternate;
+    }
+
+    /* --- nav ------------------------------------------------------------------ */
+    .ak-nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: var(--surface-glass);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ak-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .ak-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ak-brand svg {
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+
+    .ak-brand-name {
+      font-family: var(--ak-font-display);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--text-1);
+    }
+
+    .ak-gh {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 16px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      color: var(--text-2);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.18s var(--ak-ease), background-color 0.18s var(--ak-ease), border-color 0.18s var(--ak-ease);
+    }
+
+    .ak-gh svg {
+      width: 16px;
+      height: 16px;
+      flex: none;
+    }
+
+    .ak-gh:hover {
+      color: var(--text-1);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border);
+    }
+
+    /* --- hero ------------------------------------------------------------------ */
+    .ak-hero {
+      position: relative;
+    }
+
+    .ak-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 32px 32px;
+      -webkit-mask-image: radial-gradient(70% 60% at 50% 45%, #000, transparent 75%);
+      mask-image: radial-gradient(70% 60% at 50% 45%, #000, transparent 75%);
+    }
+
+    .ak-hero-inner {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: calc(100vh - 56px);
+      min-height: min(760px, calc(100svh - 56px));
+      padding-block: 48px 40px;
+    }
+
+    .ak-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--text-2);
+    }
+
+    .ak-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-3);
+      animation: ak-pulse 2.4s ease-in-out infinite;
+    }
+
+    .ak-h1 {
+      margin: 24px 0 0;
+      font-family: var(--ak-font-display);
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--text-1);
+    }
+
+    .ak-grad {
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: var(--accent-1-bright);
+      -webkit-text-fill-color: transparent;
+    }
+
+    @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+      .ak-grad {
+        color: var(--accent-1-bright);
+        -webkit-text-fill-color: var(--accent-1-bright);
+      }
+    }
+
+    .ak-tagline {
+      margin: 20px 0 0;
+      max-width: 560px;
+      font-size: clamp(1rem, 2.2vw, 1.125rem);
+      line-height: 1.6;
+      color: var(--text-2);
+    }
+
+    .ak-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .ak-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 12px 24px;
+      border: 0;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.2;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .ak-btn svg {
+      width: 18px;
+      height: 18px;
+      flex: none;
+    }
+
+    .ak-btn-primary {
+      background: var(--gradient-cta);
+      color: #ffffff;
+      box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.35), 0 8px 32px var(--glow-violet);
+      transition: transform 0.18s var(--ak-ease), box-shadow 0.18s var(--ak-ease);
+    }
+
+    .ak-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.5), 0 12px 40px rgba(139, 92, 246, 0.35);
+    }
+
+    .ak-btn-primary:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .ak-chip-slot {
+      display: flex;
+      justify-content: center;
+    }
+
+    .ak-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--text-2);
+      font-family: var(--ak-font-mono);
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .ak-chip svg {
+      width: 16px;
+      height: 16px;
+      flex: none;
+    }
+
+    .ak-chip-teal {
+      border-color: rgba(45, 212, 191, 0.35);
+      background: rgba(45, 212, 191, 0.12);
+      color: var(--accent-3);
+    }
+
+    .ak-hint {
+      margin: 16px 0 0;
+      font-size: 13px;
+      color: var(--text-3);
+    }
+
+    /* --- features ---------------------------------------------------------------- */
+    .ak-features {
+      margin-top: 40px;
+      padding-bottom: 72px;
+    }
+
+    .ak-eyebrow {
+      margin: 0 0 20px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      text-align: center;
+    }
+
+    .ak-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+    }
+
+    .ak-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      transition: transform 0.2s var(--ak-ease), border-color 0.2s var(--ak-ease), box-shadow 0.2s var(--ak-ease);
+    }
+
+    .ak-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-hover);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .ak-card-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(139, 92, 246, 0.12);
+      color: var(--accent-1-bright);
+    }
+
+    .ak-card-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .ak-card-title {
+      margin: 14px 0 0;
+      font-family: var(--ak-font-display);
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-1);
+    }
+
+    .ak-card-body {
+      margin: 6px 0 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-2);
+    }
+
+    /* --- footer ------------------------------------------------------------------- */
+    .ak-footer {
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+    }
+
+    .ak-footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 64px;
+      padding-block: 12px;
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+
+    .ak-footer-line {
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-3);
+      text-align: center;
+    }
+
+    .ak-footer-line a {
+      color: var(--text-2);
+      text-decoration: none;
+      transition: color 0.18s var(--ak-ease);
+    }
+
+    .ak-footer-line a:hover {
+      color: var(--text-1);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* --- modal ---------------------------------------------------------------------- */
+    .ak-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(6, 6, 10, 0.6);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      animation: ak-overlay-in 0.2s ease backwards;
+    }
+
+    .ak-overlay[hidden] {
+      display: none;
+    }
+
+    .ak-modal {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+      animation: ak-modal-in 0.25s var(--ak-ease) backwards;
+      outline: none;
+    }
+
+    .ak-modal-x {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text-3);
+      cursor: pointer;
+      transition: color 0.18s var(--ak-ease), background-color 0.18s var(--ak-ease);
+    }
+
+    .ak-modal-x::after {
+      content: "";
+      position: absolute;
+      inset: -4px;
+    }
+
+    .ak-modal-x:hover {
+      color: var(--text-1);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .ak-modal-x svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .ak-modal-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(139, 92, 246, 0.12);
+      color: var(--accent-1-bright);
+    }
+
+    .ak-modal-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .ak-modal-icon-teal {
+      background: rgba(45, 212, 191, 0.12);
+      color: var(--accent-3);
+    }
+
+    .ak-modal-title {
+      margin: 16px 0 0;
+      padding-right: 28px;
+      font-family: var(--ak-font-display);
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-1);
+    }
+
+    .ak-modal-body {
+      margin: 8px 0 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-2);
+    }
+
+    .ak-modal-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 20px;
+    }
+
+    .ak-modal-actions .ak-btn {
+      width: 100%;
+    }
+
+    .ak-modal-alt {
+      align-self: center;
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-3);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.18s var(--ak-ease);
+    }
+
+    .ak-modal-alt:hover {
+      color: var(--text-2);
+    }
+
+    .ak-picks {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .ak-picks[hidden] {
+      display: none;
+    }
+
+    .ak-pick {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text-2);
+      font-family: var(--ak-font-mono);
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.18s var(--ak-ease), background-color 0.18s var(--ak-ease), color 0.18s var(--ak-ease);
+    }
+
+    .ak-pick svg {
+      width: 16px;
+      height: 16px;
+      flex: none;
+      color: var(--accent-3);
+    }
+
+    .ak-pick:hover {
+      border-color: var(--border-hover);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-1);
+    }
+
+    .ak-pick-selected {
+      border-color: rgba(45, 212, 191, 0.45);
+      background: rgba(45, 212, 191, 0.08);
+      color: var(--text-1);
+    }
+
+    /* --- keyframes / entrance ---------------------------------------------------------- */
+    @keyframes ak-fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes ak-drift-a {
+      to {
+        transform: translate(60px, 40px) scale(1.08);
+      }
+    }
+
+    @keyframes ak-drift-b {
+      to {
+        transform: translate(-50px, -36px) scale(1.06);
+      }
+    }
+
+    @keyframes ak-pulse {
+      0%,
+      100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    @keyframes ak-overlay-in {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes ak-modal-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .ak-up {
+      animation: ak-fade-up 0.6s var(--ak-ease) backwards;
+      animation-delay: var(--d, 0s);
+    }
+
+    /* --- responsive ----------------------------------------------------------------------- */
+    @media (max-width: 520px) {
+      .ak-cta-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .ak-cta-row .ak-btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .ak-overlay {
+        padding: 16px;
+      }
+
+      .ak-card-title {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .ak-gh-text {
+        display: none;
+      }
+
+      .ak-gh {
+        padding: 0 12px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .ak-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* --- reduced motion gate ------------------------------------------------------------------
+       Kills all durations/delays; entrance uses animation-fill-mode: backwards whose end
+       state equals the natural styles, so content is fully visible and hover transforms work. */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ak-shell">
+    <div class="ak-ambient" aria-hidden="true">
+      <div class="ak-orb ak-orb-a"></div>
+      <div class="ak-orb ak-orb-b"></div>
+    </div>
+
+    <header class="ak-nav">
+      <div class="ak-container ak-nav-inner">
+        <div class="ak-brand">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="ak-logo-gradient" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#8B5CF6"/>
+                <stop offset="1" stop-color="#D946EF"/>
+              </linearGradient>
+            </defs>
+            <circle cx="12" cy="12" r="9.5" stroke="url(#ak-logo-gradient)" stroke-width="2"/>
+            <path d="M10 8.3v7.4l6.2-3.7L10 8.3Z" stroke="url(#ak-logo-gradient)" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+          <span class="ak-brand-name">ANI-KUTA</span>
+        </div>
+        <a class="ak-gh" href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+          </svg>
+          <span class="ak-gh-text">GitHub</span>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <section class="ak-hero">
+        <div class="ak-container ak-hero-inner">
+          <div class="ak-badge ak-up" style="--d: 0s">
+            <span class="ak-dot" aria-hidden="true"></span>
+            Demo preview — downloads coming soon
+          </div>
+
+          <h1 class="ak-h1 ak-up" style="--d: .08s">
+            Your videos, <br>
+            <span class="ak-grad">powered by extensions</span>.
+          </h1>
+
+          <p class="ak-tagline ak-up" style="--d: .16s">
+            ANI-KUTA is a clean, minimal video app for Android. Add extensions and make it yours.
+          </p>
+
+          <div class="ak-cta-row ak-up" style="--d: .24s">
+            <button type="button" class="ak-btn ak-btn-primary" id="ak-cta">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" x2="12" y1="15" y2="3"/>
+              </svg>
+              Download for Android
+            </button>
+            <div class="ak-chip-slot" id="ak-chip-slot" aria-live="polite"></div>
+          </div>
+
+          <p class="ak-hint ak-up" style="--d: .32s">
+            No builds are published yet — the button shows which APK you’d get.
+          </p>
+        </div>
+      </section>
+
+      <section class="ak-features">
+        <div class="ak-container">
+          <p class="ak-eyebrow">Why ANI-KUTA</p>
+          <div class="ak-grid">
+            <article class="ak-card ak-up" style="--d: .4s">
+              <div class="ak-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.979.979 0 0 1-.276.837l-1.61 1.61a2.404 2.404 0 0 1-1.705.707 2.402 2.402 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 1 1-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.402 2.402 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 1 0 3.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0 1 12 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 1 1 3.237 3.237c-.464.18-.894.527-.967 1.02Z"/>
+                </svg>
+              </div>
+              <h3 class="ak-card-title">Extension-Powered</h3>
+              <p class="ak-card-body">Load community extensions to shape what ANI-KUTA can play.</p>
+            </article>
+
+            <article class="ak-card ak-up" style="--d: .5s">
+              <div class="ak-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
+                  <path d="M20 3v4"/>
+                  <path d="M22 5h-4"/>
+                  <path d="M4 17v2"/>
+                  <path d="M5 18H3"/>
+                </svg>
+              </div>
+              <h3 class="ak-card-title">Clean by Design</h3>
+              <p class="ak-card-body">A minimal, distraction-free interface that stays out of your way.</p>
+            </article>
+
+            <article class="ak-card ak-up" style="--d: .6s">
+              <div class="ak-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
+                  <path d="M12 18h.01"/>
+                </svg>
+              </div>
+              <h3 class="ak-card-title">Built for Android</h3>
+              <p class="ak-card-body">Native APK builds for arm64-v8a, armeabi-v7a and more.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="ak-footer">
+      <div class="ak-container ak-footer-inner">
+        <p class="ak-footer-line">ANI-KUTA is open source · <a href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer">View on GitHub</a> · Demo page — no APKs are published yet.</p>
+      </div>
+    </footer>
+  </div>
+
+  <div class="ak-overlay" id="ak-overlay" hidden>
+    <div class="ak-modal" id="ak-panel" role="dialog" aria-modal="true" aria-labelledby="ak-modal-title" tabindex="-1">
+      <button type="button" class="ak-modal-x" id="ak-modal-x" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M18 6 6 18"/>
+          <path d="m6 6 12 12"/>
+        </svg>
+      </button>
+      <div class="ak-modal-icon" id="ak-modal-icon" aria-hidden="true"></div>
+      <h2 class="ak-modal-title" id="ak-modal-title"></h2>
+      <p class="ak-modal-body" id="ak-modal-body"></p>
+      <div class="ak-modal-actions">
+        <button type="button" class="ak-btn ak-btn-primary" id="ak-got-it">Got it</button>
+        <button type="button" class="ak-modal-alt" id="ak-alt" aria-expanded="false" aria-controls="ak-picks">Pick a build manually</button>
+      </div>
+      <div class="ak-picks" id="ak-picks" hidden>
+        <button type="button" class="ak-pick" data-abi="arm64-v8a" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>
+          arm64-v8a
+        </button>
+        <button type="button" class="ak-pick" data-abi="armeabi-v7a" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>
+          armeabi-v7a
+        </button>
+        <button type="button" class="ak-pick" data-abi="universal" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>
+          universal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var SVG_ATTRS = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"';
+      var CPU_SVG = '<svg ' + SVG_ATTRS + '><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><path d="M15 2v2"></path><path d="M15 20v2"></path><path d="M2 15h2"></path><path d="M2 9h2"></path><path d="M20 15h2"></path><path d="M20 9h2"></path><path d="M9 2v2"></path><path d="M9 20v2"></path></svg>';
+      var CHECK_SVG = '<svg ' + SVG_ATTRS + '><path d="M20 6 9 17l-5-5"></path></svg>';
+      var INFO_SVG = '<svg ' + SVG_ATTRS + '><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>';
+
+      var ABI_RESULTS = ['arm64-v8a', 'armeabi-v7a', 'x86_64', 'x86'];
+
+      var CHIP_COPY = {
+        'arm64-v8a': 'Detected: arm64-v8a',
+        'armeabi-v7a': 'Detected: armeabi-v7a',
+        'x86_64': 'Detected: x86_64',
+        'x86': 'Detected: x86',
+        'universal': 'Universal build recommended',
+        'ios-unsupported': 'Android APKs don\u2019t install on iOS',
+        'desktop-notice': 'Runs on Android phones & tablets'
+      };
+
+      var MODAL_COPY = {
+        'arm64-v8a': {
+          title: 'This build matches your device.',
+          body: 'We detected a 64-bit ARM device, so we\u2019d download ANI-KUTA (arm64-v8a).'
+        },
+        'armeabi-v7a': {
+          title: 'This build matches your device.',
+          body: 'We detected a 32-bit ARM device, so we\u2019d download ANI-KUTA (armeabi-v7a).'
+        },
+        'x86_64': {
+          title: 'This build matches your device.',
+          body: 'We detected an x86 device, so we\u2019d download ANI-KUTA (x86_64).'
+        },
+        'x86': {
+          title: 'This build matches your device.',
+          body: 'We detected an x86 device, so we\u2019d download ANI-KUTA (x86).'
+        },
+        'universal': {
+          title: 'Universal build recommended.',
+          body: 'We couldn\u2019t verify your CPU. The universal APK works on any Android device.'
+        },
+        'ios-unsupported': {
+          title: 'Android only',
+          body: 'iOS can\u2019t install APK files. ANI-KUTA is built for Android devices \u2014 the universal build would be the one to try on an emulator.'
+        },
+        'desktop-notice': {
+          title: 'Made for Android',
+          body: 'You\u2019re on a desktop browser. On your Android phone, we\u2019d suggest the arm64-v8a build \u2014 or grab the universal APK.'
+        }
+      };
+
+      function isAbiMatch(result) {
+        return ABI_RESULTS.indexOf(result) !== -1;
+      }
+
+      /* Device detection — identical algorithm to the Next.js version:
+         iOS check → client hints (getHighEntropyValues) → UA fallback
+         (desktop-OS check first) → Android version heuristic → universal. */
+      function detectFromUserAgent(ua) {
+        if (!/Android/i.test(ua) && /Windows|Macintosh|CrOS|X11|Linux/i.test(ua)) {
+          return 'desktop-notice';
+        }
+        if (/aarch64|arm64/i.test(ua)) return 'arm64-v8a';
+        if (/x86_64|x86-64|amd64|win64|wow64/i.test(ua)) return 'x86_64';
+        if (/armv[67]|armeabi|armv8l/i.test(ua)) return 'armeabi-v7a';
+        if (/i[34]86|x86/i.test(ua)) return 'x86';
+        var m = /Android\s(\d+)/.exec(ua);
+        if (m) return parseInt(m[1], 10) >= 8 ? 'arm64-v8a' : 'armeabi-v7a';
+        if (/Windows|Macintosh|Linux/i.test(ua)) return 'desktop-notice';
+        return 'universal';
+      }
+
+      function detectDevice() {
+        return new Promise(function (resolve) {
+          var ua = navigator.userAgent;
+          if (/iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+            resolve('ios-unsupported');
+            return;
+          }
+          var uad = navigator.userAgentData;
+          if (uad && typeof uad.getHighEntropyValues === 'function') {
+            try {
+              uad.getHighEntropyValues(['platform', 'architecture', 'bitness']).then(
+                function (hints) {
+                  var platform = hints.platform;
+                  var architecture = hints.architecture;
+                  var bitness = hints.bitness;
+                  if (platform === 'Android') {
+                    if (architecture === 'arm' && bitness === '64') return resolve('arm64-v8a');
+                    if (architecture === 'arm' && bitness === '32') return resolve('armeabi-v7a');
+                    if (architecture === 'x86' && bitness === '64') return resolve('x86_64');
+                    if (architecture === 'x86' && bitness === '32') return resolve('x86');
+                    return resolve('universal');
+                  }
+                  if (!/Android/i.test(ua)) return resolve('desktop-notice');
+                  resolve(detectFromUserAgent(ua));
+                },
+                function () {
+                  resolve(detectFromUserAgent(ua));
+                }
+              );
+            } catch (e) {
+              resolve(detectFromUserAgent(ua));
+            }
+            return;
+          }
+          resolve(detectFromUserAgent(ua));
+        });
+      }
+
+      /* --- element refs ---------------------------------------------------- */
+      var chipSlot = document.getElementById('ak-chip-slot');
+      var ctaBtn = document.getElementById('ak-cta');
+      var overlay = document.getElementById('ak-overlay');
+      var panel = document.getElementById('ak-panel');
+      var modalX = document.getElementById('ak-modal-x');
+      var modalIcon = document.getElementById('ak-modal-icon');
+      var modalTitle = document.getElementById('ak-modal-title');
+      var modalBody = document.getElementById('ak-modal-body');
+      var gotItBtn = document.getElementById('ak-got-it');
+      var altBtn = document.getElementById('ak-alt');
+      var picks = document.getElementById('ak-picks');
+
+      var state = { result: 'universal', picked: null, lastFocus: null };
+
+      /* --- chip -------------------------------------------------------------- */
+      function renderChip(result) {
+        var text = (result && CHIP_COPY[result]) || 'Device not detected';
+        var tone = result && isAbiMatch(result) ? ' ak-chip-teal' : '';
+        chipSlot.innerHTML = '<span class="ak-chip' + tone + '">' + CPU_SVG + '<span></span></span>';
+        chipSlot.querySelector('.ak-chip span').textContent = text;
+      }
+
+      /* --- modal -------------------------------------------------------------- */
+      function renderModal() {
+        var copy = MODAL_COPY[state.result] || MODAL_COPY.universal;
+        var match = isAbiMatch(state.result);
+        modalTitle.textContent = copy.title;
+        modalBody.textContent = state.picked
+          ? 'You picked ' + state.picked + ' \u2014 this is the build that would be downloaded.'
+          : copy.body;
+        modalIcon.className = 'ak-modal-icon' + (match ? ' ak-modal-icon-teal' : '');
+        modalIcon.innerHTML = match ? CHECK_SVG : INFO_SVG;
+      }
+
+      function openModal() {
+        state.picked = null;
+        picks.hidden = true;
+        altBtn.setAttribute('aria-expanded', 'false');
+        Array.prototype.forEach.call(picks.querySelectorAll('.ak-pick'), function (btn) {
+          btn.classList.remove('ak-pick-selected');
+          btn.setAttribute('aria-pressed', 'false');
+        });
+        renderModal();
+        state.lastFocus = document.activeElement;
+        overlay.hidden = false;
+        document.body.style.overflow = 'hidden';
+        panel.focus();
+      }
+
+      function closeModal() {
+        overlay.hidden = true;
+        document.body.style.overflow = '';
+        if (state.lastFocus && typeof state.lastFocus.focus === 'function') {
+          state.lastFocus.focus();
+        }
+        state.lastFocus = null;
+      }
+
+      ctaBtn.addEventListener('click', openModal);
+      modalX.addEventListener('click', closeModal);
+      gotItBtn.addEventListener('click', closeModal);
+      overlay.addEventListener('click', function (event) {
+        if (event.target === overlay) closeModal();
+      });
+
+      altBtn.addEventListener('click', function () {
+        var willOpen = picks.hidden;
+        picks.hidden = !willOpen;
+        altBtn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+      });
+
+      picks.addEventListener('click', function (event) {
+        var btn = event.target.closest('.ak-pick');
+        if (!btn) return;
+        state.picked = btn.getAttribute('data-abi');
+        Array.prototype.forEach.call(picks.querySelectorAll('.ak-pick'), function (row) {
+          var selected = row === btn;
+          row.classList.toggle('ak-pick-selected', selected);
+          row.setAttribute('aria-pressed', selected ? 'true' : 'false');
+        });
+        renderModal();
+      });
+
+      document.addEventListener('keydown', function (event) {
+        if (overlay.hidden) return;
+        if (event.key === 'Escape') {
+          closeModal();
+          return;
+        }
+        if (event.key !== 'Tab') return;
+        var focusables = Array.prototype.filter.call(
+          panel.querySelectorAll('button'),
+          function (btn) { return btn.offsetParent !== null; }
+        );
+        if (!focusables.length) return;
+        var first = focusables[0];
+        var last = focusables[focusables.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      });
+
+      /* --- run detection on load ------------------------------------------------ */
+      detectDevice().then(function (result) {
+        state.result = result;
+        renderChip(result);
+      }, function () {
+        renderChip(null);
+      });
+    })();
+  </script>
+</body>
+</html>
