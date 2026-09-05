@@ -3,60 +3,63 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ANI-KUTA — Download</title>
-  <meta name="description" content="ANI-KUTA — an extension-based video content app for Android. Demo page.">
+  <title>ANI-KUTA — Download for Android</title>
+  <meta name="description" content="ANI-KUTA — an extension-based video content app for Android. Probe your device, pick arm64-v8a, armeabi-v7a or universal, and grab the APK.">
   <meta name="theme-color" content="#060B08">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <meta property="og:title" content="ANI-KUTA — Download">
-  <meta property="og:description" content="ANI-KUTA — an extension-based video content app for Android. Demo page.">
+  <meta property="og:title" content="ANI-KUTA — Download for Android">
+  <meta property="og:description" content="ANI-KUTA — an extension-based video content app for Android. Probe your device, pick the right build, grab the APK.">
   <meta property="og:url" content="https://confused-creature-180.github.io/ANI-KUTA/">
   <meta property="og:image" content="https://confused-creature-180.github.io/ANI-KUTA/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ANI-KUTA — extension-based video player for Android. Demo download page with device detection.">
+  <meta property="og:image:alt" content="ANI-KUTA — extension-based video player for Android. Download page with device probe and build picker.">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,110..125,600..800&amp;family=Instrument+Sans:wght@400;500;600&amp;family=Instrument+Serif:ital@1&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,110..125,600..800&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     /* ==========================================================================
-       ANI-KUTA — "LIVING GREEN" design system v3
-       Direction (user round-3): no solid-black backdrop, no terminal/code area.
-       The page sits on an ambient scene — liquid neon-green blobs that drift,
-       merge, split and slowly shift hue (SVG goo filter), plus thin wireframe
-       shapes that smoothly morph between forms. Centered minimal layout,
-       floating rounded nav, pill CTA pair (Download + Expand).
-       Contrast & restraint rules: scene dimmed to ~50-55%, single hue family
-       (lime/green/mint/teal, hue-capped at 186 so nothing drifts blue),
-       scrims only for readability; glows: the CTA + the tiny ok-dot status.
+       ANI-KUTA — "LIVING GREEN" design system v4
+       Direction (user round-4):
+       - keep the ambient goo scene (loved) — smaller blobs on phones;
+       - nav becomes frosted glass TINTED with the theme color;
+       - the device probe returns as a proper glass instrument panel
+         (platform / arch / bitness / method -> recommended build);
+       - real layout depth: layered glass surfaces, inset top-light,
+         deep soft shadows, hairline dividers;
+       - sections: probe, features (Anikku/Aniyomi-modeled), live release
+         card, disclaimer, richer footer.
+       Restraint rules: one hue family (hue-capped at 186), scene dimmed,
+       scrims for readability; the CTA glow stays the single strong glow.
        ========================================================================== */
     :root {
       color-scheme: dark;
       --bg: #060B08;
       --bg-rgb: 6, 11, 8;
       --surface: rgba(13, 21, 16, 0.72);
+      --glass-hi: rgba(255, 255, 255, 0.055);
+      --glass-lo: rgba(255, 255, 255, 0.008);
       --border: rgba(163, 192, 170, 0.14);
       --border-strong: rgba(163, 192, 170, 0.26);
-      --text-1: #F1F7F1;
-      --text-2: #B3C1B5;
-      --text-3: #8A9A8D;
       --accent: #B4FF39;
       --accent-hover: #C9FF6B;
       --accent-ink: #0B130B;
+      --accent-rgb: 180, 255, 57;
+      --text-1: #F1F7F1;
+      --text-2: #B3C1B5;
+      --text-3: #8A9A8D;
       --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
       --ease-open: cubic-bezier(0.2, 0.8, 0.2, 1);
       --ease-close: cubic-bezier(0.4, 0, 1, 1);
       --font-display: "Archivo", system-ui, sans-serif;
       --font-body: "Instrument Sans", system-ui, sans-serif;
       --font-serif: "Instrument Serif", Georgia, serif;
+      --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
     }
 
     /* --- base ------------------------------------------------------------------ */
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { box-sizing: border-box; }
 
     html {
       background: var(--bg);
@@ -77,6 +80,7 @@
     h1, h2, h3, p { margin: 0; }
     button { font: inherit; color: inherit; }
     a { color: inherit; }
+    .mono { font-family: var(--font-mono); }
 
     :focus-visible {
       outline: 2px solid var(--accent);
@@ -85,20 +89,15 @@
 
     .ak-sr {
       position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
       overflow: hidden;
       clip: rect(0, 0, 0, 0);
       white-space: nowrap;
       border: 0;
     }
 
-    /* --- ambient scene ------------------------------------------------------------
-       Fixed SVG behind all content. #ak-goo = liquid blobs (goo filter merges /
-       splits them smoothly); #ak-wire = thin morphing outlines. Veil adds quiet
-       scrims top/bottom + a soft center clearing so type stays readable.        */
+    /* --- ambient scene (kept from v3, tuned for small screens) ------------------- */
     .ak-scene {
       position: fixed;
       inset: 0;
@@ -123,7 +122,7 @@
         linear-gradient(180deg, rgba(var(--bg-rgb), 0.5) 0%, rgba(var(--bg-rgb), 0) 24%, rgba(var(--bg-rgb), 0) 70%, rgba(var(--bg-rgb), 0.55) 100%);
     }
 
-    /* Film grain — sits above the scene, below content. */
+    /* Film grain — above the scene, below content. */
     body::before {
       content: "";
       position: fixed;
@@ -152,7 +151,33 @@
       padding-inline: 24px;
     }
 
-    /* --- floating nav — rounded rectangle, all four corners rounded -------------- */
+    /* --- shared glass surface — the depth system --------------------------------- */
+    .ak-glass {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background:
+        linear-gradient(180deg, var(--glass-hi), rgba(255, 255, 255, 0.018) 38%, var(--glass-lo)),
+        rgba(10, 17, 12, 0.66);
+      backdrop-filter: blur(18px) saturate(150%);
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.09),
+        0 24px 60px -18px rgba(0, 0, 0, 0.55),
+        0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .ak-glass-top::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 1px;
+      border-radius: 1px;
+      background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.5), transparent);
+      pointer-events: none;
+    }
+
+    /* --- floating nav — frosted glass, tinted with the theme ---------------------- */
     .ak-nav {
       position: fixed;
       top: 16px;
@@ -161,11 +186,15 @@
       width: min(100% - 32px, 1000px);
       height: 60px;
       border-radius: 20px;
-      background: rgba(var(--bg-rgb), 0.55);
-      border: 1px solid var(--border);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(var(--accent-rgb), 0.20);
+      background:
+        linear-gradient(112deg, rgba(var(--accent-rgb), 0.14), rgba(var(--accent-rgb), 0.045) 34%, rgba(10, 16, 11, 0.38) 58%, rgba(10, 16, 11, 0.54) 100%),
+        rgba(8, 13, 10, 0.34);
+      backdrop-filter: blur(20px) saturate(170%);
+      -webkit-backdrop-filter: blur(20px) saturate(170%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.10),
+        0 14px 40px rgba(0, 0, 0, 0.42);
       z-index: 50;
     }
 
@@ -183,7 +212,11 @@
       gap: 10px;
     }
 
-    .ak-brand svg { width: 22px; height: 22px; }
+    .ak-brand svg {
+      width: 22px;
+      height: 22px;
+      filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.45));
+    }
 
     .ak-brand-name {
       font-family: var(--font-display);
@@ -221,7 +254,7 @@
     }
 
     .ak-nav-link:hover {
-      background: rgba(180, 255, 57, 0.09);
+      background: rgba(var(--accent-rgb), 0.10);
       color: var(--text-1);
     }
 
@@ -236,7 +269,7 @@
       transition: color 160ms var(--ease-out), background-color 160ms var(--ease-out);
     }
 
-    .ak-nav-gh-m:hover { color: var(--text-1); background: rgba(180, 255, 57, 0.09); }
+    .ak-nav-gh-m:hover { color: var(--text-1); background: rgba(var(--accent-rgb), 0.10); }
     .ak-nav-gh-m svg { width: 20px; height: 20px; }
 
     .ak-nav-dl {
@@ -252,10 +285,15 @@
       font-size: 14px;
       font-weight: 600;
       text-decoration: none;
-      transition: background-color 160ms var(--ease-out), transform 160ms var(--ease-out);
+      box-shadow: 0 6px 18px -6px rgba(var(--accent-rgb), 0.5);
+      transition: background-color 160ms var(--ease-out), transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
     }
 
-    .ak-nav-dl:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .ak-nav-dl:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px -6px rgba(var(--accent-rgb), 0.55);
+    }
     .ak-nav-dl:active { transform: translateY(0); }
     .ak-nav-dl svg { width: 16px; height: 16px; }
     .ak-nav-dl-ic { display: none; }
@@ -263,7 +301,7 @@
     /* --- hero — centered, single column ------------------------------------------- */
     .ak-hero {
       padding-top: clamp(128px, 20vh, 184px);
-      padding-bottom: 16px;
+      padding-bottom: 0;
       text-align: center;
     }
 
@@ -312,7 +350,6 @@
       font-weight: 400;
       font-size: 1.08em;
       letter-spacing: 0;
-      margin-right: 0.06em;
       color: var(--accent);
     }
 
@@ -337,7 +374,7 @@
       display: inline-flex;
       border-radius: 9999px;
       box-shadow:
-        0 18px 48px -12px rgba(180, 255, 57, 0.38),
+        0 18px 48px -12px rgba(var(--accent-rgb), 0.38),
         0 4px 16px rgba(0, 0, 0, 0.35);
       transition: transform 180ms var(--ease-out), box-shadow 180ms var(--ease-out);
     }
@@ -345,13 +382,15 @@
     .ak-cta-split:hover {
       transform: translateY(-2px);
       box-shadow:
-        0 22px 54px -12px rgba(180, 255, 57, 0.46),
+        0 22px 54px -12px rgba(var(--accent-rgb), 0.46),
         0 6px 18px rgba(0, 0, 0, 0.35);
     }
 
     .ak-cta-split:active { transform: translateY(0) scale(0.99); }
 
     .ak-btn-primary {
+      position: relative;
+      overflow: hidden;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -367,11 +406,32 @@
       font-weight: 600;
       letter-spacing: 0.01em;
       cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
       transition: background-color 160ms var(--ease-out);
     }
 
     .ak-btn-primary:hover { background: var(--accent-hover); }
     .ak-btn-primary svg { width: 18px; height: 18px; }
+
+    /* sheen sweep on hover */
+    .ak-btn-primary::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 34%;
+      background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+      transform: skewX(-18deg) translateX(-160%);
+      pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .ak-btn-primary:hover::after {
+        transform: skewX(-18deg) translateX(460%);
+        transition: transform 640ms var(--ease-out);
+      }
+    }
 
     .ak-btn-expand {
       display: inline-flex;
@@ -438,7 +498,9 @@
       background: var(--surface);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 28px 64px rgba(0, 0, 0, 0.45);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.07),
+        0 28px 64px rgba(0, 0, 0, 0.45);
       overflow: hidden;
       opacity: 0;
       transform: translateY(-4px);
@@ -471,8 +533,7 @@
     }
 
     .ak-row:first-child { border-top: 0; }
-
-    .ak-row:hover { background: rgba(180, 255, 57, 0.06); }
+    .ak-row:hover { background: rgba(var(--accent-rgb), 0.06); }
 
     .ak-row-main {
       display: flex;
@@ -482,7 +543,8 @@
     }
 
     .ak-row-name {
-      font-size: 14.5px;
+      font-family: var(--font-mono);
+      font-size: 14px;
       font-weight: 600;
       color: var(--text-1);
     }
@@ -499,9 +561,10 @@
       padding: 4px 10px;
       border: 1px solid var(--border);
       border-radius: 9999px;
+      font-family: var(--font-mono);
       font-size: 10.5px;
       font-weight: 600;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--text-3);
       white-space: nowrap;
@@ -514,41 +577,13 @@
     }
 
     .ak-panel-note {
-      padding: 11px 16px;
+      margin: 0;
+      padding: 12px 16px;
       border-top: 1px solid var(--border);
       font-size: 12px;
       line-height: 1.55;
       color: var(--text-3);
     }
-
-    /* --- detection hint (replaces the terminal — quiet, one line) ------------------ */
-    .ak-detect {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      margin-top: 22px;
-      min-height: 22px;
-      font-size: 14px;
-      color: var(--text-2);
-    }
-
-    .ak-detect-dot {
-      flex: none;
-      width: 6px;
-      height: 6px;
-      border-radius: 9999px;
-      background: var(--text-3);
-    }
-
-    .ak-detect.is-pending .ak-detect-dot { animation: ak-breathe 1.6s ease-in-out infinite; }
-
-    .ak-detect.is-ok .ak-detect-dot {
-      background: var(--accent);
-      box-shadow: 0 0 12px rgba(180, 255, 57, 0.55);
-    }
-
-    .ak-detect.is-info .ak-detect-dot { background: var(--text-2); }
 
     .ak-ghost {
       display: inline-flex;
@@ -570,78 +605,627 @@
 
     .ak-ghost svg { width: 16px; height: 16px; }
 
-    /* --- details — hairline editorial columns --------------------------------------- */
-    .ak-details {
-      margin-top: clamp(88px, 14vh, 132px);
-      padding-bottom: 100px;
+    /* ===========================================================================
+       DEVICE PROBE — the glass instrument panel (user asked it back, better).
+       Dotted-grid backdrop, accent hairline on top, scanning shimmer while the
+       detection promise runs, staggered stat reveal, verdict row with the
+       recommended build + wired "Get this build" action.
+       =========================================================================== */
+    .ak-probe {
+      margin-top: clamp(72px, 10vh, 110px);
+      scroll-margin-top: 110px;
+    }
+
+    .ak-probe-card {
+      border-radius: 26px;
+      overflow: hidden;
+      background-image: radial-gradient(rgba(163, 192, 170, 0.11) 1px, transparent 1.4px);
+      background-size: 22px 22px;
+    }
+
+    .ak-probe-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ak-probe-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-2);
+    }
+
+    .ak-probe-dot {
+      flex: none;
+      width: 7px;
+      height: 7px;
+      border-radius: 9999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.5);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .ak-probe-card.is-scanning .ak-probe-dot {
+        animation: ak-ping 1.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+      }
+      @keyframes ak-ping {
+        0% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.45); }
+        80%, 100% { box-shadow: 0 0 0 9px rgba(var(--accent-rgb), 0); }
+      }
+    }
+
+    .ak-probe-id {
+      margin-left: auto;
+      font-size: 11.5px;
+      letter-spacing: 0.06em;
+      color: var(--text-3);
+    }
+
+    .ak-probe-rerun {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 34px;
+      padding: 0 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: 9999px;
+      background: transparent;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: color 160ms var(--ease-out), border-color 160ms var(--ease-out), background-color 160ms var(--ease-out);
+    }
+
+    .ak-probe-rerun:hover {
+      color: var(--accent);
+      border-color: rgba(var(--accent-rgb), 0.45);
+      background: rgba(var(--accent-rgb), 0.06);
+    }
+
+    .ak-probe-rerun svg {
+      width: 13px;
+      height: 13px;
+      transition: transform 300ms var(--ease-out);
+    }
+
+    .ak-probe-rerun:hover svg { transform: rotate(180deg); }
+
+    .ak-probe-body {
+      position: relative;
+      padding: 22px;
+    }
+
+    /* scanning shimmer */
+    .ak-probe-scan {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 240ms linear;
+    }
+
+    .ak-probe-card.is-scanning .ak-probe-scan { opacity: 1; }
+
+    .ak-probe-scan::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 130px;
+      background: linear-gradient(100deg, transparent, rgba(var(--accent-rgb), 0.09), transparent);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .ak-probe-card.is-scanning .ak-probe-scan::before {
+        animation: ak-scan 1.15s linear infinite;
+      }
+      @keyframes ak-scan {
+        from { left: -150px; }
+        to { left: 100%; }
+      }
+    }
+
+    .ak-probe-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .ak-stat {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: 6px 18px;
+      min-width: 0;
+    }
+
+    .ak-stat:first-child { padding-left: 2px; }
+    .ak-stat:last-child { padding-right: 2px; }
+
+    .ak-stat + .ak-stat { border-left: 1px solid var(--border); }
+
+    .ak-stat-k {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      white-space: nowrap;
+    }
+
+    .ak-stat-v {
+      font-family: var(--font-mono);
+      font-size: 14.5px;
+      font-weight: 400;
+      color: var(--text-1);
+      opacity: 0.3;
+      transform: translateY(3px);
+      transition: opacity 320ms var(--ease-out), transform 320ms var(--ease-out);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ak-stat-v.is-set { opacity: 1; transform: none; }
+
+    .ak-probe-verdict {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-top: 20px;
+      padding: 18px 20px;
+      border: 1px solid rgba(var(--accent-rgb), 0.22);
+      border-radius: 18px;
+      background:
+        linear-gradient(180deg, rgba(var(--accent-rgb), 0.07), rgba(var(--accent-rgb), 0.02)),
+        rgba(9, 15, 11, 0.5);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    .ak-verdict-main {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .ak-verdict-v {
+      font-family: var(--font-mono);
+      font-size: clamp(18px, 2.6vw, 22px);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--accent);
+      opacity: 0.3;
+      transform: translateY(3px);
+      transition: opacity 320ms var(--ease-out), transform 320ms var(--ease-out);
+    }
+
+    .ak-verdict-v.is-set { opacity: 1; transform: none; }
+
+    .ak-verdict-note {
+      margin-top: 3px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-2);
+    }
+
+    .ak-verdict-btn {
+      margin-left: auto;
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 42px;
+      padding: 0 20px;
+      border: 1px solid rgba(var(--accent-rgb), 0.45);
+      border-radius: 9999px;
+      background: transparent;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      cursor: pointer;
+      transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out), border-color 160ms var(--ease-out), transform 160ms var(--ease-out);
+    }
+
+    .ak-verdict-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-ink);
+      transform: translateY(-1px);
+    }
+
+    .ak-verdict-btn svg { width: 15px; height: 15px; }
+
+    .ak-verdict-btn[hidden] { display: none; }
+
+    .ak-probe-note {
+      margin: 14px 2px 0;
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    /* --- section scaffolding ------------------------------------------------------- */
+    .ak-sec {
+      margin-top: clamp(96px, 14vh, 150px);
       scroll-margin-top: 96px;
     }
 
-    .ak-details-eyebrow { margin-bottom: 22px; }
+    .ak-sec-head {
+      max-width: 620px;
+    }
 
-    .ak-details-grid {
+    .ak-sec-title {
+      margin-top: 18px;
+      font-family: var(--font-display);
+      font-stretch: 116%;
+      font-weight: 700;
+      font-size: clamp(1.6rem, 3.6vw, 2.25rem);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--text-1);
+      text-wrap: balance;
+    }
+
+    .ak-sec-sub {
+      margin-top: 14px;
+      font-size: 15.5px;
+      line-height: 1.65;
+      color: var(--text-2);
+    }
+
+    /* --- features — glass cards grid -------------------------------------------------- */
+    .ak-feat-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      border-top: 1px solid var(--border);
+      gap: 16px;
+      margin-top: 38px;
     }
 
-    .ak-cell {
-      padding: 30px 30px 6px 0;
+    .ak-feat {
+      padding: 26px 24px;
+      border-radius: 20px;
+      transition: transform 220ms var(--ease-out), border-color 220ms var(--ease-out), box-shadow 220ms var(--ease-out);
     }
 
-    .ak-cell + .ak-cell {
-      border-left: 1px solid var(--border);
-      padding-left: 30px;
+    .ak-feat:hover {
+      transform: translateY(-3px);
+      border-color: rgba(var(--accent-rgb), 0.28);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.09),
+        0 30px 64px -18px rgba(0, 0, 0, 0.6),
+        0 4px 16px rgba(0, 0, 0, 0.25);
     }
 
-    .ak-cell-num {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.18em;
+    .ak-feat-ic {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(var(--accent-rgb), 0.3);
+      border-radius: 14px;
+      background: rgba(var(--accent-rgb), 0.08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
       color: var(--accent);
     }
 
-    .ak-cell-title {
-      margin-top: 12px;
+    .ak-feat-ic svg { width: 20px; height: 20px; }
+
+    .ak-feat-title {
+      margin-top: 18px;
       font-family: var(--font-display);
       font-stretch: 114%;
       font-weight: 600;
-      font-size: 19px;
+      font-size: 17.5px;
       letter-spacing: -0.01em;
       color: var(--text-1);
     }
 
-    .ak-cell-sub {
-      margin-top: 8px;
-      font-size: 14.5px;
+    .ak-feat-sub {
+      margin-top: 9px;
+      font-size: 14px;
       line-height: 1.6;
       color: var(--text-2);
     }
 
-    /* --- footer ---------------------------------------------------------------------- */
-    .ak-footer {
-      margin-top: auto;
-      border-top: 1px solid var(--border);
-      padding: 26px 0 34px;
-      padding-bottom: max(34px, env(safe-area-inset-bottom));
+    /* --- release — live card ------------------------------------------------------------ */
+    .ak-rel-card {
+      margin-top: 38px;
+      padding: 26px;
+      border-radius: 24px;
     }
 
-    .ak-footer-inner {
+    .ak-rel-top {
       display: flex;
-      align-items: baseline;
-      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .ak-rel-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border: 1px solid rgba(var(--accent-rgb), 0.35);
+      border-radius: 9999px;
+      background: rgba(var(--accent-rgb), 0.08);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .ak-rel-tag svg { width: 14px; height: 14px; }
+
+    .ak-rel-date {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+    }
+
+    .ak-rel-title {
+      margin-top: 14px;
+      font-family: var(--font-display);
+      font-stretch: 114%;
+      font-weight: 600;
+      font-size: 19px;
+      color: var(--text-1);
+    }
+
+    .ak-rel-body {
+      margin-top: 10px;
+      font-size: 14.5px;
+      line-height: 1.65;
+      color: var(--text-2);
+      max-width: 62ch;
+    }
+
+    .ak-rel-assets {
+      display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      margin-top: 16px;
+    }
+
+    .ak-asset {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-2);
+    }
+
+    .ak-asset b { color: var(--text-1); font-weight: 600; }
+
+    .ak-rel-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .ak-rel-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      height: 44px;
+      padding: 0 22px;
+      border-radius: 9999px;
+      font-size: 14.5px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out), border-color 160ms var(--ease-out), color 160ms var(--ease-out);
+    }
+
+    .ak-rel-btn svg { width: 16px; height: 16px; }
+
+    .ak-rel-btn-primary {
+      background: var(--accent);
+      color: var(--accent-ink);
+      box-shadow: 0 10px 26px -8px rgba(var(--accent-rgb), 0.45);
+    }
+
+    .ak-rel-btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+    .ak-rel-btn-ghost {
+      border-color: var(--border-strong);
+      background: transparent;
+      color: var(--text-1);
+    }
+
+    .ak-rel-btn-ghost:hover { border-color: rgba(var(--accent-rgb), 0.5); color: var(--accent); }
+
+    /* pending / empty / error states */
+    .ak-rel-empty {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+    }
+
+    .ak-rel-empty-ic {
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--border-strong);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-2);
+    }
+
+    .ak-rel-empty-ic svg { width: 22px; height: 22px; }
+
+    .ak-skel {
+      border-radius: 8px;
+      height: 14px;
+      background: linear-gradient(90deg, rgba(163, 192, 170, 0.09) 25%, rgba(163, 192, 170, 0.18) 42%, rgba(163, 192, 170, 0.09) 60%);
+      background-size: 240% 100%;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .ak-skel { animation: ak-skel 1.4s ease-in-out infinite; }
+      @keyframes ak-skel {
+        from { background-position: 120% 0; }
+        to { background-position: -120% 0; }
+      }
+    }
+
+    /* --- disclaimer ------------------------------------------------------------------------ */
+    .ak-legal-card {
+      margin-top: 38px;
+      padding: 28px;
+      border-radius: 24px;
+    }
+
+    .ak-legal-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .ak-legal-ic {
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(var(--accent-rgb), 0.3);
+      border-radius: 14px;
+      background: rgba(var(--accent-rgb), 0.08);
+      color: var(--accent);
+    }
+
+    .ak-legal-ic svg { width: 20px; height: 20px; }
+
+    .ak-legal-title {
+      font-family: var(--font-display);
+      font-stretch: 114%;
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--text-1);
+    }
+
+    .ak-legal-list {
+      list-style: none;
+      margin: 20px 0 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .ak-legal-list li {
+      position: relative;
+      padding-left: 26px;
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-2);
+    }
+
+    .ak-legal-list li::before {
+      content: "";
+      position: absolute;
+      left: 6px;
+      top: 0.72em;
+      width: 7px;
+      height: 7px;
+      border-radius: 9999px;
+      border: 1.5px solid rgba(var(--accent-rgb), 0.55);
+    }
+
+    .ak-legal-list b { color: var(--text-1); font-weight: 600; }
+
+    /* --- footer ---------------------------------------------------------------------- */
+    .ak-footer {
+      margin-top: clamp(96px, 14vh, 150px);
+      border-top: 1px solid var(--border);
+      padding: 34px 0 40px;
+      padding-bottom: max(40px, env(safe-area-inset-bottom));
+      background: linear-gradient(180deg, rgba(var(--bg-rgb), 0) 0%, rgba(var(--bg-rgb), 0.4) 100%);
+    }
+
+    .ak-footer-grid {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .ak-footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ak-footer-brand svg { width: 20px; height: 20px; }
+
+    .ak-footer-name {
+      font-family: var(--font-display);
+      font-stretch: 125%;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text-1);
+    }
+
+    .ak-footer-tag {
+      margin-top: 12px;
+      max-width: 34em;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-3);
+    }
+
+    .ak-footer-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
       font-size: 13px;
       color: var(--text-3);
     }
 
-    .ak-footer a {
+    .ak-footer-links a {
       text-decoration: none;
       transition: color 160ms var(--ease-out);
     }
 
-    .ak-footer a:hover { color: var(--accent); }
+    .ak-footer-links a:hover { color: var(--accent); }
+
+    .ak-footer-bottom {
+      margin-top: 26px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(163, 192, 170, 0.08);
+      font-size: 12.5px;
+      color: var(--text-3);
+    }
 
     /* --- modal ------------------------------------------------------------------------ */
     .ak-overlay {
@@ -661,14 +1245,18 @@
     .ak-modal {
       position: relative;
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       padding: 26px;
       border: 1px solid var(--border);
       border-radius: 22px;
-      background: rgba(13, 21, 16, 0.92);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)),
+        rgba(13, 21, 16, 0.92);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 32px 80px rgba(0, 0, 0, 0.5);
       outline: none;
     }
 
@@ -689,10 +1277,11 @@
       transition: color 160ms var(--ease-out), background-color 160ms var(--ease-out);
     }
 
-    .ak-modal-x:hover { color: var(--text-1); background: rgba(180, 255, 57, 0.08); }
+    .ak-modal-x:hover { color: var(--text-1); background: rgba(var(--accent-rgb), 0.08); }
     .ak-modal-x svg { width: 16px; height: 16px; }
 
     .ak-modal-eyebrow {
+      font-family: var(--font-mono);
       font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.18em;
@@ -703,10 +1292,9 @@
     .ak-modal-title {
       margin-top: 10px;
       padding-right: 32px;
-      font-family: var(--font-display);
-      font-stretch: 114%;
+      font-family: var(--font-mono);
       font-size: 19px;
-      font-weight: 700;
+      font-weight: 600;
       letter-spacing: -0.01em;
       color: var(--text-1);
     }
@@ -714,60 +1302,74 @@
     .ak-modal-body {
       margin-top: 10px;
       font-size: 14.5px;
-      line-height: 1.6;
+      line-height: 1.65;
       color: var(--text-2);
     }
 
     .ak-modal-actions {
       display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
       margin-top: 22px;
     }
 
-    .ak-modal-close {
+    .ak-modal-btn {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      height: 40px;
+      gap: 9px;
+      height: 42px;
       padding: 0 20px;
-      border: 1px solid var(--border-strong);
       border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out), border-color 160ms var(--ease-out), transform 160ms var(--ease-out);
+    }
+
+    .ak-modal-btn svg { width: 15px; height: 15px; }
+
+    .ak-modal-btn[hidden] { display: none; }
+
+    .ak-modal-btn-primary {
+      background: var(--accent);
+      color: var(--accent-ink);
+      box-shadow: 0 10px 26px -8px rgba(var(--accent-rgb), 0.45);
+    }
+
+    .ak-modal-btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+    .ak-modal-btn-quiet {
+      border-color: var(--border-strong);
       background: transparent;
       color: var(--text-1);
-      font-family: var(--font-body);
-      font-size: 14.5px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: color 160ms var(--ease-out), border-color 160ms var(--ease-out), background-color 160ms var(--ease-out);
     }
 
-    .ak-modal-close:hover {
+    .ak-modal-btn-quiet:hover {
       color: var(--accent);
       border-color: var(--accent);
-      background: rgba(180, 255, 57, 0.06);
+      background: rgba(var(--accent-rgb), 0.06);
     }
 
-    /* --- motion (gated; reduced-motion end state equals natural styles) ----------------- */
+    /* --- scroll reveal (gated: html.js set by script; reduced-motion net below) --------- */
     @media (prefers-reduced-motion: no-preference) {
       html { scroll-behavior: smooth; }
 
-      .ak-rise {
-        animation: ak-rise 480ms var(--ease-out) both;
-        animation-delay: var(--d, 0ms);
+      html.js .ak-rise {
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 640ms var(--ease-out), transform 640ms var(--ease-out);
+        transition-delay: var(--d, 0ms);
+      }
+
+      html.js .ak-rise.is-in {
+        opacity: 1;
+        transform: none;
       }
 
       .ak-overlay { animation: ak-fade 200ms ease both; }
-
       .ak-modal { animation: ak-modal-in 260ms var(--ease-out) both; }
-    }
-
-    @keyframes ak-rise {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: none; }
-    }
-
-    @keyframes ak-breathe {
-      0%, 100% { opacity: 0.35; }
-      50% { opacity: 1; }
     }
 
     @keyframes ak-fade {
@@ -781,17 +1383,16 @@
     }
 
     /* --- responsive ---------------------------------------------------------------------- */
+    @media (max-width: 900px) {
+      .ak-probe-grid { grid-template-columns: repeat(2, 1fr); row-gap: 18px; }
+      .ak-stat + .ak-stat { border-left: 0; }
+      .ak-stat:nth-child(even) { border-left: 1px solid var(--border); }
+      .ak-feat-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
     @media (max-width: 760px) {
-      .ak-details-grid { grid-template-columns: 1fr; }
-
-      .ak-cell { padding: 24px 0 4px; }
-
-      .ak-cell + .ak-cell {
-        border-left: 0;
-        border-top: 1px solid var(--border);
-        padding-left: 0;
-        margin-top: 20px;
-      }
+      .ak-probe-verdict { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .ak-verdict-btn { margin-left: 0; }
     }
 
     @media (max-width: 640px) {
@@ -822,19 +1423,31 @@
 
       .ak-container { padding-inline: 18px; }
       .ak-overlay { padding: 16px; }
+
+      .ak-probe-head { padding: 16px 18px; flex-wrap: wrap; gap: 10px; }
+      .ak-probe-id { display: none; }
+      .ak-probe-body { padding: 18px; }
+      .ak-stat { padding: 6px 14px; }
+      .ak-stat-v { font-size: 13.5px; }
+
+      .ak-feat-grid { grid-template-columns: 1fr; gap: 12px; }
+      .ak-feat { padding: 22px 20px; }
+
+      .ak-rel-card, .ak-legal-card { padding: 22px 18px; }
     }
 
     @media (max-width: 380px) {
       .ak-btn-primary { padding: 0 18px 0 16px; gap: 8px; }
       .ak-eyebrow { gap: 10px; }
       .ak-eyebrow::before, .ak-eyebrow::after { width: 14px; }
+      .ak-probe-grid { grid-template-columns: 1fr; row-gap: 14px; }
+      .ak-stat:nth-child(even) { border-left: 0; }
+      .ak-stat + .ak-stat { border-left: 0; border-top: 1px solid var(--border); padding-top: 12px; }
     }
 
     /* --- reduced motion safety net ---------------------------------------------------------- */
     @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
+      *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-delay: 0ms !important;
         animation-iteration-count: 1 !important;
@@ -842,6 +1455,7 @@
         transition-delay: 0ms !important;
         scroll-behavior: auto !important;
       }
+      html.js .ak-rise { opacity: 1; transform: none; }
     }
   </style>
 </head>
@@ -872,8 +1486,9 @@
         </div>
         <div class="ak-nav-right">
           <nav class="ak-nav-links" aria-label="Primary">
+            <a class="ak-nav-link" href="#probe">Probe</a>
             <a class="ak-nav-link" href="#details">Features</a>
-            <a class="ak-nav-link" href="#download">Builds</a>
+            <a class="ak-nav-link" href="#release">Release</a>
             <a class="ak-nav-link" href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer">GitHub</a>
           </nav>
           <a class="ak-nav-gh-m" href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer" aria-label="ANI-KUTA on GitHub">
@@ -894,14 +1509,15 @@
     </header>
 
     <main>
+      <!-- ============ HERO ============ -->
       <section class="ak-hero">
         <div class="ak-container">
           <div class="ak-hero-inner">
             <p class="ak-eyebrow ak-rise" style="--d:0ms">Android · Extension-based video player</p>
 
-            <h1 class="ak-h1 ak-rise" style="--d:80ms">Video content, powered by <em class="ak-h1-em">extensions</em>.</h1>
+            <h1 class="ak-h1 ak-rise" style="--d:80ms">Video content, powered by&nbsp;<em class="ak-h1-em">extensions</em>.</h1>
 
-            <p class="ak-sub ak-rise" style="--d:160ms">ANI-KUTA is an extension-based video content app for Android with a clean, minimal design. Quite a few extensions are supported — install the APK, add what you like.</p>
+            <p class="ak-sub ak-rise" style="--d:160ms">ANI-KUTA is an extension-based video content app for Android. Install the APK, add the extensions you like, and keep everything you watch in one clean place.</p>
 
             <div class="ak-cta ak-rise" style="--d:240ms" id="download">
               <div class="ak-cta-wrap" id="ak-cta-wrap">
@@ -947,56 +1563,249 @@
                           <span class="ak-row-tag">Fallback</span>
                         </button>
                       </div>
-                      <p class="ak-panel-note">Demo preview — no builds are published yet. Rows open a notice, not a download.</p>
+                      <p class="ak-panel-note">Requires Android 8.0 or higher. No builds are published yet — rows open a notice, not a download.</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <p class="ak-detect is-pending" id="ak-detect" style="--d:320ms">
-                <span class="ak-detect-dot" aria-hidden="true"></span>
-                <span id="ak-detect-text" aria-live="polite">Checking your device…</span>
-              </p>
+              <a class="ak-ghost" style="--d:380ms" href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+                  <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                </svg>
+                View source on GitHub
+              </a>
             </div>
-
-            <a class="ak-ghost ak-rise" style="--d:380ms" href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
-                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-              </svg>
-              View source on GitHub
-            </a>
           </div>
         </div>
       </section>
 
-      <section class="ak-details" id="details">
+      <!-- ============ DEVICE PROBE ============ -->
+      <section class="ak-probe" id="probe" aria-labelledby="probe-heading">
         <div class="ak-container">
-          <p class="ak-eyebrow ak-details-eyebrow ak-rise">Details</p>
-          <div class="ak-details-grid">
-            <article class="ak-cell">
-              <span class="ak-cell-num">01</span>
-              <h2 class="ak-cell-title">Extensions</h2>
-              <p class="ak-cell-sub">Quite a few extensions supported. Add sources, keep the player lean.</p>
+          <h2 class="ak-sr" id="probe-heading">Device probe</h2>
+          <div class="ak-probe-card ak-glass ak-glass-top ak-rise" id="ak-probe-card">
+            <div class="ak-probe-head">
+              <span class="ak-probe-live"><span class="ak-probe-dot" aria-hidden="true"></span>Device probe</span>
+              <span class="ak-probe-id mono" id="ak-probe-id" aria-hidden="true">scan —</span>
+              <button type="button" class="ak-probe-rerun" id="ak-probe-rerun">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+                  <polyline points="21 3 21 9 15 9"/>
+                </svg>
+                Re-run
+              </button>
+            </div>
+
+            <div class="ak-probe-body">
+              <div class="ak-probe-grid" role="group" aria-label="Detected device properties">
+                <div class="ak-stat">
+                  <span class="ak-stat-k">Platform</span>
+                  <span class="ak-stat-v" id="ak-stat-platform">—</span>
+                </div>
+                <div class="ak-stat">
+                  <span class="ak-stat-k">Architecture</span>
+                  <span class="ak-stat-v" id="ak-stat-arch">—</span>
+                </div>
+                <div class="ak-stat">
+                  <span class="ak-stat-k">Bitness</span>
+                  <span class="ak-stat-v" id="ak-stat-bits">—</span>
+                </div>
+                <div class="ak-stat">
+                  <span class="ak-stat-k">Method</span>
+                  <span class="ak-stat-v" id="ak-stat-via">—</span>
+                </div>
+              </div>
+
+              <div class="ak-probe-verdict" aria-live="polite">
+                <div class="ak-verdict-main">
+                  <span class="ak-stat-k">Recommended build</span>
+                  <span class="ak-verdict-v" id="ak-verdict">probing…</span>
+                  <p class="ak-verdict-note" id="ak-verdict-note">Reading client hints — one moment.</p>
+                </div>
+                <button type="button" class="ak-verdict-btn" id="ak-verdict-btn" hidden>
+                  <span id="ak-verdict-btn-text">Get this build</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <path d="M5 12h14"/>
+                    <path d="m12 5 7 7-7 7"/>
+                  </svg>
+                </button>
+              </div>
+
+              <p class="ak-probe-note">Runs entirely in your browser — nothing is uploaded or stored.</p>
+
+              <div class="ak-probe-scan" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FEATURES ============ -->
+      <section class="ak-sec" id="details" aria-labelledby="details-heading">
+        <div class="ak-container">
+          <div class="ak-sec-head ak-rise">
+            <p class="ak-eyebrow">What's inside</p>
+            <h2 class="ak-sec-title" id="details-heading">Built around the things that matter.</h2>
+            <p class="ak-sec-sub">Modeled after the apps this community already trusts — extensions first, your library always yours. The feature set is in active development, shaped in the open on GitHub.</p>
+          </div>
+
+          <div class="ak-feat-grid">
+            <article class="ak-feat ak-glass ak-rise">
+              <span class="ak-feat-ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                  <path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.979.979 0 0 1-.276.837l-1.61 1.61a2.404 2.404 0 0 1-1.705.707 2.402 2.402 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 1 1-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.402 2.402 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 1 0 3.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0 1 12 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 1 1 3.237 3.237c-.464.18-.894.527-.967 1.02Z"/>
+                </svg>
+              </span>
+              <h3 class="ak-feat-title">Extension-based sources</h3>
+              <p class="ak-feat-sub">Bring your own sources through community extensions. The player stays lean — the catalogue is yours to shape.</p>
             </article>
-            <article class="ak-cell">
-              <span class="ak-cell-num">02</span>
-              <h2 class="ak-cell-title">Design</h2>
-              <p class="ak-cell-sub">A clean, minimal interface. Content first, chrome last.</p>
+
+            <article class="ak-feat ak-glass ak-rise" style="--d:60ms">
+              <span class="ak-feat-ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                  <path d="m16 6 4 14"/>
+                  <path d="M12 6v14"/>
+                  <path d="M8 8v12"/>
+                  <path d="M4 4v16"/>
+                </svg>
+              </span>
+              <h3 class="ak-feat-title">Library &amp; categories</h3>
+              <p class="ak-feat-sub">Organize with categories, schedule refreshes, and let the library surface new episodes on its own.</p>
             </article>
-            <article class="ak-cell">
-              <span class="ak-cell-num">03</span>
-              <h2 class="ak-cell-title">Builds</h2>
-              <p class="ak-cell-sub">Three Android builds: arm64-v8a, armeabi-v7a, universal. Pick per device or take universal.</p>
+
+            <article class="ak-feat ak-glass ak-rise" style="--d:120ms">
+              <span class="ak-feat-ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" x2="12" y1="15" y2="3"/>
+                </svg>
+              </span>
+              <h3 class="ak-feat-title">Local &amp; offline</h3>
+              <p class="ak-feat-sub">Download what you love and watch it anywhere — flights, commutes, dead zones. No signal required.</p>
             </article>
+
+            <article class="ak-feat ak-glass ak-rise" style="--d:180ms">
+              <span class="ak-feat-ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                  <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/>
+                  <path d="m9 10 2 2 4-4"/>
+                </svg>
+              </span>
+              <h3 class="ak-feat-title">Tracker sync</h3>
+              <p class="ak-feat-sub">Keep progress in step with services like AniList, MyAnimeList, Kitsu, Simkl, Shikimori and Bangumi.</p>
+            </article>
+
+            <article class="ak-feat ak-glass ak-rise" style="--d:240ms">
+              <span class="ak-feat-ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                  <line x1="21" x2="14" y1="4" y2="4"/>
+                  <line x1="10" x2="3" y1="4" y2="4"/>
+                  <line x1="21" x2="12" y1="12" y2="12"/>
+                  <line x1="8" x2="3" y1="12" y2="12"/>
+                  <line x1="21" x2="16" y1="20" y2="20"/>
+                  <line x1="12" x2="3" y1="20" y2="20"/>
+                  <line x1="14" x2="14" y1="2" y2="6"/>
+                  <line x1="8" x2="8" y1="10" y2="14"/>
+                  <line x1="16" x2="16" y1="18" y2="22"/>
+                </svg>
+              </span>
+              <h3 class="ak-feat-title">A player you can tune</h3>
+              <p class="ak-feat-sub">A configurable video player with the options power users expect — wired for precision, not noise.</p>
+            </article>
+
+            <article class="ak-feat ak-glass ak-rise" style="--d:300ms">
+              <span class="ak-feat-ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                  <path d="M12 8a2.83 2.83 0 0 0 4 4 4 4 0 1 1-4-4"/>
+                  <path d="M12 2v2"/>
+                  <path d="M12 20v2"/>
+                  <path d="m4.9 4.9 1.4 1.4"/>
+                  <path d="m17.7 17.7 1.4 1.4"/>
+                  <path d="M2 12h2"/>
+                  <path d="M20 12h2"/>
+                  <path d="m6.3 17.7-1.4 1.4"/>
+                  <path d="m19.1 4.9-1.4 1.4"/>
+                </svg>
+              </span>
+              <h3 class="ak-feat-title">Light &amp; dark, your way</h3>
+              <p class="ak-feat-sub">Themes that follow your device — or your mood. Material through and through.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ RELEASE ============ -->
+      <section class="ak-sec" id="release" aria-labelledby="release-heading">
+        <div class="ak-container">
+          <div class="ak-sec-head ak-rise">
+            <p class="ak-eyebrow">Latest release</p>
+            <h2 class="ak-sec-title" id="release-heading">Fresh from the repository.</h2>
+          </div>
+
+          <div class="ak-rel-card ak-glass ak-glass-top ak-rise" id="ak-rel-card" aria-live="polite">
+            <!-- pending skeleton -->
+            <div class="ak-rel-state" data-state="pending">
+              <div class="ak-skel" style="width: 110px; height: 30px; border-radius: 9999px;"></div>
+              <div class="ak-skel" style="width: 70%; margin-top: 18px;"></div>
+              <div class="ak-skel" style="width: 46%; margin-top: 10px;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ DISCLAIMER ============ -->
+      <section class="ak-sec" id="disclaimer" aria-labelledby="disclaimer-heading">
+        <div class="ak-container">
+          <div class="ak-sec-head ak-rise">
+            <p class="ak-eyebrow">Disclaimer</p>
+            <h2 class="ak-sec-title" id="disclaimer-heading">The fine print, up front.</h2>
+            <p class="ak-sec-sub">ANI-KUTA is an independent, open source player. In the spirit of projects like Aniyomi and Anikku, the rules are simple:</p>
+          </div>
+
+          <div class="ak-legal-card ak-glass ak-rise">
+            <div class="ak-legal-head">
+              <span class="ak-legal-ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+                  <path d="m9 12 2 2 4-4"/>
+                </svg>
+              </span>
+              <h3 class="ak-legal-title">Please read before installing</h3>
+            </div>
+            <ul class="ak-legal-list">
+              <li><b>Zero content.</b> ANI-KUTA itself hosts, streams and stores nothing — everything you watch arrives through extensions you choose to install, from third-party providers the app has no connection to.</li>
+              <li><b>No affiliation.</b> The developer(s) are not affiliated with, endorsed by, or connected to any content provider available through community extensions — nor with Aniyomi, Anikku, Mihon or Tachiyomi.</li>
+              <li><b>Your responsibility.</b> You are responsible for the media you access and for complying with the laws and the terms of service of the providers those extensions reach.</li>
+            </ul>
           </div>
         </div>
       </section>
     </main>
 
     <footer class="ak-footer">
-      <div class="ak-container ak-footer-inner">
-        <p>ANI-KUTA — extension-based video content app for android</p>
-        <p><a href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer">github</a> · demo: no builds published yet</p>
+      <div class="ak-container">
+        <div class="ak-footer-grid">
+          <div>
+            <div class="ak-footer-brand">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                <rect width="24" height="24" rx="7" fill="#B4FF39"/>
+                <path d="M9.6 7.5 14.7 12l-5.1 4.5" stroke="#0B130B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="ak-footer-name">ANI-KUTA</span>
+            </div>
+            <p class="ak-footer-tag">An extension-based video content app for Android. Requires Android 8.0 or higher.</p>
+          </div>
+          <nav class="ak-footer-links" aria-label="Footer">
+            <a href="#probe">Probe</a>
+            <a href="#details">Features</a>
+            <a href="#release">Release</a>
+            <a href="#disclaimer">Disclaimer</a>
+            <a href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://github.com/Confused-Creature-180/ANI-KUTA/releases" target="_blank" rel="noopener noreferrer">Releases</a>
+          </nav>
+        </div>
+        <p class="ak-footer-bottom">© 2025 ANI-KUTA contributors · open source · hosts zero content</p>
       </div>
     </footer>
   </div>
@@ -1012,26 +1821,37 @@
       <p class="ak-modal-eyebrow" id="ak-modal-eyebrow">BUILD</p>
       <h2 class="ak-modal-title" id="ak-modal-title">probing…</h2>
       <p class="ak-modal-body" id="ak-modal-body">Identifying your device — one moment.</p>
-      <div class="ak-modal-actions">
-        <button type="button" class="ak-modal-close" id="ak-modal-close">Close</button>
+      <div class="ak-modal-actions" id="ak-modal-actions">
+        <a class="ak-modal-btn ak-modal-btn-primary" id="ak-modal-action" hidden href="#" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" x2="12" y1="15" y2="3"/>
+          </svg>
+          <span id="ak-modal-action-text">Download</span>
+        </a>
+        <button type="button" class="ak-modal-btn ak-modal-btn-quiet" id="ak-modal-close">Close</button>
       </div>
     </div>
   </div>
 
   <script>
+    document.documentElement.classList.add("js");
+  </script>
+  <script>
     (function () {
       "use strict";
 
       /* ==========================================================================
-         AMBIENT SCENE — liquid blobs + morphing wireframes
+         AMBIENT SCENE — liquid blobs + morphing wireframes (kept, v4 tuning)
          - #ak-goo: organic blobs drifting; the SVG goo filter (blur + alpha
            threshold) merges them into one liquid mass when they meet and lets
-           them split apart smoothly. Each blob's hue oscillates inside the
-           green family, so merges visibly shift color.
-         - #ak-wire: thin outlines that periodically morph between forms
-           (circle, triangle, square, pentagon, hexagon, flower, star).
-         - Pauses when the tab is hidden; renders a single static frame under
-           prefers-reduced-motion.
+           them split apart smoothly. Hue oscillates inside the green family.
+         - #ak-wire: thin outlines that periodically morph between forms.
+         - v4: on phones (<=640px) blobs are ~40% smaller, one fewer, the
+           wire shapes shrink, and the cohesion range tightens so the scene
+           reads lighter and keeps its depth on small screens.
+         - Pauses when the tab is hidden; static frame under reduced motion.
          ========================================================================== */
       var NS = "http://www.w3.org/2000/svg";
       var TAU = Math.PI * 2;
@@ -1070,11 +1890,17 @@
         var W = 0;
         var H = 0;
         var reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+        var mobMq = window.matchMedia("(max-width: 640px)");
+
+        /* phone tuning: smaller + fewer blobs, smaller wires, tighter cohesion */
+        var MOB_SCALE = mobMq.matches ? 0.6 : 1;
+        var WIRE_SCALE = mobMq.matches ? 0.72 : 1;
+        var COHESION = mobMq.matches ? 300 : 460;
 
         /* ---- goo blobs ------------------------------------------------------ */
         var HUES = [96, 112, 128, 143, 158, 164, 150];
         var blobs = [];
-        var BLOB_COUNT = window.matchMedia("(max-width: 640px)").matches ? 5 : 6;
+        var BLOB_COUNT = mobMq.matches ? 4 : 6;
 
         for (var bi = 0; bi < BLOB_COUNT; bi++) {
           var big = bi < 3;
@@ -1084,7 +1910,7 @@
               gooGroup.appendChild(p);
               return p;
             })(),
-            r: big ? rand(130, 185) : rand(68, 108),
+            r: (big ? rand(130, 185) : rand(68, 108)) * MOB_SCALE,
             hue: HUES[bi % HUES.length],
             sat: rand(66, 84),
             lum: rand(42, 52),
@@ -1104,7 +1930,6 @@
           for (var i = 0; i < blobs.length; i++) {
             var b = blobs[i];
             if (!b.placed) {
-              /* Balanced spread: alternate upper/lower bands across the width. */
               var fx = (i + 0.5) / blobs.length;
               b.x = W * lerp(fx - 0.07, fx + 0.07, Math.random());
               b.y = (i % 2 === 0 ? H * 0.30 : H * 0.66) + rand(-H * 0.08, H * 0.08);
@@ -1121,9 +1946,6 @@
         }
 
         function stepBlobs(t, dt) {
-          /* Soft cohesion: nearby blobs drift together (merge), deeply
-             overlapped ones ease apart again (split) — an endless
-             merge/split choreography on top of the goo filter. */
           for (var pi = 0; pi < blobs.length; pi++) {
             for (var pj = pi + 1; pj < blobs.length; pj++) {
               var ba = blobs[pi];
@@ -1131,7 +1953,7 @@
               var dx = bb.x - ba.x;
               var dy = bb.y - ba.y;
               var d = Math.sqrt(dx * dx + dy * dy);
-              if (d > 0 && d < 460) {
+              if (d > 0 && d < COHESION) {
                 var f = d < (ba.r + bb.r) * 0.5 ? -7 : 5;
                 var fx = dx / d * f;
                 var fy = dy / d * f;
@@ -1144,7 +1966,6 @@
           for (var i = 0; i < blobs.length; i++) {
             var b = blobs[i];
 
-            /* wander: gently rotate the velocity vector */
             var sp = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
             if (sp > 46) { b.vx *= 46 / sp; b.vy *= 46 / sp; sp = 46; }
             var ang = Math.atan2(b.vy, b.vx) + Math.sin(t * b.wanderW + b.s2) * 0.5 * dt;
@@ -1178,8 +1999,6 @@
         }
 
         /* ---- morphing wireframes -------------------------------------------- */
-        /* Regular k-gon radius profile (unit circumradius, catmull smoothing
-           rounds the corners). k=0 is a circle; cos modes give flowers/stars. */
         function profileR(p, theta) {
           if (p.k === 0) return 1;
           if (p.cos) return 1 - p.depth * (0.5 + 0.5 * Math.cos(p.k * theta));
@@ -1212,7 +2031,7 @@
         }
 
         var wires = [];
-        var WIRE_COUNT = window.matchMedia("(max-width: 640px)").matches ? 2 : 3;
+        var WIRE_COUNT = mobMq.matches ? 2 : 3;
 
         for (var wi = 0; wi < WIRE_COUNT; wi++) {
           var el = document.createElementNS(NS, "path");
@@ -1223,7 +2042,7 @@
           wireGroup.appendChild(el);
           wires.push({
             el: el,
-            r: rand(85, 150),
+            r: rand(85, 150) * WIRE_SCALE,
             rot: rand(0, TAU),
             rotV: rand(0.04, 0.1) * (Math.random() < 0.5 ? -1 : 1),
             from: pickProfile(null),
@@ -1313,7 +2132,6 @@
           W = window.innerWidth;
           H = window.innerHeight;
           sceneSvg.setAttribute("viewBox", "0 0 " + W + " " + H);
-          /* Keep the filter raster region exactly viewport-sized + margin. */
           gooFilter.setAttribute("x", -80);
           gooFilter.setAttribute("y", -80);
           gooFilter.setAttribute("width", W + 160);
@@ -1358,8 +2176,7 @@
       /* ==========================================================================
          Device detection — EXACT mirror of src/components/ak/detect.ts:
          iOS check -> client hints -> UA string -> Android version heuristic
-         -> universal last resort. The UI shows "Checking your device…" until
-         this promise settles; nothing defaults early.
+         -> universal last resort.
          ========================================================================== */
       var ABI_ARCH = { "arm64-v8a": "arm64", "armeabi-v7a": "arm", x86_64: "x86_64", x86: "x86", universal: "unknown" };
       var ABI_BITS = { "arm64-v8a": "64", "armeabi-v7a": "32", x86_64: "64", x86: "32", universal: "unknown" };
@@ -1460,31 +2277,134 @@
       }
 
       /* ==========================================================================
-         Detection hint — one quiet line under the CTA (no terminal).
+         DEVICE PROBE UI — staggered stat reveal + verdict row.
          ========================================================================== */
-      var detectLine = document.getElementById("ak-detect");
-      var detectText = document.getElementById("ak-detect-text");
+      var probeCard = document.getElementById("ak-probe-card");
+      var probeIdEl = document.getElementById("ak-probe-id");
+      var statEls = {
+        platform: document.getElementById("ak-stat-platform"),
+        arch: document.getElementById("ak-stat-arch"),
+        bits: document.getElementById("ak-stat-bits"),
+        via: document.getElementById("ak-stat-via")
+      };
+      var verdictEl = document.getElementById("ak-verdict");
+      var verdictNoteEl = document.getElementById("ak-verdict-note");
+      var verdictBtn = document.getElementById("ak-verdict-btn");
+      var verdictBtnText = document.getElementById("ak-verdict-btn-text");
 
-      function detectCopy(info) {
+      var VIA_LABEL = { "client-hints": "client hints", "user-agent": "user agent", "none": "unavailable" };
+
+      function newScanId() {
+        var hex = "0123456789ABCDEF";
+        var s = "";
+        for (var i = 0; i < 4; i++) s += hex[Math.floor(Math.random() * 16)];
+        probeIdEl.textContent = "scan · " + s;
+      }
+
+      function clearStats() {
+        statEls.platform.textContent = "—";
+        statEls.arch.textContent = "—";
+        statEls.bits.textContent = "—";
+        statEls.via.textContent = "—";
+        statEls.platform.classList.remove("is-set");
+        statEls.arch.classList.remove("is-set");
+        statEls.bits.classList.remove("is-set");
+        statEls.via.classList.remove("is-set");
+        verdictEl.classList.remove("is-set");
+        verdictEl.textContent = "probing…";
+        verdictNoteEl.textContent = "Reading client hints — one moment.";
+        verdictBtn.hidden = true;
+      }
+
+      function probeCopy(info) {
         switch (info.result) {
           case "arm64-v8a":
-            return ["arm64-v8a detected — this is the build for your device", true];
+            return { build: "arm64-v8a", note: "64-bit ARM detected — this is the build for your device.", pick: "arm64-v8a", btn: "Get this build" };
           case "armeabi-v7a":
-            return ["armeabi-v7a detected — this is the build for your device", true];
+            return { build: "armeabi-v7a", note: "32-bit ARM detected — this is the build for your device.", pick: "armeabi-v7a", btn: "Get this build" };
           case "x86_64":
           case "x86":
-            return ["x86 Android detected — universal is the safe pick", false];
-          case "ios-unsupported":
-            return ["iOS detected — ANI-KUTA is Android-only", false];
+            return { build: "universal", note: "x86 Android detected — no dedicated build; universal covers it.", pick: "universal", btn: "View universal" };
           case "desktop-notice":
-            return ["You're on desktop — open this page on your Android phone", false];
+            return { build: "universal", note: "Desktop browser — universal is the safe pick for any Android device.", pick: "universal", btn: "View universal" };
+          case "ios-unsupported":
+            return { build: "—", note: "iOS detected — ANI-KUTA is Android-only.", pick: null, btn: null };
           default:
             if (info.via === "none") {
-              return ["Couldn't identify your CPU — universal runs on any Android device", false];
+              return { build: "universal", note: "Couldn't identify the CPU — universal runs on any Android device.", pick: "universal", btn: "View universal" };
             }
-            return ["Universal build — runs on any Android device", false];
+            return { build: "universal", note: "Runs on any Android device — universal is the safe pick.", pick: "universal", btn: "View universal" };
         }
       }
+
+      function probeTimers() {
+        return {
+          ids: [],
+          add(fn, ms) { this.ids.push(setTimeout(fn, ms)); },
+          clear() { for (var i = 0; i < this.ids.length; i++) clearTimeout(this.ids[i]); this.ids = []; }
+        };
+      }
+
+      var probeTimer = null;
+
+      function renderProbe(info) {
+        if (probeTimer) probeTimer.clear();
+        probeTimer = probeTimers();
+
+        probeTimer.add(function () {
+          statEls.platform.textContent = info.platform || "unknown";
+          statEls.platform.classList.add("is-set");
+        }, 90);
+        probeTimer.add(function () {
+          statEls.arch.textContent = info.arch || "unknown";
+          statEls.arch.classList.add("is-set");
+        }, 210);
+        probeTimer.add(function () {
+          statEls.bits.textContent = info.bits || "unknown";
+          statEls.bits.classList.add("is-set");
+        }, 330);
+        probeTimer.add(function () {
+          statEls.via.textContent = VIA_LABEL[info.via] || info.via || "—";
+          statEls.via.classList.add("is-set");
+        }, 450);
+
+        probeTimer.add(function () {
+          var copy = probeCopy(info);
+          verdictEl.textContent = copy.build;
+          verdictEl.classList.add("is-set");
+          verdictNoteEl.textContent = copy.note;
+          if (copy.pick) {
+            verdictBtn.hidden = false;
+            verdictBtnText.textContent = copy.btn;
+            verdictBtn.onclick = function () {
+              openModal(copy.pick, verdictBtn);
+            };
+          } else {
+            verdictBtn.hidden = true;
+          }
+        }, 640);
+
+        probeTimer.add(function () {
+          probeCard.classList.remove("is-scanning");
+        }, 1050);
+      }
+
+      function runProbe(fresh) {
+        newScanId();
+        clearStats();
+        probeCard.classList.add("is-scanning");
+        if (fresh) detectionPromise = null;
+        getDetection().then(function (info) {
+          resolvedInfo = info;
+          renderTags();
+          if (modalOpenState && modalPick === null) renderModal();
+          renderProbe(info);
+        });
+      }
+
+      document.getElementById("ak-probe-rerun").addEventListener("click", function () {
+        runProbe(true);
+      });
 
       /* ==========================================================================
          Disclosure panel (expand button) — Escape + outside-click close.
@@ -1515,10 +2435,8 @@
       });
 
       /* ==========================================================================
-         Demo modal — seeded with the shared detection promise ("probing…" until
-         it settles), auto-updates when the promise lands. Escape + overlay
-         click + X close; focus moves in on open, returns to the trigger on
-         close; Tab cycles through VISIBLE buttons only.
+         Modal — release-aware: once the repository publishes a release, the
+         modal offers the real APK download; until then it stays a demo notice.
          ========================================================================== */
       var overlay = document.getElementById("ak-overlay");
       var modal = document.getElementById("ak-modal");
@@ -1527,6 +2445,8 @@
       var modalBody = document.getElementById("ak-modal-body");
       var modalX = document.getElementById("ak-modal-x");
       var modalClose = document.getElementById("ak-modal-close");
+      var modalAction = document.getElementById("ak-modal-action");
+      var modalActionText = document.getElementById("ak-modal-action-text");
       var primaryBtn = document.getElementById("ak-primary");
 
       var modalOpenState = false;
@@ -1534,22 +2454,55 @@
       var returnFocusEl = null;
       var resolvedInfo = null;
 
+      var release = null; /* { tag, url, assets: { build: { name, size, url } } } */
+
       var BUILDS = [
         { id: "arm64-v8a", neutral: "64-bit" },
         { id: "armeabi-v7a", neutral: "32-bit" },
         { id: "universal", neutral: "Fallback" }
       ];
 
+      function fmtMB(bytes) {
+        return (bytes / 1048576).toFixed(1) + " MB";
+      }
+
+      function assetFor(build) {
+        if (!release) return null;
+        return release.assets[build] || null;
+      }
+
       function modalCopy(info, pick) {
+        var build = pick || (info && (info.result === "arm64-v8a" || info.result === "armeabi-v7a") ? info.result : (info && (info.result === "x86_64" || info.result === "x86" || info.result === "universal" || info.result === "desktop-notice") ? "universal" : null));
+
+        /* real release available -> actionable modal */
+        if (release && build) {
+          var asset = assetFor(build);
+          if (asset) {
+            return {
+              eyebrow: "DOWNLOAD",
+              title: build,
+              body: "ANI-KUTA " + release.tag + " — " + asset.name + " (" + asset.size + ") from GitHub Releases.",
+              action: { text: "Download APK · " + asset.size, href: asset.url }
+            };
+          }
+          return {
+            eyebrow: "DOWNLOAD",
+            title: build,
+            body: "A dedicated " + build + " asset isn't attached to " + release.tag + " — grab it from the release page instead.",
+            action: { text: "Open release page", href: release.url }
+          };
+        }
+
         if (pick) {
           return {
             eyebrow: "BUILD",
             title: pick,
-            body: "This demo would download the " + pick + " APK. No builds are published yet — ANI-KUTA is in demo preview."
+            body: "This demo would download the " + pick + " APK. No builds are published yet — ANI-KUTA is in demo preview.",
+            action: null
           };
         }
         if (!info) {
-          return { eyebrow: "BUILD", title: "probing…", body: "Identifying your device — one moment." };
+          return { eyebrow: "BUILD", title: "probing…", body: "Identifying your device — one moment.", action: null };
         }
         switch (info.result) {
           case "arm64-v8a":
@@ -1557,39 +2510,45 @@
             return {
               eyebrow: "BUILD",
               title: info.result,
-              body: "This demo would download the " + info.result + " APK. No builds are published yet — ANI-KUTA is in demo preview."
+              body: "This demo would download the " + info.result + " APK. No builds are published yet — ANI-KUTA is in demo preview.",
+              action: null
             };
           case "x86_64":
           case "x86":
             return {
               eyebrow: "BUILD",
               title: "universal",
-              body: "Detected an x86 Android device. No dedicated x86 build is offered — use universal where supported."
+              body: "Detected an x86 Android device. No dedicated x86 build is offered — use universal where supported.",
+              action: null
             };
           case "ios-unsupported":
             return {
               eyebrow: "NOTICE",
               title: "not available",
-              body: "ANI-KUTA is an Android app. There is no iOS build."
+              body: "ANI-KUTA is an Android app. There is no iOS build.",
+              action: null
             };
           case "desktop-notice":
             return {
               eyebrow: "NOTICE",
               title: "android only",
-              body: "This page detects Android devices. Open it on your Android phone to pick a build."
+              body: "This page detects Android devices. Open it on your Android phone to pick a build.",
+              action: null
             };
           default:
             if (info.via === "none") {
               return {
                 eyebrow: "BUILD",
                 title: "universal",
-                body: "We couldn't identify your CPU — universal runs on any Android device. No builds are published yet (demo preview)."
+                body: "We couldn't identify your CPU — universal runs on any Android device. No builds are published yet (demo preview).",
+                action: null
               };
             }
             return {
               eyebrow: "BUILD",
-              title: "universal",
-              body: "This demo would download the " + info.result + " APK. No builds are published yet — ANI-KUTA is in demo preview."
+              title: info.result,
+              body: "This demo would download the " + info.result + " APK. No builds are published yet — ANI-KUTA is in demo preview.",
+              action: null
             };
         }
       }
@@ -1627,6 +2586,13 @@
         modalEyebrow.textContent = copy.eyebrow;
         modalTitle.textContent = copy.title;
         modalBody.textContent = copy.body;
+        if (copy.action) {
+          modalAction.hidden = false;
+          modalAction.href = copy.action.href;
+          modalActionText.textContent = copy.action.text;
+        } else {
+          modalAction.hidden = true;
+        }
       }
 
       function openModal(pick, trigger) {
@@ -1658,8 +2624,6 @@
       for (var r = 0; r < rows.length; r++) {
         (function (row) {
           row.addEventListener("click", function () {
-            /* Focus returns to the expand button on close — the row itself is
-               inside the just-collapsed panel (visibility:hidden). */
             openModal(row.getAttribute("data-build"), expandBtn);
           });
         })(rows[r]);
@@ -1680,7 +2644,7 @@
         }
         if (event.key !== "Tab") return;
         var buttons = Array.prototype.filter.call(
-          modal.querySelectorAll("button"),
+          modal.querySelectorAll("button, a"),
           function (el) { return !el.disabled && el.offsetParent !== null; }
         );
         if (buttons.length === 0) return;
@@ -1695,19 +2659,137 @@
         }
       });
 
-      /* ---- boot ------------------------------------------------------------------ */
-      getDetection().then(function (info) {
-        resolvedInfo = info;
-        renderTags();
-        if (modalOpenState && modalPick === null) renderModal();
+      /* ==========================================================================
+         RELEASE CARD — live from the GitHub API; graceful when there is none.
+         ========================================================================== */
+      var relCard = document.getElementById("ak-rel-card");
 
-        var copy = detectCopy(info);
-        detectText.textContent = copy[0];
-        detectLine.classList.remove("is-pending");
-        detectLine.classList.add(copy[1] ? "is-ok" : "is-info");
+      function relDate(iso) {
+        try {
+          return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+        } catch (e) {
+          return "";
+        }
+      }
+
+      function renderReleaseEmpty(kind) {
+        var icon = "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' focusable='false'><path d='M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z'/><circle cx='7.5' cy='7.5' r='.5' fill='currentColor'/></svg>";
+        var title = kind === "error"
+          ? "Couldn't reach GitHub just now."
+          : "No release tagged yet.";
+        var body = kind === "error"
+          ? "The connection to the GitHub API failed. Check back shortly — or open the releases page directly."
+          : "The first public build is being prepared. Watch the repository and it will land right here, with arm64-v8a, armeabi-v7a and universal APKs attached.";
+        relCard.innerHTML =
+          '<div class="ak-rel-empty">' +
+            '<span class="ak-rel-empty-ic">' + icon + "</span>" +
+            "<div>" +
+              '<h3 class="ak-rel-title">' + title + "</h3>" +
+              '<p class="ak-rel-body">' + body + "</p>" +
+              '<div class="ak-rel-actions">' +
+                '<a class="ak-rel-btn ak-rel-btn-primary" href="https://github.com/Confused-Creature-180/ANI-KUTA/releases" target="_blank" rel="noopener noreferrer">' +
+                  "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' focusable='false'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/><polyline points='7 10 12 15 17 10'/><line x1='12' x2='12' y1='15' y2='3'/></svg>" +
+                  "Open releases page" +
+                "</a>" +
+                '<a class="ak-rel-btn ak-rel-btn-ghost" href="https://github.com/Confused-Creature-180/ANI-KUTA/releases.atom" target="_blank" rel="noopener noreferrer">' +
+                  "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' focusable='false'><path d='M4 11a9 9 0 0 1 9 9'/><path d='M4 4a16 16 0 0 1 16 16'/><circle cx='5' cy='19' r='1'/></svg>" +
+                  "Watch the feed" +
+                "</a>" +
+              "</div>" +
+            "</div>" +
+          "</div>";
+      }
+
+      function renderRelease(rel) {
+        var assets = rel.assets || [];
+        var chips = "";
+        for (var i = 0; i < assets.length && i < 6; i++) {
+          chips += '<span class="ak-asset"><b>' + escapeHtml(assets[i].name) + "</b>" + fmtMB(assets[i].size) + "</span>";
+        }
+        var body = (rel.body || "").trim();
+        if (body.length > 220) body = body.slice(0, 220) + "…";
+        relCard.innerHTML =
+          '<div class="ak-rel-top">' +
+            '<span class="ak-rel-tag">' +
+              "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' focusable='false'><path d='M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z'/><circle cx='7.5' cy='7.5' r='.5' fill='currentColor'/></svg>" +
+              escapeHtml(rel.tag_name) +
+            "</span>" +
+            '<span class="ak-rel-date">' + relDate(rel.published_at) + "</span>" +
+          "</div>" +
+          (rel.name ? '<h3 class="ak-rel-title">' + escapeHtml(rel.name) + "</h3>" : "") +
+          (body ? '<p class="ak-rel-body">' + escapeHtml(body) + "</p>" : "") +
+          (chips ? '<div class="ak-rel-assets">' + chips + "</div>" : "") +
+          '<div class="ak-rel-actions">' +
+            '<a class="ak-rel-btn ak-rel-btn-primary" href="' + escapeHtml(rel.html_url) + '" target="_blank" rel="noopener noreferrer">' +
+              "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' focusable='false'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/><polyline points='7 10 12 15 17 10'/><line x1='12' x2='12' y1='15' y2='3'/></svg>" +
+              "Open release" +
+            "</a>" +
+            '<a class="ak-rel-btn ak-rel-btn-ghost" href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer">' +
+              "<svg viewBox='0 0 24 24' fill='currentColor' aria-hidden='true' focusable='false'><path d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/></svg>" +
+              "View repository" +
+            "</a>" +
+          "</div>";
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+      }
+
+      fetch("https://api.github.com/repos/Confused-Creature-180/ANI-KUTA/releases/latest", {
+        headers: { Accept: "application/vnd.github+json" }
+      }).then(function (res) {
+        if (res.status === 404) return "none";
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      }).then(function (data) {
+        if (data === "none" || !data) {
+          renderReleaseEmpty("none");
+          return;
+        }
+        var assets = {};
+        var list = data.assets || [];
+        for (var i = 0; i < list.length; i++) {
+          var n = String(list[i].name || "").toLowerCase();
+          var url = list[i].browser_download_url;
+          var size = fmtMB(list[i].size);
+          var name = list[i].name;
+          if (n.indexOf("arm64-v8a") !== -1 || n.indexOf("arm64") !== -1) {
+            assets["arm64-v8a"] = { name: name, size: size, url: url };
+          } else if (n.indexOf("armeabi-v7a") !== -1 || n.indexOf("v7a") !== -1 || n.indexOf("armeabi") !== -1) {
+            assets["armeabi-v7a"] = { name: name, size: size, url: url };
+          } else if (n.indexOf("universal") !== -1 || n.indexOf("all") !== -1) {
+            assets["universal"] = { name: name, size: size, url: url };
+          }
+        }
+        release = { tag: data.tag_name, url: data.html_url, assets: assets };
+        renderRelease(data);
+      }).catch(function () {
+        renderReleaseEmpty("error");
       });
 
+      /* ==========================================================================
+         Scroll reveal — below-fold sections rise in as they enter the viewport.
+         ========================================================================== */
+      var rises = document.querySelectorAll(".ak-rise");
+      if ("IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (entries) {
+          for (var i = 0; i < entries.length; i++) {
+            if (entries[i].isIntersecting) {
+              entries[i].target.classList.add("is-in");
+              io.unobserve(entries[i].target);
+            }
+          }
+        }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+        for (var ri = 0; ri < rises.length; ri++) io.observe(rises[ri]);
+      } else {
+        for (var rj = 0; rj < rises.length; rj++) rises[rj].classList.add("is-in");
+      }
+
+      /* ---- boot ------------------------------------------------------------------ */
       renderTags();
+      runProbe(false);
     })();
   </script>
 </body>
