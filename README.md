@@ -2,7 +2,7 @@
 
 # ▶️ ANI-KUTA
 
-**A clean, extension-based video app for Android.**
+**A clean, extension-based anime streaming app for Android.**
 
 [![Latest Release](https://img.shields.io/github/v/release/Confused-Creature-180/ANI-KUTA?style=flat-square&labelColor=1b1b22)](https://github.com/Confused-Creature-180/ANI-KUTA/releases)
 [![Platform](https://img.shields.io/badge/platform-Android-3ddc97?style=flat-square&labelColor=1b1b22)](https://github.com/Confused-Creature-180/ANI-KUTA)
@@ -22,7 +22,7 @@
 
 ## 📖 About
 
-**ANI-KUTA** is a lightweight, extension-based video content app for Android. Install the app, add the extensions you like, and watch — everything in one clean, minimal place.
+**ANI-KUTA** is a lightweight, extension-based anime streaming app for Android. Install the app, add the extensions you like, and watch — everything in one clean, minimal place.
 
 - 🧩 **Extension-powered** — add the sources you want, skip the rest
 - 🪶 **Clean & minimal** — content first, clutter nowhere
@@ -34,15 +34,17 @@
 
 Grab the APK from the **[download page](https://confused-creature-180.github.io/ANI-KUTA/)** — it probes your device right in the browser and recommends the build that fits. No accounts, no tracking, just the file.
 
+Latest: **[ANI-KUTA v1.1.1](https://github.com/Confused-Creature-180/ANI-KUTA/releases/latest)** — the first official release.
+
 | Build | Architecture | For |
 |---|---|---|
-| `arm64-v8a` | 64-bit ARM | most modern Android phones |
-| `armeabi-v7a` | 32-bit ARM | older devices |
-| `universal` | all architectures | the safe fallback |
+| [`arm64-v8a`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.1/ani-kuta-v1.1.1-arm64-v8a.apk) | 64-bit ARM | **most modern Android phones** — pick this if unsure |
+| [`armeabi-v7a`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.1/ani-kuta-v1.1.1-armeabi-v7a.apk) | 32-bit ARM | older devices |
+| [`x86_64`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.1/ani-kuta-v1.1.1-x86_64.apk) | 64-bit Intel | emulators, Chromebooks |
+| [`x86`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.1/ani-kuta-v1.1.1-x86.apk) | 32-bit Intel | older x86 devices/boxes |
+| [`universal`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.1/ani-kuta-v1.1.1-universal.apk) | all architectures | every ABI in one APK (largest) |
 
-> 💡 More builds — **x86_64**, **x86** and friends — will join the lineup in future releases.
->
-> 📌 Requires **Android 8.0+**. You can also browse everything on the [Releases](https://github.com/Confused-Creature-180/ANI-KUTA/releases) page.
+> 📌 Requires **Android 7.0+**. The in-app updater (**Settings → About → Check for Updates**) picks the right APK for your device automatically. You can also browse everything on the [Releases](https://github.com/Confused-Creature-180/ANI-KUTA/releases) page.
 
 ---
 
@@ -68,4 +70,4 @@ But where's the fun in that? 😉
 
 ## 📄 License
 
-To be finalized alongside the first stable release.
+Not finalized yet — this is only the first release.
