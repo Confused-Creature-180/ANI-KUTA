@@ -37,3 +37,36 @@ You can also trigger a release manually from the **Actions** tab (*Release → R
 | `ANI-KUTA-vX.Y.Z-arm64-v8a.apk` | 64-bit ARM (most modern devices) |
 | `ANI-KUTA-vX.Y.Z-armeabi-v7a.apk` | 32-bit ARM (older devices) |
 | `ANI-KUTA-vX.Y.Z-universal.apk` | All architectures |
+
+## Features
+
+ANI-KUTA is built around the same ideas as the projects that inspired it (Aniyomi, Anikku):
+
+- **Extension-based sources** — bring your own sources through community extensions; the player stays lean
+- **Library & categories** — organize your content, schedule refreshes, surface new episodes automatically
+- **Local watching** — download and watch offline, anywhere
+- **Tracker sync** — keep progress in step with services like AniList, MyAnimeList, Kitsu, Simkl, Shikimori and Bangumi
+- **Configurable player** — a video player with the options power users expect
+- **Light & dark themes** — follows your device or your mood
+
+> The feature set is in active development — follow along in the repository.
+
+## Build downloads
+
+| Build | Architecture | Devices |
+|---|---|---|
+| `arm64-v8a` | 64-bit ARM | Most modern Android phones |
+| `armeabi-v7a` | 32-bit ARM | Older devices |
+| `universal` | All architectures | Safe fallback for anything else |
+
+*Requires Android 8.0 or higher. Not sure which build? The [download page](https://confused-creature-180.github.io/ANI-KUTA/) probes your device and recommends one — entirely in your browser.*
+
+## Disclaimer
+
+The developer(s) of this application have no affiliation with the content providers available through community extensions, and this application hosts zero content. All media is served by third-party sources that the user chooses to install; users are responsible for the content they access and for complying with the laws and terms of service of those providers.
+
+ANI-KUTA is an independent project and is not affiliated with Aniyomi, Anikku, Mihon or Tachiyomi.
+
+## License
+
+To be finalized alongside the first stable release.
