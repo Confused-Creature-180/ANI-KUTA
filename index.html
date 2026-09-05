@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ANI-KUTA — Download for Android</title>
-  <meta name="description" content="ANI-KUTA — an extension-based video content app for Android. Probe your device, pick arm64-v8a, armeabi-v7a or universal, and grab the APK.">
+  <meta name="description" content="ANI-KUTA — a free, open source extension-based video player for Android. Probe your device, pick arm64-v8a, armeabi-v7a or universal, and grab the APK.">
   <meta name="theme-color" content="#060B08">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <meta property="og:title" content="ANI-KUTA — Download for Android">
-  <meta property="og:description" content="ANI-KUTA — an extension-based video content app for Android. Probe your device, pick the right build, grab the APK.">
+  <meta property="og:description" content="ANI-KUTA — a free, open source extension-based video player for Android. Probe your device, pick the right build, grab the APK.">
   <meta property="og:url" content="https://confused-creature-180.github.io/ANI-KUTA/">
   <meta property="og:image" content="https://confused-creature-180.github.io/ANI-KUTA/og.png">
   <meta property="og:image:width" content="1200">
@@ -1270,9 +1270,9 @@
       <section class="ak-hero">
         <div class="ak-container">
           <div class="ak-hero-inner">
-            <p class="ak-eyebrow ak-rise" style="--d:0ms">Android · Extension-based video player</p>
+            <p class="ak-eyebrow ak-rise" style="--d:0ms">Android · Free &amp; open source</p>
 
-            <h1 class="ak-h1 ak-rise" style="--d:80ms">Video content, powered&nbsp;by <em class="ak-h1-em">extensions</em>.</h1>
+            <h1 class="ak-h1 ak-rise" style="--d:80ms">One player. Every <em class="ak-h1-em">extension</em>.</h1>
 
             <div class="ak-cta ak-rise" style="--d:240ms" id="download">
               <div class="ak-cta-wrap" id="ak-cta-wrap">
@@ -1318,7 +1318,7 @@
                           <span class="ak-row-tag">Fallback</span>
                         </button>
                       </div>
-                      <p class="ak-panel-note">Requires Android 8.0 or higher. No builds are published yet — rows open a notice, not a download.</p>
+                      <p class="ak-panel-note">Requires Android 8.0 or higher. No builds are published yet — picking a build shows a notice.</p>
                     </div>
                   </div>
                 </div>
@@ -1464,7 +1464,7 @@
                 </svg>
                 <span class="ak-footer-name">ANI-KUTA</span>
               </div>
-              <p class="ak-footer-tag">An extension-based video content app for Android. Requires Android 8.0 or higher.</p>
+              <p class="ak-footer-tag">A free, open source video player for Android, built around extensions. Requires Android 8.0 or higher.</p>
             </div>
             <nav class="ak-footer-links" aria-label="Footer">
               <a href="#download">Download</a>
@@ -2156,7 +2156,7 @@
           return {
             eyebrow: "BUILD",
             title: pick,
-            body: "This demo would download the " + pick + " APK. No builds are published yet — ANI-KUTA is in demo preview.",
+            body: "No builds are published yet — this is a demo preview. The " + pick + " APK will download here once a release ships.",
             action: null
           };
         }
@@ -2169,7 +2169,7 @@
             return {
               eyebrow: "BUILD",
               title: info.result,
-              body: "This demo would download the " + info.result + " APK. No builds are published yet — ANI-KUTA is in demo preview.",
+              body: "No builds are published yet — this is a demo preview. The " + info.result + " APK will download here once a release ships.",
               action: null
             };
           case "x86_64":
@@ -2177,20 +2177,20 @@
             return {
               eyebrow: "BUILD",
               title: "universal",
-              body: "Detected an x86 Android device. No dedicated x86 build is offered — use universal where supported.",
+              body: "Detected an x86 Android device. There's no dedicated x86 build yet — universal covers it.",
               action: null
             };
           case "ios-unsupported":
             return {
               eyebrow: "NOTICE",
-              title: "not available",
+              title: "Android only",
               body: "ANI-KUTA is an Android app. There is no iOS build.",
               action: null
             };
           case "desktop-notice":
             return {
               eyebrow: "NOTICE",
-              title: "android only",
+              title: "Android only",
               body: "This page detects Android devices. Open it on your Android phone to pick a build.",
               action: null
             };
@@ -2199,14 +2199,14 @@
               return {
                 eyebrow: "BUILD",
                 title: "universal",
-                body: "We couldn't identify your CPU — universal runs on any Android device. No builds are published yet (demo preview).",
+                body: "We couldn't identify your CPU — universal runs on any Android device. No builds are published yet. This is a demo preview.",
                 action: null
               };
             }
             return {
               eyebrow: "BUILD",
               title: info.result,
-              body: "This demo would download the " + info.result + " APK. No builds are published yet — ANI-KUTA is in demo preview.",
+              body: "No builds are published yet — this is a demo preview. The " + info.result + " APK will download here once a release ships.",
               action: null
             };
         }
