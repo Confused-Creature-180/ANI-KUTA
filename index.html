@@ -4,40 +4,44 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ANI-KUTA — Download for Android</title>
-  <meta name="description" content="ANI-KUTA — an anime streaming app for Android. Probe your device, pick the right build — arm64-v8a, armeabi-v7a, x86, x86_64 or universal — and grab the APK.">
-  <meta name="theme-color" content="#060B08">
+  <meta name="description" content="ANI-KUTA — a new way to watch on Android. Probe your device, pick the right build — arm64-v8a, armeabi-v7a, x86, x86_64 or universal — and grab the APK.">
+  <meta name="theme-color" content="#101712">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <meta property="og:title" content="ANI-KUTA — Download for Android">
-  <meta property="og:description" content="ANI-KUTA — an anime streaming app for Android. Probe your device, pick the right build, grab the APK.">
+  <meta property="og:description" content="ANI-KUTA — a new way to watch on Android. Probe your device, pick the right build, grab the APK.">
   <meta property="og:url" content="https://confused-creature-180.github.io/ANI-KUTA/">
   <meta property="og:image" content="https://confused-creature-180.github.io/ANI-KUTA/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ANI-KUTA — extension-based video player for Android. Download page with device probe and build picker.">
+  <meta property="og:image:alt" content="ANI-KUTA — a new way to watch on Android. Download page with device probe and build picker.">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,110..125,600..800&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     /* ==========================================================================
-       ANI-KUTA — "LIVING GREEN" design system v5
-       Direction (user round-5):
+       ANI-KUTA — "LIVING GREEN" design system v7
+       Direction (user round-8):
+       - one short new tagline under the brand headline, nothing else;
+       - download CTA is a baby-blue rectangle (10px corners) — the one cool
+         accent on the green page; hero + CTA center together on phones;
+       - all text carries a soft dark halo (text-shadow) so it stays crisp
+         over the scene; base background lifted one step lighter;
+       - probe: three dedicated section cards (platform / architecture /
+         bitness) plus a full-width "build for you" verdict strip.
+       Carried from round-5:
        - nav: frosted theme glass, NO download button, auto-hides on scroll;
-       - hero: left-aligned, zero fluff copy, CTA reads just "Download";
-       - probe: one compact instrument strip (platform / arch / bitness /
-         build for you) — no narration, no action button;
        - bottom: exactly three cards (watch · download · customize);
        - release section removed (modal stays release-aware silently);
-       - scene: shapes roam a little more, soft-focus blur for depth —
-         background and foreground read as clearly separate planes.
+       - scene: soft-focus blur for depth, shapes roam freely.
        Restraint rules: one hue family (hue-capped at 186), scene dimmed,
        scrims for readability; the CTA glow stays the single strong glow.
        ========================================================================== */
     :root {
       color-scheme: dark;
-      --bg: #060B08;
-      --bg-rgb: 6, 11, 8;
-      --surface: rgba(13, 21, 16, 0.72);
+      --bg: #101712;
+      --bg-rgb: 16, 23, 18;
+      --surface: rgba(21, 30, 24, 0.72);
       --glass-hi: rgba(255, 255, 255, 0.055);
       --glass-lo: rgba(255, 255, 255, 0.008);
       --border: rgba(163, 192, 170, 0.14);
@@ -46,6 +50,10 @@
       --accent-hover: #C9FF6B;
       --accent-ink: #0B130B;
       --accent-rgb: 180, 255, 57;
+      --baby: #A5D8F3;
+      --baby-hover: #C2E6FA;
+      --baby-ink: #0B1620;
+      --baby-rgb: 165, 216, 243;
       --text-1: #F1F7F1;
       --text-2: #B3C1B5;
       --text-3: #8A9A8D;
@@ -75,6 +83,12 @@
       line-height: 1.6;
       overflow-x: clip;
       -webkit-font-smoothing: antialiased;
+      /* soft dark halo — every glyph keeps a blurry rim so text stays crisp
+         over the moving scene (user round-8). */
+      text-shadow:
+        0 1px 2px rgba(6, 10, 8, 0.85),
+        0 0 5px rgba(6, 10, 8, 0.55),
+        0 0 16px rgba(6, 10, 8, 0.35);
     }
 
     h1, h2, h3, p { margin: 0; }
@@ -163,7 +177,7 @@
       border-radius: 24px;
       background:
         linear-gradient(180deg, var(--glass-hi), rgba(255, 255, 255, 0.018) 38%, var(--glass-lo)),
-        rgba(10, 17, 12, 0.66);
+        rgba(19, 27, 22, 0.66);
       backdrop-filter: blur(18px) saturate(150%);
       -webkit-backdrop-filter: blur(18px) saturate(150%);
       box-shadow:
@@ -193,8 +207,8 @@
       border-radius: 20px;
       border: 1px solid rgba(var(--accent-rgb), 0.20);
       background:
-        linear-gradient(112deg, rgba(var(--accent-rgb), 0.14), rgba(var(--accent-rgb), 0.045) 34%, rgba(10, 16, 11, 0.38) 58%, rgba(10, 16, 11, 0.54) 100%),
-        rgba(8, 13, 10, 0.34);
+        linear-gradient(112deg, rgba(var(--accent-rgb), 0.14), rgba(var(--accent-rgb), 0.045) 34%, rgba(17, 24, 19, 0.38) 58%, rgba(17, 24, 19, 0.54) 100%),
+        rgba(15, 22, 17, 0.40);
       backdrop-filter: blur(20px) saturate(170%);
       -webkit-backdrop-filter: blur(20px) saturate(170%);
       box-shadow:
@@ -333,6 +347,10 @@
       letter-spacing: -0.025em;
       color: var(--text-1);
       text-wrap: balance;
+      text-shadow:
+        0 2px 4px rgba(6, 10, 8, 0.9),
+        0 0 9px rgba(6, 10, 8, 0.6),
+        0 0 26px rgba(6, 10, 8, 0.4);
     }
 
     .ak-h1-em {
@@ -372,9 +390,9 @@
 
     .ak-cta-split {
       display: inline-flex;
-      border-radius: 9999px;
+      border-radius: 10px;
       box-shadow:
-        0 18px 48px -12px rgba(var(--accent-rgb), 0.38),
+        0 18px 48px -12px rgba(var(--baby-rgb), 0.38),
         0 4px 16px rgba(0, 0, 0, 0.35);
       transition: transform 180ms var(--ease-out), box-shadow 180ms var(--ease-out);
     }
@@ -382,7 +400,7 @@
     .ak-cta-split:hover {
       transform: translateY(-2px);
       box-shadow:
-        0 22px 54px -12px rgba(var(--accent-rgb), 0.46),
+        0 22px 54px -12px rgba(var(--baby-rgb), 0.46),
         0 6px 18px rgba(0, 0, 0, 0.35);
     }
 
@@ -398,19 +416,20 @@
       height: 56px;
       padding: 0 26px 0 24px;
       border: 0;
-      border-radius: 9999px 0 0 9999px;
-      background: var(--accent);
-      color: var(--accent-ink);
+      border-radius: 10px 0 0 10px;
+      background: var(--baby);
+      color: var(--baby-ink);
       font-family: var(--font-body);
       font-size: 15.5px;
       font-weight: 600;
       letter-spacing: 0.01em;
       cursor: pointer;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      text-shadow: none;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
       transition: background-color 160ms var(--ease-out);
     }
 
-    .ak-btn-primary:hover { background: var(--accent-hover); }
+    .ak-btn-primary:hover { background: var(--baby-hover); }
     .ak-btn-primary svg { width: 18px; height: 18px; }
 
     /* sheen sweep on hover */
@@ -440,22 +459,23 @@
       width: 56px;
       height: 56px;
       border: 0;
-      border-left: 1px solid rgba(11, 19, 11, 0.3);
-      border-radius: 0 9999px 9999px 0;
-      background: #101B13;
+      border-left: 1px solid rgba(11, 22, 32, 0.3);
+      border-radius: 0 10px 10px 0;
+      background: #16232C;
       color: var(--text-2);
       cursor: pointer;
+      text-shadow: none;
       transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out);
     }
 
     .ak-btn-expand:hover {
-      background: #16251A;
+      background: #1C2E3A;
       color: var(--text-1);
     }
 
     .ak-btn-expand[aria-expanded="true"] {
-      background: var(--accent);
-      color: var(--accent-ink);
+      background: var(--baby);
+      color: var(--baby-ink);
     }
 
     .ak-btn-expand svg {
@@ -574,6 +594,7 @@
       background: var(--accent);
       border-color: var(--accent);
       color: var(--accent-ink);
+      text-shadow: none;
     }
 
     .ak-panel-note {
@@ -606,9 +627,10 @@
     .ak-ghost svg { width: 16px; height: 16px; }
 
     /* ===========================================================================
-       DEVICE PROBE — one compact instrument strip (user round-5: compact,
-       no narration, no action button). Mono label + pulsing dot on a slim
-       bar, four stat cells, the "build for you" cell tinted with the accent.
+       DEVICE PROBE — dedicated section cards (user round-8). The slim bar
+       with mono label + pulsing dot stays; below it Platform / Architecture
+       / Bitness each get their own bordered card with a detail sub-line,
+       and a full-width accent strip carries the "build for you" verdict.
        =========================================================================== */
     .ak-probe {
       margin-top: clamp(72px, 10vh, 110px);
@@ -696,26 +718,49 @@
 
     .ak-probe-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
     }
 
     .ak-stat {
       display: flex;
       flex-direction: column;
-      gap: 7px;
-      padding: 11px 15px;
+      gap: 6px;
+      padding: 14px 16px;
       min-width: 0;
+      border: 1px solid var(--border);
       border-radius: 14px;
+      background: rgba(255, 255, 255, 0.025);
     }
 
-    .ak-stat-build {
+    .ak-verdict {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+      padding: 13px 16px;
+      border: 1px solid rgba(var(--accent-rgb), 0.25);
+      border-radius: 14px;
       background:
         linear-gradient(180deg, rgba(var(--accent-rgb), 0.10), rgba(var(--accent-rgb), 0.03)),
         rgba(9, 15, 11, 0.4);
-      border: 1px solid rgba(var(--accent-rgb), 0.25);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
     }
+
+    .ak-stat-sub {
+      font-size: 11.5px;
+      line-height: 1.45;
+      color: var(--text-3);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: 0.3;
+      transform: translateY(3px);
+      transition: opacity 320ms var(--ease-out), transform 320ms var(--ease-out);
+    }
+
+    .ak-stat-sub.is-set { opacity: 1; transform: none; }
 
     .ak-stat-k {
       font-size: 10.5px;
@@ -797,6 +842,10 @@
       letter-spacing: -0.02em;
       color: var(--text-1);
       text-wrap: balance;
+      text-shadow:
+        0 2px 4px rgba(6, 10, 8, 0.9),
+        0 0 9px rgba(6, 10, 8, 0.6),
+        0 0 26px rgba(6, 10, 8, 0.4);
     }
 
     .ak-sec-sub {
@@ -1035,7 +1084,7 @@
       display: grid;
       place-items: center;
       padding: 24px;
-      background: rgba(4, 8, 6, 0.66);
+      background: rgba(10, 16, 12, 0.62);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
@@ -1051,7 +1100,7 @@
       border-radius: 22px;
       background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)),
-        rgba(13, 21, 16, 0.92);
+        rgba(21, 30, 24, 0.94);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       box-shadow:
@@ -1133,12 +1182,13 @@
     .ak-modal-btn[hidden] { display: none; }
 
     .ak-modal-btn-primary {
-      background: var(--accent);
-      color: var(--accent-ink);
-      box-shadow: 0 10px 26px -8px rgba(var(--accent-rgb), 0.45);
+      background: var(--baby);
+      color: var(--baby-ink);
+      box-shadow: 0 10px 26px -8px rgba(var(--baby-rgb), 0.5);
+      text-shadow: none;
     }
 
-    .ak-modal-btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .ak-modal-btn-primary:hover { background: var(--baby-hover); transform: translateY(-1px); }
 
     .ak-modal-btn-quiet {
       border-color: var(--border-strong);
@@ -1195,6 +1245,11 @@
       .ak-nav-gh-m { display: inline-flex; }
 
       .ak-hero { padding-top: 120px; }
+      /* round-8: on phones the hero reads as a centered stack — headline,
+         tagline and the download CTA all share one axis. */
+      .ak-hero-inner { align-items: center; text-align: center; }
+      .ak-hero-sub { margin-inline: auto; }
+      .ak-cta { align-items: center; }
       .ak-eyebrow::before, .ak-eyebrow::after { display: none; }
       .ak-eyebrow { letter-spacing: 0.18em; }
 
@@ -1211,16 +1266,10 @@
 
       .ak-probe-card { padding: 13px 13px 14px; }
       .ak-probe-bar { margin-bottom: 10px; }
-      .ak-probe-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-      .ak-stat { padding: 10px 13px; }
+      .ak-probe-grid { grid-template-columns: 1fr; gap: 8px; }
+      .ak-stat { padding: 11px 14px; }
       .ak-stat-v { font-size: 13px; }
-      .ak-stat-build {
-        grid-column: 1 / -1;
-        flex-direction: row;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: 12px;
-      }
+      .ak-verdict { margin-top: 8px; padding: 12px 14px; }
 
       .ak-legal-card { padding: 22px 18px; }
       .ak-footer-plate { padding: 20px 18px; }
@@ -1293,7 +1342,7 @@
           <div class="ak-hero-inner">
             <h1 class="ak-h1 ak-h1-brand ak-rise" style="--d:0ms">ANI&#8209;KUTA</h1>
 
-            <p class="ak-hero-sub ak-rise" style="--d:80ms">Anime streaming on Android, built around the <em class="ak-h1-em">extensions you choose</em>.</p>
+            <p class="ak-hero-sub ak-rise" style="--d:80ms">A new way to <em class="ak-h1-em">watch</em> on Android.</p>
 
             <div class="ak-cta ak-rise" style="--d:240ms" id="download">
               <div class="ak-cta-wrap" id="ak-cta-wrap">
@@ -1389,19 +1438,23 @@
               <div class="ak-stat">
                 <span class="ak-stat-k">Platform</span>
                 <span class="ak-stat-v" id="ak-stat-platform">—</span>
+                <span class="ak-stat-sub" id="ak-sub-platform">—</span>
               </div>
               <div class="ak-stat">
                 <span class="ak-stat-k">Architecture</span>
                 <span class="ak-stat-v" id="ak-stat-arch">—</span>
+                <span class="ak-stat-sub" id="ak-sub-arch">—</span>
               </div>
               <div class="ak-stat">
                 <span class="ak-stat-k">Bitness</span>
                 <span class="ak-stat-v" id="ak-stat-bits">—</span>
+                <span class="ak-stat-sub" id="ak-sub-bits">—</span>
               </div>
-              <div class="ak-stat ak-stat-build">
-                <span class="ak-stat-k">Build for you</span>
-                <span class="ak-stat-v ak-stat-v-build" id="ak-verdict" aria-live="polite">probing…</span>
-              </div>
+            </div>
+
+            <div class="ak-verdict">
+              <span class="ak-stat-k">Build for you</span>
+              <span class="ak-stat-v ak-stat-v-build" id="ak-verdict" aria-live="polite">probing…</span>
             </div>
 
             <div class="ak-probe-scan" aria-hidden="true"></div>
@@ -1995,6 +2048,11 @@
         arch: document.getElementById("ak-stat-arch"),
         bits: document.getElementById("ak-stat-bits")
       };
+      var subEls = {
+        platform: document.getElementById("ak-sub-platform"),
+        arch: document.getElementById("ak-sub-arch"),
+        bits: document.getElementById("ak-sub-bits")
+      };
       var verdictEl = document.getElementById("ak-verdict");
 
       function clearStats() {
@@ -2004,6 +2062,12 @@
         statEls.platform.classList.remove("is-set");
         statEls.arch.classList.remove("is-set");
         statEls.bits.classList.remove("is-set");
+        subEls.platform.textContent = "—";
+        subEls.arch.textContent = "—";
+        subEls.bits.textContent = "—";
+        subEls.platform.classList.remove("is-set");
+        subEls.arch.classList.remove("is-set");
+        subEls.bits.classList.remove("is-set");
         verdictEl.classList.remove("is-set");
         verdictEl.textContent = "probing…";
       }
@@ -2012,13 +2076,45 @@
         switch (info.result) {
           case "arm64-v8a":
           case "armeabi-v7a":
+          case "x86_64":
+          case "x86":
             return info.result;
           case "ios-unsupported":
             return "n/a";
           default:
-            /* x86 devices, desktops, unknown CPUs — universal covers them */
+            /* desktops, unknown CPUs — universal covers them */
             return "universal";
         }
+      }
+
+      /* Dedicated-section detail lines: Platform carries the detected OS
+         version, Architecture a human arch name, Bitness the method. */
+      var HUMAN_ARCH = { "arm64-v8a": "64-bit ARM", "armeabi-v7a": "32-bit ARM", x86_64: "64-bit Intel", x86: "32-bit Intel", universal: "generic build" };
+      var VIA_TEXT = { "client-hints": "via client hints", "user-agent": "via user agent", "none": "not reported" };
+
+      function capFirst(s) {
+        return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+      }
+
+      function probeDetails(info) {
+        var verMatch = /Android\s+(\d+)/i.exec(navigator.userAgent || "");
+        var isAndroid = info.platform === "android";
+        var abiKnown = !!ABI_ARCH[info.result] && info.result !== "universal";
+        var viaText = VIA_TEXT[info.via] || "not reported";
+
+        var platformVal = info.platform && info.platform !== "unknown" ? (isAndroid ? "Android" : capFirst(info.platform)) : "Unknown";
+        var platformSub = isAndroid && verMatch ? "Android " + verMatch[1] : viaText;
+
+        var archVal = abiKnown ? info.result : (info.arch || "unknown");
+        var archSub = HUMAN_ARCH[abiKnown ? info.result : archVal] || "—";
+
+        var bitsVal = info.bits === "64" ? "64-bit" : info.bits === "32" ? "32-bit" : "unknown";
+
+        return {
+          platform: [platformVal, platformSub],
+          arch: [archVal, archSub],
+          bits: [bitsVal, viaText]
+        };
       }
 
       function probeTimers() {
@@ -2035,21 +2131,30 @@
         if (probeTimer) probeTimer.clear();
         probeTimer = probeTimers();
 
+        var d = probeDetails(info);
+
         probeTimer.add(function () {
-          statEls.platform.textContent = info.platform || "unknown";
+          statEls.platform.textContent = d.platform[0];
           statEls.platform.classList.add("is-set");
+          subEls.platform.textContent = d.platform[1];
+          subEls.platform.classList.add("is-set");
         }, 90);
         probeTimer.add(function () {
-          statEls.arch.textContent = info.arch || "unknown";
+          statEls.arch.textContent = d.arch[0];
           statEls.arch.classList.add("is-set");
+          subEls.arch.textContent = d.arch[1];
+          subEls.arch.classList.add("is-set");
         }, 210);
         probeTimer.add(function () {
-          statEls.bits.textContent = info.bits || "unknown";
+          statEls.bits.textContent = d.bits[0];
           statEls.bits.classList.add("is-set");
+          subEls.bits.textContent = d.bits[1];
+          subEls.bits.classList.add("is-set");
         }, 330);
 
         probeTimer.add(function () {
-          verdictEl.textContent = buildFor(info);
+          var build = buildFor(info);
+          verdictEl.textContent = build === "n/a" ? build : build + ".apk";
           verdictEl.classList.add("is-set");
         }, 480);
 
