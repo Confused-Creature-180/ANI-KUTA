@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ANI-KUTA — Download for Android</title>
-  <meta name="description" content="ANI-KUTA — a free, open source extension-based video player for Android. Probe your device, pick arm64-v8a, armeabi-v7a or universal, and grab the APK.">
+  <meta name="description" content="ANI-KUTA — an anime streaming app for Android. Probe your device, pick the right build — arm64-v8a, armeabi-v7a, x86, x86_64 or universal — and grab the APK.">
   <meta name="theme-color" content="#060B08">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <meta property="og:title" content="ANI-KUTA — Download for Android">
-  <meta property="og:description" content="ANI-KUTA — a free, open source extension-based video player for Android. Probe your device, pick the right build, grab the APK.">
+  <meta property="og:description" content="ANI-KUTA — an anime streaming app for Android. Probe your device, pick the right build, grab the APK.">
   <meta property="og:url" content="https://confused-creature-180.github.io/ANI-KUTA/">
   <meta property="og:image" content="https://confused-creature-180.github.io/ANI-KUTA/og.png">
   <meta property="og:image:width" content="1200">
@@ -342,6 +342,23 @@
       font-size: 1.08em;
       letter-spacing: 0;
       color: var(--accent);
+    }
+
+    /* Brand headline (v6): the name itself, bold green, with a proper
+       supporting line under it. */
+    .ak-h1-brand {
+      margin-top: 0;
+      font-size: clamp(3.2rem, 9vw, 6rem);
+      letter-spacing: -0.01em;
+      color: var(--accent);
+    }
+
+    .ak-hero-sub {
+      margin-top: 20px;
+      max-width: 540px;
+      font-size: clamp(1.06rem, 1.9vw, 1.3rem);
+      line-height: 1.55;
+      color: var(--text-2);
     }
 
     /* --- CTA cluster: pill download button + expand -------------------------------- */
@@ -998,6 +1015,10 @@
       white-space: nowrap;
     }
 
+    .ak-footer-chip.is-live .ak-footer-chip-dot {
+      opacity: 1;
+    }
+
     .ak-footer-chip-dot {
       width: 5px;
       height: 5px;
@@ -1270,9 +1291,9 @@
       <section class="ak-hero">
         <div class="ak-container">
           <div class="ak-hero-inner">
-            <p class="ak-eyebrow ak-rise" style="--d:0ms">Android · Free &amp; open source</p>
+            <h1 class="ak-h1 ak-h1-brand ak-rise" style="--d:0ms">ANI&#8209;KUTA</h1>
 
-            <h1 class="ak-h1 ak-rise" style="--d:80ms">One player. Every <em class="ak-h1-em">extension</em>.</h1>
+            <p class="ak-hero-sub ak-rise" style="--d:80ms">Anime streaming on Android, built around the <em class="ak-h1-em">extensions you choose</em>.</p>
 
             <div class="ak-cta ak-rise" style="--d:240ms" id="download">
               <div class="ak-cta-wrap" id="ak-cta-wrap">
@@ -1310,25 +1331,39 @@
                           </span>
                           <span class="ak-row-tag">32-bit</span>
                         </button>
+                        <button type="button" class="ak-row" data-build="x86_64">
+                          <span class="ak-row-main">
+                            <span class="ak-row-name">x86_64</span>
+                            <span class="ak-row-desc">64-bit Intel — emulators and Chromebooks</span>
+                          </span>
+                          <span class="ak-row-tag">64-bit</span>
+                        </button>
+                        <button type="button" class="ak-row" data-build="x86">
+                          <span class="ak-row-main">
+                            <span class="ak-row-name">x86</span>
+                            <span class="ak-row-desc">32-bit Intel — older emulators and boxes</span>
+                          </span>
+                          <span class="ak-row-tag">32-bit</span>
+                        </button>
                         <button type="button" class="ak-row" data-build="universal">
                           <span class="ak-row-main">
                             <span class="ak-row-name">universal</span>
-                            <span class="ak-row-desc">All architectures in one APK</span>
+                            <span class="ak-row-desc">Every architecture in one APK (largest)</span>
                           </span>
                           <span class="ak-row-tag">Fallback</span>
                         </button>
                       </div>
-                      <p class="ak-panel-note">Requires Android 8.0 or higher. No builds are published yet — picking a build shows a notice.</p>
+                      <p class="ak-panel-note" id="ak-panel-note">Requires Android 7.0 or higher. Picking a build opens its download.</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <a class="ak-ghost" style="--d:380ms" href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer">
+              <a class="ak-ghost" style="--d:380ms" href="https://github.com/Confused-Creature-180/ANI-KUTA/releases/latest" target="_blank" rel="noopener noreferrer">
                 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
                   <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
                 </svg>
-                View source on GitHub
+                Releases on GitHub
               </a>
             </div>
           </div>
@@ -1429,7 +1464,7 @@
           <div class="ak-sec-head ak-rise">
             <p class="ak-eyebrow">Disclaimer</p>
             <h2 class="ak-sec-title" id="disclaimer-heading">The fine print, up front.</h2>
-            <p class="ak-sec-sub">ANI-KUTA is an independent, open source player. In the spirit of projects like Aniyomi and Anikku, the rules are simple:</p>
+            <p class="ak-sec-sub">ANI-KUTA is an independent anime player. In the spirit of projects like Aniyomi and Anikku, the rules are simple:</p>
           </div>
 
           <div class="ak-legal-card ak-glass ak-rise">
@@ -1464,7 +1499,7 @@
                 </svg>
                 <span class="ak-footer-name">ANI-KUTA</span>
               </div>
-              <p class="ak-footer-tag">A free, open source video player for Android, built around extensions. Requires Android 8.0 or higher.</p>
+              <p class="ak-footer-tag">An anime streaming app for Android, built around the extensions you choose. Requires Android 7.0 or higher.</p>
             </div>
             <nav class="ak-footer-links" aria-label="Footer">
               <a href="#download">Download</a>
@@ -1475,8 +1510,8 @@
             </nav>
           </div>
           <div class="ak-footer-bottom">
-            <span>© 2025 ANI-KUTA contributors · open source · hosts zero content</span>
-            <span class="ak-footer-chip"><span class="ak-footer-chip-dot" aria-hidden="true"></span>demo preview — no builds yet</span>
+            <span>© 2025 ANI-KUTA · hosts zero content</span>
+            <span class="ak-footer-chip is-live" id="ak-footer-chip"><span class="ak-footer-chip-dot" aria-hidden="true"></span><span id="ak-footer-chip-text">v1.1.1 — latest release</span></span>
           </div>
         </div>
       </div>
@@ -2115,9 +2150,13 @@
 
       var release = null; /* { tag, url, assets: { build: { name, size, url } } } */
 
+      var RELEASES_URL = "https://github.com/Confused-Creature-180/ANI-KUTA/releases/latest";
+
       var BUILDS = [
         { id: "arm64-v8a", neutral: "64-bit" },
         { id: "armeabi-v7a", neutral: "32-bit" },
+        { id: "x86_64", neutral: "64-bit" },
+        { id: "x86", neutral: "32-bit" },
         { id: "universal", neutral: "Fallback" }
       ];
 
@@ -2131,7 +2170,7 @@
       }
 
       function modalCopy(info, pick) {
-        var build = pick || (info && (info.result === "arm64-v8a" || info.result === "armeabi-v7a") ? info.result : (info && (info.result === "x86_64" || info.result === "x86" || info.result === "universal" || info.result === "desktop-notice") ? "universal" : null));
+        var build = pick || (info && (info.result === "arm64-v8a" || info.result === "armeabi-v7a" || info.result === "x86_64" || info.result === "x86" || info.result === "universal") ? info.result : (info && info.result === "desktop-notice" ? "universal" : null));
 
         /* real release available -> actionable modal */
         if (release && build) {
@@ -2156,8 +2195,8 @@
           return {
             eyebrow: "BUILD",
             title: pick,
-            body: "No builds are published yet — this is a demo preview. The " + pick + " APK will download here once a release ships.",
-            action: null
+            body: "The release list couldn't be loaded just now — every build is published on the GitHub releases page.",
+            action: { text: "Open releases", href: RELEASES_URL }
           };
         }
         if (!info) {
@@ -2169,16 +2208,16 @@
             return {
               eyebrow: "BUILD",
               title: info.result,
-              body: "No builds are published yet — this is a demo preview. The " + info.result + " APK will download here once a release ships.",
-              action: null
+              body: "The release list couldn't be loaded just now — every build is published on the GitHub releases page.",
+              action: { text: "Open releases", href: RELEASES_URL }
             };
           case "x86_64":
           case "x86":
             return {
               eyebrow: "BUILD",
-              title: "universal",
-              body: "Detected an x86 Android device. There's no dedicated x86 build yet — universal covers it.",
-              action: null
+              title: info.result,
+              body: "Detected an x86 Android device — a dedicated build is published. The release list couldn't be loaded just now; grab it from GitHub.",
+              action: { text: "Open releases", href: RELEASES_URL }
             };
           case "ios-unsupported":
             return {
@@ -2199,15 +2238,15 @@
               return {
                 eyebrow: "BUILD",
                 title: "universal",
-                body: "We couldn't identify your CPU — universal runs on any Android device. No builds are published yet. This is a demo preview.",
-                action: null
+                body: "We couldn't identify your CPU — universal runs on any Android device. The release list couldn't be loaded just now.",
+                action: { text: "Open releases", href: RELEASES_URL }
               };
             }
             return {
               eyebrow: "BUILD",
               title: info.result,
-              body: "No builds are published yet — this is a demo preview. The " + info.result + " APK will download here once a release ships.",
-              action: null
+              body: "The release list couldn't be loaded just now — every build is published on the GitHub releases page.",
+              action: { text: "Open releases", href: RELEASES_URL }
             };
         }
       }
@@ -2225,9 +2264,13 @@
         if (id === "armeabi-v7a") {
           return r === "armeabi-v7a" ? { label: "Recommended", rec: true } : { label: neutral, rec: false };
         }
-        return r === "universal" || r === "x86_64" || r === "x86"
-          ? { label: "Recommended", rec: true }
-          : { label: neutral, rec: false };
+        if (id === "x86_64") {
+          return r === "x86_64" ? { label: "Recommended", rec: true } : { label: neutral, rec: false };
+        }
+        if (id === "x86") {
+          return r === "x86" ? { label: "Recommended", rec: true } : { label: neutral, rec: false };
+        }
+        return r === "universal" ? { label: "Recommended", rec: true } : { label: neutral, rec: false };
       }
 
       function renderTags() {
@@ -2343,6 +2386,10 @@
           }
         }
         release = { tag: data.tag_name, url: data.html_url, assets: assets };
+        var note = document.getElementById("ak-panel-note");
+        if (note) note.textContent = "Latest " + release.tag + " · Requires Android 7.0 or higher. Picking a build downloads the exact APK.";
+        var chipText = document.getElementById("ak-footer-chip-text");
+        if (chipText) chipText.textContent = release.tag + " — latest release";
         if (modalOpenState) renderModal();
       }
 
@@ -2352,7 +2399,7 @@
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();
       }).then(wireRelease).catch(function () {
-        /* no release / offline — modal keeps its demo behaviour */
+        /* offline / failure — static copy stays (it already names the release) */
       });
 
       /* ==========================================================================
