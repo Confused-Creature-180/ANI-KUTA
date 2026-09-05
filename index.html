@@ -4,16 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ANI-KUTA — Download for Android</title>
-  <meta name="description" content="ANI-KUTA — a new way to watch on Android. Probe your device, pick the right build — arm64-v8a, armeabi-v7a, x86, x86_64 or universal — and grab the APK.">
+  <meta name="description" content="ANI-KUTA — one app for every anime. Probe your device, pick the right build — arm64-v8a, armeabi-v7a, x86, x86_64 or universal — and grab the APK.">
   <meta name="theme-color" content="#101712">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <meta property="og:title" content="ANI-KUTA — Download for Android">
-  <meta property="og:description" content="ANI-KUTA — a new way to watch on Android. Probe your device, pick the right build, grab the APK.">
+  <meta property="og:description" content="ANI-KUTA — one app for every anime. Probe your device, pick the right build, grab the APK.">
   <meta property="og:url" content="https://confused-creature-180.github.io/ANI-KUTA/">
   <meta property="og:image" content="https://confused-creature-180.github.io/ANI-KUTA/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ANI-KUTA — a new way to watch on Android. Download page with device probe and build picker.">
+  <meta property="og:image:alt" content="ANI-KUTA — one app for every anime. Download page with device probe and build picker.">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1155,6 +1155,50 @@
       color: var(--text-2);
     }
 
+    .ak-modal-body[hidden] { display: none; }
+
+    .ak-modal-specs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .ak-modal-specs[hidden] { display: none; }
+
+    .ak-spec {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 11px 12px 10px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.03);
+      min-width: 0;
+    }
+
+    .ak-spec-label {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    .ak-spec-value {
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ak-spec-build .ak-spec-value { color: var(--accent); }
+
     .ak-modal-actions {
       display: flex;
       flex-wrap: wrap;
@@ -1342,7 +1386,7 @@
           <div class="ak-hero-inner">
             <h1 class="ak-h1 ak-h1-brand ak-rise" style="--d:0ms">ANI&#8209;KUTA</h1>
 
-            <p class="ak-hero-sub ak-rise" style="--d:80ms">A new way to <em class="ak-h1-em">watch</em> on Android.</p>
+            <p class="ak-hero-sub ak-rise" style="--d:80ms">One app. <em class="ak-h1-em">Every anime.</em></p>
 
             <div class="ak-cta ak-rise" style="--d:240ms" id="download">
               <div class="ak-cta-wrap" id="ak-cta-wrap">
@@ -1581,7 +1625,12 @@
       </button>
       <p class="ak-modal-eyebrow" id="ak-modal-eyebrow">BUILD</p>
       <h2 class="ak-modal-title" id="ak-modal-title">probing…</h2>
-      <p class="ak-modal-body" id="ak-modal-body">Identifying your device — one moment.</p>
+      <div class="ak-modal-specs" id="ak-modal-specs" hidden>
+        <div class="ak-spec"><span class="ak-spec-label">Version</span><span class="ak-spec-value" id="ak-spec-version">—</span></div>
+        <div class="ak-spec ak-spec-build"><span class="ak-spec-label">Build</span><span class="ak-spec-value" id="ak-spec-build">—</span></div>
+        <div class="ak-spec"><span class="ak-spec-label">Size</span><span class="ak-spec-value" id="ak-spec-size">—</span></div>
+      </div>
+      <p class="ak-modal-body" id="ak-modal-body" hidden>Identifying your device — one moment.</p>
       <div class="ak-modal-actions" id="ak-modal-actions">
         <a class="ak-modal-btn ak-modal-btn-primary" id="ak-modal-action" hidden href="#" target="_blank" rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -2246,6 +2295,10 @@
       var modalClose = document.getElementById("ak-modal-close");
       var modalAction = document.getElementById("ak-modal-action");
       var modalActionText = document.getElementById("ak-modal-action-text");
+      var modalSpecs = document.getElementById("ak-modal-specs");
+      var specVersion = document.getElementById("ak-spec-version");
+      var specBuild = document.getElementById("ak-spec-build");
+      var specSize = document.getElementById("ak-spec-size");
       var primaryBtn = document.getElementById("ak-primary");
 
       var modalOpenState = false;
@@ -2277,21 +2330,24 @@
       function modalCopy(info, pick) {
         var build = pick || (info && (info.result === "arm64-v8a" || info.result === "armeabi-v7a" || info.result === "x86_64" || info.result === "x86" || info.result === "universal") ? info.result : (info && info.result === "desktop-notice" ? "universal" : null));
 
-        /* real release available -> actionable modal */
+        /* real release available -> actionable modal with a clean spec sheet:
+           name / version / build / size, each in its own tag */
         if (release && build) {
           var asset = assetFor(build);
           if (asset) {
             return {
               eyebrow: "DOWNLOAD",
-              title: build,
-              body: "ANI-KUTA " + release.tag + " — " + asset.name + " (" + asset.size + ") from GitHub Releases.",
-              action: { text: "Download APK · " + asset.size, href: asset.url }
+              title: "ANI-KUTA",
+              specs: { version: release.tag, build: build, size: asset.size },
+              body: "",
+              action: { text: "Download APK", href: asset.url }
             };
           }
           return {
             eyebrow: "DOWNLOAD",
             title: build,
-            body: "A dedicated " + build + " asset isn't attached to " + release.tag + " — grab it from the release page instead.",
+            specs: null,
+            body: "A dedicated " + build + " file isn't attached to " + release.tag + " — open the release page to grab it.",
             action: { text: "Open release page", href: release.url }
           };
         }
@@ -2300,7 +2356,8 @@
           return {
             eyebrow: "BUILD",
             title: pick,
-            body: "The release list couldn't be loaded just now — every build is published on the GitHub releases page.",
+            specs: null,
+            body: "The release list couldn't be loaded just now — every build is published on the releases page.",
             action: { text: "Open releases", href: RELEASES_URL }
           };
         }
@@ -2313,7 +2370,8 @@
             return {
               eyebrow: "BUILD",
               title: info.result,
-              body: "The release list couldn't be loaded just now — every build is published on the GitHub releases page.",
+              specs: null,
+              body: "The release list couldn't be loaded just now — every build is published on the releases page.",
               action: { text: "Open releases", href: RELEASES_URL }
             };
           case "x86_64":
@@ -2321,7 +2379,8 @@
             return {
               eyebrow: "BUILD",
               title: info.result,
-              body: "Detected an x86 Android device — a dedicated build is published. The release list couldn't be loaded just now; grab it from GitHub.",
+              specs: null,
+              body: "Detected an x86 Android device — a dedicated build is published. The release list couldn't be loaded just now.",
               action: { text: "Open releases", href: RELEASES_URL }
             };
           case "ios-unsupported":
@@ -2343,6 +2402,7 @@
               return {
                 eyebrow: "BUILD",
                 title: "universal",
+                specs: null,
                 body: "We couldn't identify your CPU — universal runs on any Android device. The release list couldn't be loaded just now.",
                 action: { text: "Open releases", href: RELEASES_URL }
               };
@@ -2350,7 +2410,8 @@
             return {
               eyebrow: "BUILD",
               title: info.result,
-              body: "The release list couldn't be loaded just now — every build is published on the GitHub releases page.",
+              specs: null,
+              body: "The release list couldn't be loaded just now — every build is published on the releases page.",
               action: { text: "Open releases", href: RELEASES_URL }
             };
         }
@@ -2392,7 +2453,17 @@
         var copy = modalCopy(resolvedInfo, modalPick);
         modalEyebrow.textContent = copy.eyebrow;
         modalTitle.textContent = copy.title;
-        modalBody.textContent = copy.body;
+        if (copy.specs) {
+          modalSpecs.hidden = false;
+          specVersion.textContent = copy.specs.version;
+          specBuild.textContent = copy.specs.build;
+          specSize.textContent = copy.specs.size;
+          modalBody.hidden = true;
+        } else {
+          modalSpecs.hidden = true;
+          modalBody.hidden = false;
+          modalBody.textContent = copy.body;
+        }
         if (copy.action) {
           modalAction.hidden = false;
           modalAction.href = copy.action.href;
