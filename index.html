@@ -71,6 +71,9 @@
     html {
       background: var(--bg);
       scrollbar-gutter: stable;
+      /* keep Android Chrome from font-boosting tight UI (modal spec tags) */
+      text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
@@ -1307,6 +1310,19 @@
 
       .ak-legal-card { padding: 22px 18px; }
       .ak-footer-plate { padding: 20px 18px; }
+
+      /* round-11: the three spec tags reflow on phones — version + build
+         share the top row, size drops to its own full-width strip so no
+         value is ever clipped. */
+      .ak-modal-specs { grid-template-columns: repeat(2, 1fr); }
+      .ak-modal-specs .ak-spec:nth-child(3) {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+      }
     }
 
     @media (max-width: 380px) {
