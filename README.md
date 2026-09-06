@@ -34,11 +34,11 @@ Not sure which build fits? **universal** runs on any Android device.
 
 | File | For |
 |---|---|
-| [`arm64-v8a.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.1/arm64-v8a.apk) | **Most modern phones** — 64-bit ARM |
-| [`armeabi-v7a.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.1/armeabi-v7a.apk) | Older devices — 32-bit ARM |
-| [`x86_64.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.1/x86_64.apk) | Emulators, Chromebooks — 64-bit Intel |
-| [`x86.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.1/x86.apk) | Older x86 devices and boxes — 32-bit Intel |
-| [`universal.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.1/universal.apk) | Every architecture in one APK (largest) |
+| [`arm64-v8a.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.2/arm64-v8a.apk) | **Most modern phones** — 64-bit ARM |
+| [`armeabi-v7a.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.2/armeabi-v7a.apk) | Older devices — 32-bit ARM |
+| [`x86_64.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.2/x86_64.apk) | Emulators, Chromebooks — 64-bit Intel |
+| [`x86.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.2/x86.apk) | Older x86 devices and boxes — 32-bit Intel |
+| [`universal.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.2/universal.apk) | Every architecture in one APK (largest) |
 
 Requires **Android 7.0 or higher**.
 
