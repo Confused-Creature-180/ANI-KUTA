@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ANI-KUTA — Download for Android</title>
-  <meta name="description" content="ANI-KUTA — maybe something better. Probe your device, pick the right build — arm64-v8a, armeabi-v7a, x86, x86_64 or universal — and grab the APK.">
+  <meta name="description" content="ANI-KUTA — maybe something better. Probe your device, pick the right build — arm64-v8a, armeabi-v7a, x86, x86_64 or universal — and grab the APK or ZIP.">
   <meta name="theme-color" content="#101712">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <meta property="og:title" content="ANI-KUTA — Download for Android">
-  <meta property="og:description" content="ANI-KUTA — maybe something better. Probe your device, pick the right build, grab the APK.">
+  <meta property="og:description" content="ANI-KUTA — maybe something better. Probe your device, pick the right build, grab the APK or ZIP.">
   <meta property="og:url" content="https://confused-creature-180.github.io/ANI-KUTA/">
   <meta property="og:image" content="https://confused-creature-180.github.io/ANI-KUTA/og.png">
   <meta property="og:image:width" content="1200">
@@ -21,7 +21,13 @@
   <style>
     /* ==========================================================================
        ANI-KUTA — "LIVING GREEN" design system v7
-       Direction (user round-8):
+       Direction (user round-12):
+       - download format is a real selectable option — an APK | ZIP segmented
+         pill above the CTA (APK left, ZIP right); the active option decides
+         what the Download button, the build rows and the modal hand over;
+         per-build file sizes show for the selected format once the release
+         loads (v1.1.3 ships APK + highly compressed ZIP for every build).
+       Carried from round-8:
        - one short new tagline under the brand headline, nothing else;
        - download CTA is a baby-blue rectangle (10px corners) — the one cool
          accent on the green page; hero + CTA center together on phones;
@@ -479,6 +485,53 @@
 
     .ak-btn-expand[aria-expanded="true"] svg { transform: rotate(180deg); }
 
+    /* --- format option — APK | ZIP segmented pill (a real option, not a switch) --- */
+    .ak-fmt {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 16px;
+      padding: 4px;
+      border: 1px solid var(--border-strong);
+      border-radius: 9999px;
+      background:
+        linear-gradient(180deg, var(--glass-hi), var(--glass-lo)),
+        rgba(19, 27, 22, 0.55);
+      backdrop-filter: blur(14px) saturate(150%);
+      -webkit-backdrop-filter: blur(14px) saturate(150%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .ak-fmt-opt {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 64px;
+      padding: 8px 18px;
+      border: 0;
+      border-radius: 9999px;
+      background: transparent;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      cursor: pointer;
+      text-shadow: none;
+      transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out);
+    }
+
+    .ak-fmt-opt:hover { color: var(--text-1); }
+
+    .ak-fmt-opt[aria-checked="true"] {
+      background: var(--baby);
+      color: var(--baby-ink);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
     /* Disclosure panel — grid-rows 0fr -> 1fr open/close. */
     .ak-disclosure {
       display: grid;
@@ -589,6 +642,19 @@
       color: var(--accent-ink);
       text-shadow: none;
     }
+
+    /* live file size for the selected format (shown once the release loads) */
+    .ak-row-size {
+      margin-left: auto;
+      flex: none;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-2);
+      white-space: nowrap;
+    }
+
+    .ak-row.has-size .ak-row-tag { margin-left: 0; }
 
     .ak-panel-note {
       margin: 0;
@@ -1396,6 +1462,10 @@
 
             <div class="ak-cta ak-rise" style="--d:240ms" id="download">
               <div class="ak-cta-wrap" id="ak-cta-wrap">
+                <div class="ak-fmt" id="ak-fmt" role="radiogroup" aria-label="Download format">
+                  <button type="button" class="ak-fmt-opt" id="ak-fmt-apk" role="radio" aria-checked="true" data-fmt="apk">APK</button>
+                  <button type="button" class="ak-fmt-opt" id="ak-fmt-zip" role="radio" aria-checked="false" data-fmt="zip">ZIP</button>
+                </div>
                 <div class="ak-cta-split">
                   <button type="button" class="ak-btn-primary" id="ak-primary">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -1421,6 +1491,7 @@
                             <span class="ak-row-name">arm64-v8a</span>
                             <span class="ak-row-desc">64-bit ARM — most modern Android phones</span>
                           </span>
+                          <span class="ak-row-size" hidden></span>
                           <span class="ak-row-tag">64-bit</span>
                         </button>
                         <button type="button" class="ak-row" data-build="armeabi-v7a">
@@ -1428,6 +1499,7 @@
                             <span class="ak-row-name">armeabi-v7a</span>
                             <span class="ak-row-desc">32-bit ARM — older devices</span>
                           </span>
+                          <span class="ak-row-size" hidden></span>
                           <span class="ak-row-tag">32-bit</span>
                         </button>
                         <button type="button" class="ak-row" data-build="x86_64">
@@ -1435,6 +1507,7 @@
                             <span class="ak-row-name">x86_64</span>
                             <span class="ak-row-desc">64-bit Intel — emulators and Chromebooks</span>
                           </span>
+                          <span class="ak-row-size" hidden></span>
                           <span class="ak-row-tag">64-bit</span>
                         </button>
                         <button type="button" class="ak-row" data-build="x86">
@@ -1442,6 +1515,7 @@
                             <span class="ak-row-name">x86</span>
                             <span class="ak-row-desc">32-bit Intel — older emulators and boxes</span>
                           </span>
+                          <span class="ak-row-size" hidden></span>
                           <span class="ak-row-tag">32-bit</span>
                         </button>
                         <button type="button" class="ak-row" data-build="universal">
@@ -1449,10 +1523,11 @@
                             <span class="ak-row-name">universal</span>
                             <span class="ak-row-desc">Every architecture in one APK (largest)</span>
                           </span>
+                          <span class="ak-row-size" hidden></span>
                           <span class="ak-row-tag">Fallback</span>
                         </button>
                       </div>
-                      <p class="ak-panel-note" id="ak-panel-note">Requires Android 7.0 or higher. Picking a build opens its download.</p>
+                      <p class="ak-panel-note" id="ak-panel-note">Requires Android 7.0 or higher. Picking a build downloads the exact APK or ZIP.</p>
                     </div>
                   </div>
                 </div>
@@ -1537,7 +1612,7 @@
                 </svg>
               </span>
               <h3 class="ak-feat-title">Download it</h3>
-              <p class="ak-feat-sub">One tap, the right APK for your device — and you're in.</p>
+              <p class="ak-feat-sub">One tap, the right build for your device — APK or ZIP — and you're in.</p>
             </article>
 
             <article class="ak-feat ak-glass ak-rise" style="--d:120ms">
@@ -1614,7 +1689,7 @@
           </div>
           <div class="ak-footer-bottom">
             <span>© 2025 ANI-KUTA · hosts zero content</span>
-            <span class="ak-footer-chip is-live" id="ak-footer-chip"><span class="ak-footer-chip-dot" aria-hidden="true"></span><span id="ak-footer-chip-text">v1.1.2 — latest release</span></span>
+            <span class="ak-footer-chip is-live" id="ak-footer-chip"><span class="ak-footer-chip-dot" aria-hidden="true"></span><span id="ak-footer-chip-text">v1.1.3 — latest release</span></span>
           </div>
         </div>
       </div>
@@ -2209,7 +2284,7 @@
 
         probeTimer.add(function () {
           var build = buildFor(info);
-          verdictEl.textContent = build === "n/a" ? build : build + ".apk";
+          verdictEl.textContent = build === "n/a" ? build : build + "." + fmt;
           verdictEl.classList.add("is-set");
         }, 480);
 
@@ -2328,9 +2403,95 @@
         return (bytes / 1048576).toFixed(1) + " MB";
       }
 
+      /* ==========================================================================
+         FORMAT OPTION — APK | ZIP. A real selectable option (a segmented pill,
+         not a switch): the active side decides what the Download button, the
+         build rows and the modal hand over. Persisted in localStorage.
+         ========================================================================== */
+      var FMT_KEY = "ak-fmt";
+      var fmt = "apk";
+      try {
+        var savedFmt = localStorage.getItem(FMT_KEY);
+        if (savedFmt === "zip" || savedFmt === "apk") fmt = savedFmt;
+      } catch (eFmt) { /* storage unavailable — APK stays the default */ }
+
+      function fmtLabel() {
+        return fmt === "zip" ? "ZIP" : "APK";
+      }
+
+      function updateFmtTexts() {
+        var note = document.getElementById("ak-panel-note");
+        if (note) {
+          note.textContent = (release ? "Latest " + release.tag + " · " : "") +
+            "Requires Android 7.0 or higher. Picking a build downloads the exact " + fmtLabel() + ".";
+        }
+        if (resolvedInfo) {
+          var b = buildFor(resolvedInfo);
+          verdictEl.textContent = b === "n/a" ? b : b + "." + fmt;
+        }
+      }
+
+      function renderRowSizes() {
+        var sizeRows = document.querySelectorAll(".ak-row");
+        for (var i = 0; i < sizeRows.length; i++) {
+          var row = sizeRows[i];
+          var el = row.querySelector(".ak-row-size");
+          if (!el) continue;
+          var slot = release && release.assets[row.getAttribute("data-build")];
+          var a = slot ? (slot[fmt] || slot.apk || slot.zip) : null;
+          if (a) {
+            el.textContent = a.size;
+            el.hidden = false;
+            row.classList.add("has-size");
+          } else {
+            el.hidden = true;
+            row.classList.remove("has-size");
+          }
+        }
+      }
+
+      function setFmt(next) {
+        fmt = next === "zip" ? "zip" : "apk";
+        try { localStorage.setItem(FMT_KEY, fmt); } catch (eFmt2) { /* private mode */ }
+        var opts = document.querySelectorAll(".ak-fmt-opt");
+        for (var i = 0; i < opts.length; i++) {
+          opts[i].setAttribute("aria-checked", opts[i].getAttribute("data-fmt") === fmt ? "true" : "false");
+        }
+        updateFmtTexts();
+        renderRowSizes();
+        if (modalOpenState) renderModal();
+      }
+
+      var fmtGroup = document.getElementById("ak-fmt");
+      var fmtOpts = document.querySelectorAll(".ak-fmt-opt");
+      for (var fo = 0; fo < fmtOpts.length; fo++) {
+        (function (opt) {
+          opt.addEventListener("click", function () {
+            setFmt(opt.getAttribute("data-fmt"));
+          });
+        })(fmtOpts[fo]);
+      }
+      if (fmtGroup) {
+        fmtGroup.addEventListener("keydown", function (event) {
+          if (event.key === "ArrowLeft" && fmt !== "apk") {
+            event.preventDefault();
+            setFmt("apk");
+            document.getElementById("ak-fmt-apk").focus();
+          } else if (event.key === "ArrowRight" && fmt !== "zip") {
+            event.preventDefault();
+            setFmt("zip");
+            document.getElementById("ak-fmt-zip").focus();
+          }
+        });
+      }
+
       function assetFor(build) {
         if (!release) return null;
-        return release.assets[build] || null;
+        var slot = release.assets[build];
+        if (!slot) return null;
+        var file = slot[fmt] || slot.apk || slot.zip;
+        if (!file) return null;
+        return { file: file, fmt: slot[fmt] ? fmt : (slot.apk ? "apk" : "zip") };
       }
 
       function modalCopy(info, pick) {
@@ -2344,9 +2505,9 @@
             return {
               eyebrow: "DOWNLOAD",
               title: "ANI-KUTA",
-              specs: { version: release.tag, build: build, size: asset.size },
+              specs: { version: release.tag, build: build, size: asset.file.size },
               body: "",
-              action: { text: "Download APK", href: asset.url }
+              action: { text: "Download " + (asset.fmt === "zip" ? "ZIP" : "APK"), href: asset.file.url }
             };
           }
           return {
@@ -2554,22 +2715,31 @@
         var list = data.assets || [];
         for (var i = 0; i < list.length; i++) {
           var n = String(list[i].name || "").toLowerCase();
+          var isZip = /\.zip$/.test(n);
           var entry = { name: list[i].name, size: fmtMB(list[i].size), url: list[i].browser_download_url };
+          var key = null;
           if (n.indexOf("arm64-v8a") !== -1 || n.indexOf("arm64") !== -1) {
-            assets["arm64-v8a"] = entry;
+            key = "arm64-v8a";
           } else if (n.indexOf("armeabi-v7a") !== -1 || n.indexOf("v7a") !== -1 || n.indexOf("armeabi") !== -1) {
-            assets["armeabi-v7a"] = entry;
+            key = "armeabi-v7a";
           } else if (n.indexOf("x86_64") !== -1 || n.indexOf("x86-64") !== -1 || n.indexOf("amd64") !== -1) {
-            assets["x86_64"] = entry;
+            key = "x86_64";
           } else if (/\bx86\b/.test(n)) {
-            assets["x86"] = entry;
+            key = "x86";
           } else if (n.indexOf("universal") !== -1 || n.indexOf("all") !== -1) {
-            assets["universal"] = entry;
+            key = "universal";
+          }
+          if (!key) continue;
+          var slot = assets[key] || (assets[key] = {});
+          if (isZip) {
+            if (!slot.zip) slot.zip = entry;
+          } else {
+            if (!slot.apk) slot.apk = entry;
           }
         }
         release = { tag: data.tag_name, url: data.html_url, assets: assets };
-        var note = document.getElementById("ak-panel-note");
-        if (note) note.textContent = "Latest " + release.tag + " · Requires Android 7.0 or higher. Picking a build downloads the exact APK.";
+        updateFmtTexts();
+        renderRowSizes();
         var chipText = document.getElementById("ak-footer-chip-text");
         if (chipText) chipText.textContent = release.tag + " — latest release";
         if (modalOpenState) renderModal();
@@ -2604,6 +2774,7 @@
 
       /* ---- boot ------------------------------------------------------------------ */
       renderTags();
+      setFmt(fmt);
       runProbe(false);
     })();
   </script>
