@@ -28,17 +28,19 @@
 
 ## Download
 
-The **[website](https://confused-creature-180.github.io/ANI-KUTA/)** probes your device right in the browser and hands you the exact APK — every file comes straight from the [Releases](https://github.com/Confused-Creature-180/ANI-KUTA/releases) page.
+The **[website](https://confused-creature-180.github.io/ANI-KUTA/)** probes your device right in the browser and hands you the exact build — **APK** or highly compressed **ZIP**, your choice — every file comes straight from the [Releases](https://github.com/Confused-Creature-180/ANI-KUTA/releases) page.
 
 Not sure which build fits? **universal** runs on any Android device.
 
 | File | For |
 |---|---|
-| [`arm64-v8a.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.2/arm64-v8a.apk) | **Most modern phones** — 64-bit ARM |
-| [`armeabi-v7a.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.2/armeabi-v7a.apk) | Older devices — 32-bit ARM |
-| [`x86_64.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.2/x86_64.apk) | Emulators, Chromebooks — 64-bit Intel |
-| [`x86.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.2/x86.apk) | Older x86 devices and boxes — 32-bit Intel |
-| [`universal.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.2/universal.apk) | Every architecture in one APK (largest) |
+| [`Ani-Kuta-arm64-v8a.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.3/Ani-Kuta-arm64-v8a.apk) | **Most modern phones** — 64-bit ARM |
+| [`Ani-Kuta-armeabi-v7a.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.3/Ani-Kuta-armeabi-v7a.apk) | Older devices — 32-bit ARM |
+| [`Ani-Kuta-x86_64.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.3/Ani-Kuta-x86_64.apk) | Emulators, Chromebooks — 64-bit Intel |
+| [`Ani-Kuta-x86.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.3/Ani-Kuta-x86.apk) | Older x86 devices and boxes — 32-bit Intel |
+| [`Ani-Kuta-universal.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.3/Ani-Kuta-universal.apk) | Every architecture in one APK (largest) |
+
+Prefer a smaller download? Every build above also ships as a **highly compressed ZIP** — pick **APK** or **ZIP** on the website and grab `Ani-Kuta-<build>.zip` from the same release.
 
 Requires **Android 7.0 or higher**.
 
