@@ -112,6 +112,10 @@
     html {
       background: var(--bg);
       scrollbar-gutter: stable;
+      /* round-22: the deck's edge peeks bleed past the viewport by design —
+         clip them at the ROOT too, or Android Chrome opens the page panned
+         and zoomed into the top-left corner */
+      overflow-x: clip;
       /* keep Android Chrome from font-boosting tight UI (modal spec tags) */
       text-size-adjust: 100%;
       -webkit-text-size-adjust: 100%;
@@ -781,9 +785,10 @@
     .ak-showcase {
       position: relative;
       display: none;
-      /* round-21: 9/20 — the teasers are 9:20 captures, so the card shows
-         the WHOLE screen instead of cover-cropping a zoomed middle band */
-      aspect-ratio: 9 / 20;
+      /* round-22: 1/2 — just wider than the 9/20 teasers, so the whole
+         screen stays visible (no cover-crop zoom) AND the per-image tour
+         keeps ~10% of vertical pan room to glide through */
+      aspect-ratio: 1 / 2;
     }
 
     .ak-showcase::before {
@@ -1006,14 +1011,23 @@
         grid-template-columns: minmax(0, 1fr) auto;
         column-gap: 56px;
         align-items: center;
+        /* round-22: the deck used to SPAN the three text rows and grid
+           distributed its 574px across them, leaving a ~90px hole under
+           the headline. It's out of flow now — the text rows hug their
+           content and the reserved min-height just hosts the deck. */
+        align-content: center;
+        position: relative;
+        min-height: 584px;
         max-width: 1080px;
       }
       .ak-hero-inner > .ak-h1,
       .ak-hero-inner > .ak-hero-sub,
       .ak-hero-inner > .ak-cta { grid-column: 1; }
       .ak-showcase-desktop {
-        grid-column: 2;
-        grid-row: 1 / span 3;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
       }
     }
 
@@ -1680,14 +1694,14 @@
       .ak-nav-gh-m { display: inline-flex; }
       .ak-nav-shot-m { display: inline-flex; }
 
-      .ak-hero { padding-top: 120px; }
-      /* round-21: on phones the hero text sits on the left axis — headline
-         and tagline share it, matching the CTA below. round-14: the axis
-         ends at the tagline; below it the CTA docks bottom-left and the
-         showcase rises top-right, ghost link gone entirely. */
+      /* round-22: the whole opening screen compresses so the device probe
+         is visible without scrolling — tighter hero paddings, slimmer
+         deck, and the probe's three cards share one compact row */
+      .ak-hero { padding-top: 88px; }
       .ak-hero-inner { align-items: flex-start; text-align: left; }
+      .ak-hero-sub { margin-top: 14px; }
       .ak-ghost { display: none; }
-      .ak-cta { align-items: stretch; }
+      .ak-cta { align-items: stretch; margin-top: 26px; }
       .ak-cta-wrap { align-items: flex-start; }
       .ak-cta-row {
         display: grid;
@@ -1697,12 +1711,12 @@
       }
       .ak-showcase-mobile {
         display: block;
-        /* round-21: slimmer cards for the 9/20 full-screen ratio — the deck
+        /* round-21: slimmer cards for the full-screen ratio — the deck
            shows entire captures now, so width trades for height */
-        width: clamp(96px, 24vw, 116px);
+        width: clamp(78px, 20vw, 100px);
         justify-self: end;
       }
-      .ak-probe { margin-top: 52px; }
+      .ak-probe { margin-top: 28px; }
       .ak-eyebrow::before, .ak-eyebrow::after { display: none; }
       .ak-eyebrow { letter-spacing: 0.18em; }
 
@@ -1717,12 +1731,13 @@
       .ak-container { padding-inline: 18px; }
       .ak-overlay { padding: 16px; }
 
-      .ak-probe-card { padding: 13px 13px 14px; }
-      .ak-probe-bar { margin-bottom: 10px; }
-      .ak-probe-grid { grid-template-columns: 1fr; gap: 8px; }
-      .ak-stat { padding: 11px 14px; }
-      .ak-stat-v { font-size: 13px; }
-      .ak-verdict { margin-top: 8px; padding: 12px 14px; }
+      .ak-probe-card { padding: 11px 12px 12px; }
+      .ak-probe-bar { margin-bottom: 8px; }
+      .ak-probe-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+      .ak-stat { padding: 8px 10px; gap: 3px; }
+      .ak-stat-v { font-size: 11.5px; }
+      .ak-stat-sub { font-size: 9.5px; }
+      .ak-verdict { margin-top: 6px; padding: 10px 12px; }
 
       .ak-legal-card { padding: 22px 18px; }
       .ak-footer-plate { padding: 20px 18px; }
@@ -1745,7 +1760,7 @@
       .ak-btn-primary { padding: 0 18px 0 16px; gap: 8px; }
       .ak-eyebrow { gap: 10px; }
       .ak-eyebrow::before, .ak-eyebrow::after { width: 14px; }
-      .ak-showcase-mobile { width: 88px; }
+      .ak-showcase-mobile { width: 74px; }
     }
 
     /* --- reduced motion safety net ---------------------------------------------------------- */
