@@ -837,8 +837,8 @@
     }
 
     .ak-showcase-card.is-front { opacity: 1; transform: none; z-index: 3; }
-    .ak-showcase-card.is-behind { opacity: 0.5; transform: translateX(27%) translateY(-3.5%) scale(0.87) rotate(2.5deg); z-index: 2; }
-    .ak-showcase-card.is-far { opacity: 0.26; transform: translateX(48%) translateY(3%) scale(0.75) rotate(5deg); z-index: 1; }
+    .ak-showcase-card.is-next { opacity: 0.5; transform: translateX(30%) translateY(-3.5%) scale(0.87) rotate(2.5deg); z-index: 2; }
+    .ak-showcase-card.is-prev { opacity: 0.5; transform: translateX(-30%) translateY(3.5%) scale(0.87) rotate(-2.5deg); z-index: 2; }
 
     /* round-17: the front card's scroll tour is per-image now. Each teaser
        carries data-tour/data-dur; JS feeds them to this card as CSS vars.
@@ -873,15 +873,28 @@
       }
     }
 
-    /* round-17: desktop tells a different story than the phone — a solo
-       screen with the tour playing inside it, and a glass side panel that
-       narrates what's on screen (title, line, index, tour dots). No deck
-       peeking on desktop; the stack look stays mobile-only. */
+    /* round-19: desktop gets a REAL carousel — the clean full-height capture
+       centered at a fixed size, the previous and next shots peeking in from
+       both sides, the narration panel resting under it. Nothing stretches:
+       the card keeps a hard 228×507 box no matter what the hero rows do. */
     @media (min-width: 641px) {
-      .ak-showcase-desktop { display: flex; gap: 20px; align-items: stretch; width: auto; align-self: center; }
-      .ak-desktop-stage { position: relative; width: clamp(240px, 21vw, 300px); aspect-ratio: 9 / 20; flex: none; align-self: flex-start; }
-      .ak-showcase-desktop .ak-showcase-card.is-behind,
-      .ak-showcase-desktop .ak-showcase-card.is-far { opacity: 0; }
+      .ak-showcase-desktop {
+        display: block;
+        position: relative;
+        width: 400px;
+        aspect-ratio: auto;
+        align-self: center;
+      }
+      .ak-desktop-stage { position: relative; width: 100%; height: 520px; }
+      .ak-showcase-desktop .ak-showcase-card {
+        inset: 6px auto auto 50%;
+        width: 228px;
+        height: 507px;
+        margin-left: -114px;
+      }
+      .ak-showcase-desktop .ak-showcase-card.is-front { opacity: 1; transform: none; z-index: 3; }
+      .ak-showcase-desktop .ak-showcase-card.is-next { opacity: 0.45; transform: translateX(128px) scale(0.85); z-index: 2; }
+      .ak-showcase-desktop .ak-showcase-card.is-prev { opacity: 0.45; transform: translateX(-128px) scale(0.85); z-index: 2; }
       /* round-18: desktop slides the clean full-height capture in — the
          per-image tour stays a mobile thing, the whole shot is the slide */
       .ak-showcase-desktop .ak-showcase-card.is-front img { animation: none; }
@@ -900,7 +913,8 @@
         flex-direction: column;
         justify-content: flex-end;
         gap: 6px;
-        width: 220px;
+        width: auto;
+        margin-top: 20px;
         padding: 18px 20px 22px;
         border: 1px solid var(--border-strong);
         border-radius: 10px;
@@ -3220,7 +3234,7 @@
         if (cards.length < 2) return;
         var deckIdx = 0;
         var deckTimer = null;
-        var RANKS = ["is-front", "is-behind", "is-far"];
+        var RANKS = ["is-front", "is-next", "is-prev"];
 
         function teaserName(card) {
           var img = card.querySelector("img");
@@ -3244,11 +3258,16 @@
           }
         }
         function deal() {
+          var n = cards.length;
           var front = cards[deckIdx];
-          for (var i = 0; i < cards.length; i++) {
-            var r = (i - deckIdx + cards.length) % cards.length;
+          for (var i = 0; i < n; i++) {
+            var r = (i - deckIdx + n) % n;
             for (var k = 0; k < RANKS.length; k++) cards[i].classList.remove(RANKS[k]);
-            if (r < RANKS.length) cards[i].classList.add(RANKS[r]);
+            /* round-19: symmetric carousel ranks — the next shot peeks on
+               one side, the previous on the other, both breakpoints */
+            if (r === 0) cards[i].classList.add("is-front");
+            else if (r === 1) cards[i].classList.add("is-next");
+            else if (r === n - 1) cards[i].classList.add("is-prev");
           }
           /* the front card carries its own tour into CSS (attrs live on the img) */
           var img = front.querySelector("img");
