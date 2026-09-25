@@ -48,6 +48,13 @@
        - the pill carries a sliding baby-blue thumb: flipping APK | ZIP
          glides it under the active option while the format-dependent
          text (verdict, row sizes, panel note) crossfades out and back.
+       Direction (user round-14):
+       - mobile only: the "Releases on GitHub" link is dropped; the CTA
+         (pill + button) docks bottom-left just above the probe, and a
+         floating showcase of app screenshots rises to its top right —
+         the frame drifts on a slow float loop with a breathing accent
+         glow while the screenshots crossfade every few seconds. The
+         desktop hero is untouched from round-13.
        ========================================================================== */
     :root {
       color-scheme: dark;
@@ -728,6 +735,62 @@
 
     .ak-ghost svg { width: 16px; height: 16px; }
 
+    /* --- mobile showcase (round-14) — app screenshots in a floating frame.
+       Hidden on desktop; on phones it rises to the right of the CTA, one
+       image crossfading to the next every few seconds. --- */
+    .ak-showcase { display: none; }
+
+    .ak-showcase-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 480 / 1067;
+      border: 1px solid var(--border-strong);
+      border-radius: 18px;
+      background: var(--surface);
+      overflow: hidden;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 18px 42px -12px rgba(0, 0, 0, 0.55),
+        0 34px 80px -20px rgba(0, 0, 0, 0.5);
+    }
+
+    .ak-showcase-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transform: scale(1.05);
+      transition: opacity 650ms var(--ease-open), transform 1100ms var(--ease-out);
+    }
+
+    .ak-showcase-img.is-active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .ak-showcase-frame { animation: ak-float 7.5s ease-in-out infinite; }
+      .ak-showcase::before {
+        content: "";
+        position: absolute;
+        inset: -12% -18%;
+        z-index: -1;
+        background: radial-gradient(closest-side, rgba(var(--accent-rgb), 0.18), rgba(var(--accent-rgb), 0.05) 55%, transparent 75%);
+        filter: blur(10px);
+        animation: ak-breathe 5.5s ease-in-out infinite;
+      }
+      @keyframes ak-float {
+        0%, 100% { transform: translateY(0) rotate(0.4deg); }
+        50% { transform: translateY(-9px) rotate(-0.6deg); }
+      }
+      @keyframes ak-breathe {
+        0%, 100% { opacity: 0.55; transform: scale(0.96); }
+        50% { opacity: 1; transform: scale(1.04); }
+      }
+    }
+
     /* ===========================================================================
        DEVICE PROBE — dedicated section cards (user round-8). The slim bar
        with mono label + pulsing dot stays; below it Platform / Architecture
@@ -1392,11 +1455,27 @@
 
       .ak-hero { padding-top: 120px; }
       /* round-8: on phones the hero reads as a centered stack — headline,
-         tagline and the download CTA all share one axis. */
+         tagline and the download CTA all share one axis. round-14: the
+         axis now ends at the tagline; below it the CTA docks bottom-left
+         and the showcase rises top-right, ghost link gone entirely. */
       .ak-hero-inner { align-items: center; text-align: center; }
       .ak-hero-sub { margin-inline: auto; }
-      .ak-cta { align-items: center; }
-      .ak-cta-wrap { align-items: center; }
+      .ak-ghost { display: none; }
+      .ak-cta { align-items: stretch; }
+      .ak-cta-wrap { align-items: flex-start; }
+      .ak-cta-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 14px;
+        align-items: end;
+      }
+      .ak-showcase {
+        position: relative;
+        display: block;
+        width: clamp(88px, 27vw, 118px);
+        justify-self: end;
+      }
+      .ak-probe { margin-top: 52px; }
       .ak-eyebrow::before, .ak-eyebrow::after { display: none; }
       .ak-eyebrow { letter-spacing: 0.18em; }
 
@@ -1439,6 +1518,7 @@
       .ak-btn-primary { padding: 0 18px 0 16px; gap: 8px; }
       .ak-eyebrow { gap: 10px; }
       .ak-eyebrow::before, .ak-eyebrow::after { width: 14px; }
+      .ak-showcase { width: 72px; }
     }
 
     /* --- reduced motion safety net ---------------------------------------------------------- */
@@ -1505,74 +1585,88 @@
             <p class="ak-hero-sub ak-rise" style="--d:80ms"><b>maybe something better.</b></p>
 
             <div class="ak-cta ak-rise" style="--d:240ms" id="download">
-              <div class="ak-cta-wrap" id="ak-cta-wrap">
-                <div class="ak-fmt" id="ak-fmt" role="radiogroup" aria-label="Download format">
-                  <button type="button" class="ak-fmt-opt" id="ak-fmt-apk" role="radio" aria-checked="true" data-fmt="apk">APK</button>
-                  <button type="button" class="ak-fmt-opt" id="ak-fmt-zip" role="radio" aria-checked="false" data-fmt="zip">ZIP</button>
-                </div>
-                <div class="ak-cta-split">
-                  <button type="button" class="ak-btn-primary" id="ak-primary">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                      <polyline points="7 10 12 15 17 10"/>
-                      <line x1="12" x2="12" y1="15" y2="3"/>
-                    </svg>
-                    Download
-                  </button>
-                  <button type="button" class="ak-btn-expand" id="ak-expand" aria-expanded="false" aria-controls="build-panel" aria-label="Show all build versions">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                      <path d="m6 9 6 6 6-6"/>
-                    </svg>
-                  </button>
+              <div class="ak-cta-row">
+                <div class="ak-cta-wrap" id="ak-cta-wrap">
+                  <div class="ak-fmt" id="ak-fmt" role="radiogroup" aria-label="Download format">
+                    <button type="button" class="ak-fmt-opt" id="ak-fmt-apk" role="radio" aria-checked="true" data-fmt="apk">APK</button>
+                    <button type="button" class="ak-fmt-opt" id="ak-fmt-zip" role="radio" aria-checked="false" data-fmt="zip">ZIP</button>
+                  </div>
+                  <div class="ak-cta-split">
+                    <button type="button" class="ak-btn-primary" id="ak-primary">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" x2="12" y1="15" y2="3"/>
+                      </svg>
+                      Download
+                    </button>
+                    <button type="button" class="ak-btn-expand" id="ak-expand" aria-expanded="false" aria-controls="build-panel" aria-label="Show all build versions">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="m6 9 6 6 6-6"/>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
 
-                <div class="ak-disclosure" id="ak-disclosure">
-                  <div class="ak-disclosure-clip">
-                    <div class="ak-panel" id="build-panel" role="region" aria-label="Build versions">
-                      <div class="ak-panel-rows">
-                        <button type="button" class="ak-row" data-build="arm64-v8a">
-                          <span class="ak-row-main">
-                            <span class="ak-row-name">arm64-v8a</span>
-                            <span class="ak-row-desc">64-bit ARM — most modern Android phones</span>
-                          </span>
-                          <span class="ak-row-size" hidden></span>
-                          <span class="ak-row-tag">64-bit</span>
-                        </button>
-                        <button type="button" class="ak-row" data-build="armeabi-v7a">
-                          <span class="ak-row-main">
-                            <span class="ak-row-name">armeabi-v7a</span>
-                            <span class="ak-row-desc">32-bit ARM — older devices</span>
-                          </span>
-                          <span class="ak-row-size" hidden></span>
-                          <span class="ak-row-tag">32-bit</span>
-                        </button>
-                        <button type="button" class="ak-row" data-build="x86_64">
-                          <span class="ak-row-main">
-                            <span class="ak-row-name">x86_64</span>
-                            <span class="ak-row-desc">64-bit Intel — emulators and Chromebooks</span>
-                          </span>
-                          <span class="ak-row-size" hidden></span>
-                          <span class="ak-row-tag">64-bit</span>
-                        </button>
-                        <button type="button" class="ak-row" data-build="x86">
-                          <span class="ak-row-main">
-                            <span class="ak-row-name">x86</span>
-                            <span class="ak-row-desc">32-bit Intel — older emulators and boxes</span>
-                          </span>
-                          <span class="ak-row-size" hidden></span>
-                          <span class="ak-row-tag">32-bit</span>
-                        </button>
-                        <button type="button" class="ak-row" data-build="universal">
-                          <span class="ak-row-main">
-                            <span class="ak-row-name">universal</span>
-                            <span class="ak-row-desc">Every architecture in one APK (largest)</span>
-                          </span>
-                          <span class="ak-row-size" hidden></span>
-                          <span class="ak-row-tag">Fallback</span>
-                        </button>
-                      </div>
-                      <p class="ak-panel-note" id="ak-panel-note">Requires Android 7.0 or higher. Picking a build downloads the exact APK or ZIP.</p>
+                <div class="ak-showcase" id="ak-showcase" aria-hidden="true">
+                  <div class="ak-showcase-frame">
+                    <img class="ak-showcase-img is-active" src="img/player.webp" alt="" width="480" height="1067" loading="lazy" decoding="async">
+                    <img class="ak-showcase-img" src="img/details.webp" alt="" width="480" height="1067" loading="lazy" decoding="async">
+                    <img class="ak-showcase-img" src="img/search.webp" alt="" width="480" height="1067" loading="lazy" decoding="async">
+                    <img class="ak-showcase-img" src="img/library.webp" alt="" width="480" height="1067" loading="lazy" decoding="async">
+                    <img class="ak-showcase-img" src="img/downloads.webp" alt="" width="480" height="1067" loading="lazy" decoding="async">
+                    <img class="ak-showcase-img" src="img/profile-stats.webp" alt="" width="480" height="1067" loading="lazy" decoding="async">
+                    <img class="ak-showcase-img" src="img/quality-sources.webp" alt="" width="480" height="1067" loading="lazy" decoding="async">
+                  </div>
+                </div>
+              </div>
+
+              <div class="ak-disclosure" id="ak-disclosure">
+                <div class="ak-disclosure-clip">
+                  <div class="ak-panel" id="build-panel" role="region" aria-label="Build versions">
+                    <div class="ak-panel-rows">
+                      <button type="button" class="ak-row" data-build="arm64-v8a">
+                        <span class="ak-row-main">
+                          <span class="ak-row-name">arm64-v8a</span>
+                          <span class="ak-row-desc">64-bit ARM — most modern Android phones</span>
+                        </span>
+                        <span class="ak-row-size" hidden></span>
+                        <span class="ak-row-tag">64-bit</span>
+                      </button>
+                      <button type="button" class="ak-row" data-build="armeabi-v7a">
+                        <span class="ak-row-main">
+                          <span class="ak-row-name">armeabi-v7a</span>
+                          <span class="ak-row-desc">32-bit ARM — older devices</span>
+                        </span>
+                        <span class="ak-row-size" hidden></span>
+                        <span class="ak-row-tag">32-bit</span>
+                      </button>
+                      <button type="button" class="ak-row" data-build="x86_64">
+                        <span class="ak-row-main">
+                          <span class="ak-row-name">x86_64</span>
+                          <span class="ak-row-desc">64-bit Intel — emulators and Chromebooks</span>
+                        </span>
+                        <span class="ak-row-size" hidden></span>
+                        <span class="ak-row-tag">64-bit</span>
+                      </button>
+                      <button type="button" class="ak-row" data-build="x86">
+                        <span class="ak-row-main">
+                          <span class="ak-row-name">x86</span>
+                          <span class="ak-row-desc">32-bit Intel — older emulators and boxes</span>
+                        </span>
+                        <span class="ak-row-size" hidden></span>
+                        <span class="ak-row-tag">32-bit</span>
+                      </button>
+                      <button type="button" class="ak-row" data-build="universal">
+                        <span class="ak-row-main">
+                          <span class="ak-row-name">universal</span>
+                          <span class="ak-row-desc">Every architecture in one APK (largest)</span>
+                        </span>
+                        <span class="ak-row-size" hidden></span>
+                        <span class="ak-row-tag">Fallback</span>
+                      </button>
                     </div>
+                    <p class="ak-panel-note" id="ak-panel-note">Requires Android 7.0 or higher. Picking a build downloads the exact APK or ZIP.</p>
                   </div>
                 </div>
               </div>
@@ -2384,7 +2478,9 @@
          ========================================================================== */
       var expandBtn = document.getElementById("ak-expand");
       var disclosure = document.getElementById("ak-disclosure");
-      var cluster = document.getElementById("ak-cta-wrap");
+      /* round-14: the disclosure is a sibling of the CTA row now, so
+         outside-click means outside the whole CTA cluster. */
+      var cluster = document.getElementById("download");
 
       function disclosureOpen() {
         return disclosure.classList.contains("is-open");
@@ -2839,6 +2935,24 @@
         for (var ri = 0; ri < rises.length; ri++) io.observe(rises[ri]);
       } else {
         for (var rj = 0; rj < rises.length; rj++) rises[rj].classList.add("is-in");
+      }
+
+      /* ==========================================================================
+         MOBILE SHOWCASE (round-14) — the screenshots in the floating frame
+         crossfade every few seconds. Decorative: aria-hidden container, no
+         interaction, and the cycle never starts under reduced motion (the
+         global safety net would make the swaps instant flashes instead).
+         ========================================================================== */
+      var showcase = document.getElementById("ak-showcase");
+      if (showcase && !reduceMotionMq.matches) {
+        var showcaseImgs = showcase.querySelectorAll(".ak-showcase-img");
+        var showcaseIdx = 0;
+        setInterval(function () {
+          if (document.hidden || showcaseImgs.length < 2) return;
+          showcaseImgs[showcaseIdx].classList.remove("is-active");
+          showcaseIdx = (showcaseIdx + 1) % showcaseImgs.length;
+          showcaseImgs[showcaseIdx].classList.add("is-active");
+        }, 4200);
       }
 
       /* ---- boot ------------------------------------------------------------------ */
