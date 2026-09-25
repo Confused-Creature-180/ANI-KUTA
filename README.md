@@ -61,7 +61,7 @@ Requires **Android 7.0 or higher**.
 > **ANI-KUTA hosts zero content.** Nothing. Nada.
 
 - The app streams nothing on its own — everything you watch arrives through **extensions you choose to install**, from third-party providers the app has no connection to.
-- The developer(s) are **not affiliated** with any content provider available through community extensions — nor with Aniyomi, Anikku, Mihon or Tachiyomi.
+- The developer(s) are **not affiliated** with any content provider available through community extensions — nor with such.
 - **You** are responsible for the media you access and for complying with the laws and terms of service of those providers.
 
 ---
