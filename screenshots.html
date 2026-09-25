@@ -780,6 +780,7 @@
     function scatter() {
       wanders.forEach(function (a) { if (a) a.cancel(); });
       wanders = figures.map(function () { return null; });
+      floatOn = figures.map(function () { return false; });
       if (!wide.matches) {
         gallery.style.height = "";
         figures.forEach(function (f) {
@@ -807,7 +808,7 @@
           ok = true;
           /* the tolerated gap narrows as the tries burn — late cards tuck
              into tighter holes instead of pushing the canvas ever taller */
-          var g = 136 - 96 * (t / 900) + Math.random() * 40;
+          var g = 152 - 96 * (t / 900) + Math.random() * 40;
           for (var b = 0; b < boxes.length; b++) {
             var B = boxes[b];
             if (x < B.x + B.w + g && x + w + g > B.x && y < B.y + B.h + g && y + h + g > B.y) {
@@ -828,38 +829,42 @@
         f.querySelector(".ak-shot-frame").style.setProperty("--rot", (Math.random() * 6.5 - 3.25).toFixed(2) + "deg");
       });
       gallery.style.height = Math.round(Math.max(maxBottom + 84, H0)) + "px";
+      /* fresh deal, fresh float loops */
+      figures.forEach(function (f, i) { startFloat(i); });
     }
 
-    /* every capture wanders on its own clock, gliding around its deal spot
-       (bounded so the big gaps are never eaten). No snapping, no re-deal:
-       just continuous, independent, slow motion. */
-    var drifts = figures.map(function () { return { x: 0, y: 0 }; });
+    /* round-20: every capture FLOATS FOREVER — one closed loop of random
+       waypoints per card, glided through smoothly and endlessly, so the
+       sheet never sits still and never snaps back to a rest position.
+       Amplitudes stay inside the dealt gaps. */
+    var floatOn = figures.map(function () { return false; });
 
-    function wanderCard(i) {
-      if (!document.hidden && wide.matches && figures[i].classList.contains("is-in")) {
-        var f = figures[i];
-        var d = drifts[i];
-        var nx = Math.round((Math.random() * 2 - 1) * 30);
-        var ny = Math.round((Math.random() * 2 - 1) * 20);
-        if (nx !== d.x || ny !== d.y) {
-          var a = f.animate(
-            [
-              { transform: "translate(" + d.x + "px," + d.y + "px)" },
-              { transform: "translate(" + nx + "px," + ny + "px)" }
-            ],
-            {
-              duration: 2400 + Math.round(Math.random() * 1900),
-              easing: "cubic-bezier(0.45, 0, 0.55, 1)",
-              fill: "forwards"
-            }
-          );
-          if (wanders[i]) wanders[i].cancel();
-          wanders[i] = a;
-          d.x = nx;
-          d.y = ny;
-        }
+    function startFloat(i) {
+      if (floatOn[i] || !wide.matches) return;
+      if (!figures[i].classList.contains("is-in")) {
+        /* wait for the card to reveal before it starts drifting */
+        setTimeout(function () { startFloat(i); }, 600 + Math.random() * 700);
+        return;
       }
-      setTimeout(function () { wanderCard(i); }, 4400 + Math.random() * 4400);
+      floatOn[i] = true;
+      var pts = [[0, 0]];
+      for (var k = 0; k < 4; k++) {
+        pts.push([
+          Math.round((Math.random() * 2 - 1) * 28),
+          Math.round((Math.random() * 2 - 1) * 18)
+        ]);
+      }
+      pts.push([0, 0]); /* close the loop — the infinity is seamless */
+      var a = figures[i].animate(
+        pts.map(function (p) { return { transform: "translate(" + p[0] + "px," + p[1] + "px)" }; }),
+        {
+          duration: 26000 + Math.round(Math.random() * 16000),
+          easing: "ease-in-out",
+          iterations: Infinity
+        }
+      );
+      if (wanders[i]) wanders[i].cancel();
+      wanders[i] = a;
     }
 
     var rsT = null;
@@ -871,7 +876,7 @@
       : wide.addListener(scatter);
     scatter();
     figures.forEach(function (f, i) {
-      setTimeout(function () { wanderCard(i); }, 1400 + i * 620 + Math.random() * 900);
+      setTimeout(function () { startFloat(i); }, 1300 + i * 500 + Math.random() * 900);
     });
 
     /* LIGHTBOX — one overlay, thirteen shots. Arrow keys, swipe, or the

@@ -873,28 +873,27 @@
       }
     }
 
-    /* round-19: desktop gets a REAL carousel — the clean full-height capture
-       centered at a fixed size, the previous and next shots peeking in from
-       both sides, the narration panel resting under it. Nothing stretches:
-       the card keeps a hard 228×507 box no matter what the hero rows do. */
+    /* round-20: desktop carousel compressed — a slightly smaller stage and
+       card, peeks tightened to match, and the narration panel squashed into
+       a slim strip (title + one desc line + a single meta row). */
     @media (min-width: 641px) {
       .ak-showcase-desktop {
         display: block;
         position: relative;
-        width: 400px;
+        width: 380px;
         aspect-ratio: auto;
         align-self: center;
       }
-      .ak-desktop-stage { position: relative; width: 100%; height: 520px; }
+      .ak-desktop-stage { position: relative; width: 100%; height: 470px; }
       .ak-showcase-desktop .ak-showcase-card {
-        inset: 6px auto auto 50%;
-        width: 228px;
-        height: 507px;
-        margin-left: -114px;
+        inset: 4px auto auto 50%;
+        width: 208px;
+        height: 462px;
+        margin-left: -104px;
       }
       .ak-showcase-desktop .ak-showcase-card.is-front { opacity: 1; transform: none; z-index: 3; }
-      .ak-showcase-desktop .ak-showcase-card.is-next { opacity: 0.45; transform: translateX(128px) scale(0.85); z-index: 2; }
-      .ak-showcase-desktop .ak-showcase-card.is-prev { opacity: 0.45; transform: translateX(-128px) scale(0.85); z-index: 2; }
+      .ak-showcase-desktop .ak-showcase-card.is-next { opacity: 0.45; transform: translateX(116px) scale(0.85); z-index: 2; }
+      .ak-showcase-desktop .ak-showcase-card.is-prev { opacity: 0.45; transform: translateX(-116px) scale(0.85); z-index: 2; }
       /* round-18: desktop slides the clean full-height capture in — the
          per-image tour stays a mobile thing, the whole shot is the slide */
       .ak-showcase-desktop .ak-showcase-card.is-front img { animation: none; }
@@ -912,10 +911,10 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-        gap: 6px;
+        gap: 3px;
         width: auto;
-        margin-top: 20px;
-        padding: 18px 20px 22px;
+        margin-top: 14px;
+        padding: 12px 16px 13px;
         border: 1px solid var(--border-strong);
         border-radius: 10px;
         background:
@@ -930,7 +929,7 @@
 
       .ak-dp-eyebrow {
         font-family: var(--font-mono);
-        font-size: 9.5px;
+        font-size: 9px;
         font-weight: 600;
         letter-spacing: 0.18em;
         text-transform: uppercase;
@@ -941,26 +940,35 @@
         font-family: var(--font-display);
         font-stretch: 118%;
         font-weight: 800;
-        font-size: 21px;
+        font-size: 17px;
         line-height: 1.15;
         color: var(--text-1);
       }
 
-      .ak-dp-desc { font-size: 13px; line-height: 1.5; color: var(--text-2); }
+      .ak-dp-desc { font-size: 12.5px; line-height: 1.45; color: var(--text-2); }
+
+      /* round-20: index + dots share one slim row */
+      .ak-dp-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 7px;
+      }
 
       .ak-dp-idx {
-        margin-top: 10px;
+        margin: 0;
         font-family: var(--font-mono);
-        font-size: 10.5px;
+        font-size: 10px;
         font-weight: 600;
         letter-spacing: 0.12em;
         color: var(--text-3);
       }
 
-      .ak-dp-dots { display: flex; gap: 6px; margin-top: 10px; }
+      .ak-dp-dots { display: flex; gap: 5px; margin: 0; }
 
       .ak-dp-dot {
-        width: 16px;
+        width: 12px;
         height: 3px;
         border-radius: 2px;
         background: rgba(var(--accent-rgb), 0.22);
@@ -1808,7 +1816,7 @@
           <div class="ak-hero-inner">
             <h1 class="ak-h1 ak-h1-brand ak-rise" style="--d:0ms">ANI&#8209;KUTA</h1>
 
-            <p class="ak-hero-sub ak-rise" style="--d:80ms"><b>maybe something better.</b></p>
+            <p class="ak-hero-sub ak-rise" style="--d:80ms"><b>Anime, streamed your way.</b> Bring your own extensions and press play — library, offline downloads and AniList sync built in.</p>
 
             <div class="ak-cta ak-rise" style="--d:240ms" id="download">
               <div class="ak-cta-row">
@@ -1946,8 +1954,10 @@
                 <p class="ak-dp-eyebrow" id="ak-dp-eyebrow">Now showing</p>
                 <h3 class="ak-dp-title" id="ak-dp-title">The player</h3>
                 <p class="ak-dp-desc" id="ak-dp-desc">Branded, buffer-free playback with the episode list one flick away.</p>
-                <p class="ak-dp-idx" id="ak-dp-idx">01 / 07</p>
-                <div class="ak-dp-dots" id="ak-dp-dots"></div>
+                <div class="ak-dp-meta">
+                  <p class="ak-dp-idx" id="ak-dp-idx">01 / 07</p>
+                  <div class="ak-dp-dots" id="ak-dp-dots"></div>
+                </div>
               </div>
             </div>
           </div>
