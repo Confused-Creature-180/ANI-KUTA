@@ -28,25 +28,15 @@
 
 ## Screenshots
 
-| Search & discover | Your library | Anime details |
+| Player | Search | Library |
 |---|---|---|
-| <img src="assets/search.webp" width="250"/> | <img src="assets/library.webp" width="250"/> | <img src="assets/details.webp" width="250"/> |
+| <img src="assets/player.webp" width="250"/> | <img src="assets/search.webp" width="250"/> | <img src="assets/library.webp" width="250"/> |
 
-| Watch it | Episode list | Offline downloads |
+| Details | Stats | Downloads |
 |---|---|---|
-| <img src="assets/player.webp" width="250"/> | <img src="assets/episodes-cards.webp" width="250"/> | <img src="assets/downloads.webp" width="250"/> |
+| <img src="assets/details.webp" width="250"/> | <img src="assets/profile-stats.webp" width="250"/> | <img src="assets/downloads.webp" width="250"/> |
 
-| AniList stats | Genre insights | Make it yours |
-|---|---|---|
-| <img src="assets/profile-stats.webp" width="250"/> | <img src="assets/profile-genres.webp" width="250"/> | <img src="assets/more.webp" width="250"/> |
-
-| Pick source & quality | Episode details | Timeline view |
-|---|---|---|
-| <img src="assets/quality-sources.webp" width="250"/> | <img src="assets/episodes-synopsis.webp" width="250"/> | <img src="assets/episodes-timeline.webp" width="250"/> |
-
-| Fullscreen playback |
-|---|
-| <img src="assets/player-landscape.webp" width="720"/> |
+**[More screenshots →](https://confused-creature-180.github.io/ANI-KUTA/screenshots.html)**
 
 ---
 
