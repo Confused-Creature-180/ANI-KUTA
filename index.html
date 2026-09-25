@@ -346,6 +346,21 @@
     .ak-nav-gh-m:hover { color: var(--text-1); background: rgba(var(--accent-rgb), 0.10); }
     .ak-nav-gh-m svg { width: 20px; height: 20px; }
 
+    /* round-18: phones get a screenshots shortcut beside the GitHub icon */
+    .ak-nav-shot-m {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      color: var(--text-2);
+      transition: color 160ms var(--ease-out), background-color 160ms var(--ease-out);
+    }
+
+    .ak-nav-shot-m:hover { color: var(--accent); background: rgba(var(--accent-rgb), 0.10); }
+    .ak-nav-shot-m svg { width: 21px; height: 21px; }
+
     /* --- hero — left-aligned, zero fluff --------------------------------------- */
     .ak-hero {
       padding-top: clamp(128px, 20vh, 184px);
@@ -864,9 +879,21 @@
        peeking on desktop; the stack look stays mobile-only. */
     @media (min-width: 641px) {
       .ak-showcase-desktop { display: flex; gap: 20px; align-items: stretch; width: auto; align-self: center; }
-      .ak-desktop-stage { position: relative; width: clamp(230px, 20vw, 270px); aspect-ratio: 3 / 4; flex: none; align-self: flex-start; }
+      .ak-desktop-stage { position: relative; width: clamp(240px, 21vw, 300px); aspect-ratio: 9 / 20; flex: none; align-self: flex-start; }
       .ak-showcase-desktop .ak-showcase-card.is-behind,
       .ak-showcase-desktop .ak-showcase-card.is-far { opacity: 0; }
+      /* round-18: desktop slides the clean full-height capture in — the
+         per-image tour stays a mobile thing, the whole shot is the slide */
+      .ak-showcase-desktop .ak-showcase-card.is-front img { animation: none; }
+      @media (prefers-reduced-motion: no-preference) {
+        .ak-showcase-desktop .ak-showcase-card.is-front {
+          animation: ak-pc-in 620ms var(--ease-out);
+        }
+        @keyframes ak-pc-in {
+          from { opacity: 0; transform: translateX(46px) scale(0.975); }
+          to { opacity: 1; transform: none; }
+        }
+      }
 
       .ak-desktop-panel {
         display: flex;
@@ -1629,6 +1656,7 @@
       .ak-nav-inner { padding-inline: 14px; }
       .ak-nav-links { display: none; }
       .ak-nav-gh-m { display: inline-flex; }
+      .ak-nav-shot-m { display: inline-flex; }
 
       .ak-hero { padding-top: 120px; }
       /* round-8: on phones the hero reads as a centered stack — headline,
@@ -1743,6 +1771,13 @@
             <a class="ak-nav-link" href="screenshots.html">Screenshots</a>
             <a class="ak-nav-link" href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer">GitHub</a>
           </nav>
+          <a class="ak-nav-shot-m" href="screenshots.html" aria-label="Screenshots">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <rect x="3" y="3" width="18" height="18" rx="3"/>
+              <circle cx="9" cy="9" r="2"/>
+              <path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/>
+            </svg>
+          </a>
           <a class="ak-nav-gh-m" href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer" aria-label="ANI-KUTA on GitHub">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
               <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
@@ -1871,25 +1906,25 @@
             <div class="ak-showcase ak-showcase-desktop" aria-hidden="true">
               <div class="ak-desktop-stage">
               <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                <img src="img/teasers/player.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="two" data-dur="10500">
+                <img src="img/player.webp" alt="" width="1080" height="2400" loading="lazy" decoding="async" data-tour="two" data-dur="10500">
               </a>
               <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
-                <img data-src="img/teasers/details.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="two" data-dur="10500">
+                <img data-src="img/details.webp" alt="" width="1080" height="2400" loading="lazy" decoding="async" data-tour="two" data-dur="10500">
               </a>
               <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
-                <img data-src="img/teasers/search.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="sweep" data-dur="9500">
+                <img data-src="img/search.webp" alt="" width="1080" height="2400" loading="lazy" decoding="async" data-tour="sweep" data-dur="9500">
               </a>
               <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
-                <img data-src="img/teasers/library.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="sweep" data-dur="9500">
+                <img data-src="img/library.webp" alt="" width="1080" height="2400" loading="lazy" decoding="async" data-tour="sweep" data-dur="9500">
               </a>
               <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
-                <img data-src="img/teasers/downloads.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="sweep" data-dur="9500">
+                <img data-src="img/downloads.webp" alt="" width="1080" height="2400" loading="lazy" decoding="async" data-tour="sweep" data-dur="9500">
               </a>
               <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
-                <img data-src="img/teasers/profile-stats.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="two" data-dur="10500">
+                <img data-src="img/profile-stats.webp" alt="" width="1080" height="2400" loading="lazy" decoding="async" data-tour="two" data-dur="10500">
               </a>
               <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
-                <img data-src="img/teasers/quality-sources.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="one" data-dur="10000">
+                <img data-src="img/quality-sources.webp" alt="" width="1080" height="2400" loading="lazy" decoding="async" data-tour="one" data-dur="10000">
               </a>
               </div>
 
@@ -3189,7 +3224,7 @@
 
         function teaserName(card) {
           var img = card.querySelector("img");
-          var m = (img.getAttribute("data-src") || img.getAttribute("src") || "").match(/teasers\/([\w-]+)\.webp/);
+          var m = (img.getAttribute("data-src") || img.getAttribute("src") || "").match(/([\w-]+)\.webp/);
           return m ? m[1] : "";
         }
         function feed(i) {
