@@ -42,6 +42,12 @@
        - scene: soft-focus blur for depth, shapes roam freely.
        Restraint rules: one hue family (hue-capped at 186), scene dimmed,
        scrims for readability; the CTA glow stays the single strong glow.
+       Direction (user round-13):
+       - the format pill stacks above the CTA on every viewport — the old
+         inline row only held on wide screens by accident of inline flow;
+       - the pill carries a sliding baby-blue thumb: flipping APK | ZIP
+         glides it under the active option while the format-dependent
+         text (verdict, row sizes, panel note) crossfades out and back.
        ========================================================================== */
     :root {
       color-scheme: dark;
@@ -387,6 +393,14 @@
       scroll-margin-top: 120px;
     }
 
+    /* round-13: one axis everywhere — pill above the button, left-aligned
+       on desktop (matching the hero) and centered on phones. */
+    .ak-cta-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
     .ak-cta-split {
       display: inline-flex;
       border-radius: 10px;
@@ -487,6 +501,7 @@
 
     /* --- format option — APK | ZIP segmented pill (a real option, not a switch) --- */
     .ak-fmt {
+      position: relative;
       display: inline-flex;
       align-items: center;
       gap: 4px;
@@ -504,7 +519,29 @@
         0 8px 24px rgba(0, 0, 0, 0.3);
     }
 
+    /* round-13: the thumb slides behind the labels; the options render
+       above it and only ever swap ink color. Both labels are 3 mono
+       characters, so the halves are exactly equal — a 50% thumb tracks
+       them precisely without measuring. */
+    .ak-fmt::before {
+      content: "";
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      left: 4px;
+      width: calc(50% - 6px);
+      border-radius: 9999px;
+      background: var(--baby);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      transform: translateX(0);
+      transition: transform 240ms var(--ease-out);
+    }
+
+    #ak-fmt[data-fmt="zip"]::before { transform: translateX(calc(100% + 4px)); }
+
     .ak-fmt-opt {
+      position: relative;
+      z-index: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -526,11 +563,7 @@
 
     .ak-fmt-opt:hover { color: var(--text-1); }
 
-    .ak-fmt-opt[aria-checked="true"] {
-      background: var(--baby);
-      color: var(--baby-ink);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    }
+    .ak-fmt-opt[aria-checked="true"] { color: var(--baby-ink); }
 
     /* Disclosure panel — grid-rows 0fr -> 1fr open/close. */
     .ak-disclosure {
@@ -652,6 +685,7 @@
       font-weight: 600;
       color: var(--text-2);
       white-space: nowrap;
+      transition: opacity 150ms linear;
     }
 
     .ak-row.has-size .ak-row-tag { margin-left: 0; }
@@ -663,6 +697,15 @@
       font-size: 12px;
       line-height: 1.55;
       color: var(--text-3);
+      transition: opacity 150ms linear;
+    }
+
+    /* round-13: format-swap crossfade — set while the thumb glides; the
+       !important is what lets the verdict duck under its own probe-reveal
+       opacity (is-set) for the 110ms the swap lasts. */
+    .is-fmt-swap {
+      opacity: 0 !important;
+      transition: opacity 110ms linear !important;
     }
 
     .ak-ghost {
@@ -1353,6 +1396,7 @@
       .ak-hero-inner { align-items: center; text-align: center; }
       .ak-hero-sub { margin-inline: auto; }
       .ak-cta { align-items: center; }
+      .ak-cta-wrap { align-items: center; }
       .ak-eyebrow::before, .ak-eyebrow::after { display: none; }
       .ak-eyebrow { letter-spacing: 0.18em; }
 
@@ -2450,15 +2494,40 @@
         }
       }
 
+      var fmtSwapTimer = null;
+
       function setFmt(next) {
+        var prev = fmt;
         fmt = next === "zip" ? "zip" : "apk";
         try { localStorage.setItem(FMT_KEY, fmt); } catch (eFmt2) { /* private mode */ }
+        if (fmtGroup) fmtGroup.setAttribute("data-fmt", fmt);
         var opts = document.querySelectorAll(".ak-fmt-opt");
         for (var i = 0; i < opts.length; i++) {
           opts[i].setAttribute("aria-checked", opts[i].getAttribute("data-fmt") === fmt ? "true" : "false");
         }
-        updateFmtTexts();
-        renderRowSizes();
+        /* round-13: on a real flip the format-dependent values duck out
+           and settle back while the thumb glides; the boot swap (and any
+           same-format re-set) stays instant. */
+        var swapEls = [verdictEl, document.getElementById("ak-panel-note")];
+        var sizeEls = document.querySelectorAll(".ak-row-size");
+        for (var se = 0; se < sizeEls.length; se++) swapEls.push(sizeEls[se]);
+        if (prev !== fmt) {
+          if (fmtSwapTimer) clearTimeout(fmtSwapTimer);
+          for (var fe = 0; fe < swapEls.length; fe++) {
+            if (swapEls[fe]) swapEls[fe].classList.add("is-fmt-swap");
+          }
+          fmtSwapTimer = setTimeout(function () {
+            fmtSwapTimer = null;
+            updateFmtTexts();
+            renderRowSizes();
+            for (var fc = 0; fc < swapEls.length; fc++) {
+              if (swapEls[fc]) swapEls[fc].classList.remove("is-fmt-swap");
+            }
+          }, 150);
+        } else {
+          updateFmtTexts();
+          renderRowSizes();
+        }
         if (modalOpenState) renderModal();
       }
 
