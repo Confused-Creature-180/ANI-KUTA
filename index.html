@@ -781,7 +781,9 @@
     .ak-showcase {
       position: relative;
       display: none;
-      aspect-ratio: 3 / 4;
+      /* round-21: 9/20 — the teasers are 9:20 captures, so the card shows
+         the WHOLE screen instead of cover-cropping a zoomed middle band */
+      aspect-ratio: 9 / 20;
     }
 
     .ak-showcase::before {
@@ -944,8 +946,6 @@
         line-height: 1.15;
         color: var(--text-1);
       }
-
-      .ak-dp-desc { font-size: 12.5px; line-height: 1.45; color: var(--text-2); }
 
       /* round-20: index + dots share one slim row */
       .ak-dp-meta {
@@ -1681,12 +1681,11 @@
       .ak-nav-shot-m { display: inline-flex; }
 
       .ak-hero { padding-top: 120px; }
-      /* round-8: on phones the hero reads as a centered stack — headline,
-         tagline and the download CTA all share one axis. round-14: the
-         axis now ends at the tagline; below it the CTA docks bottom-left
-         and the showcase rises top-right, ghost link gone entirely. */
-      .ak-hero-inner { align-items: center; text-align: center; }
-      .ak-hero-sub { margin-inline: auto; }
+      /* round-21: on phones the hero text sits on the left axis — headline
+         and tagline share it, matching the CTA below. round-14: the axis
+         ends at the tagline; below it the CTA docks bottom-left and the
+         showcase rises top-right, ghost link gone entirely. */
+      .ak-hero-inner { align-items: flex-start; text-align: left; }
       .ak-ghost { display: none; }
       .ak-cta { align-items: stretch; }
       .ak-cta-wrap { align-items: flex-start; }
@@ -1698,7 +1697,9 @@
       }
       .ak-showcase-mobile {
         display: block;
-        width: clamp(108px, 27vw, 128px);
+        /* round-21: slimmer cards for the 9/20 full-screen ratio — the deck
+           shows entire captures now, so width trades for height */
+        width: clamp(96px, 24vw, 116px);
         justify-self: end;
       }
       .ak-probe { margin-top: 52px; }
@@ -1744,7 +1745,7 @@
       .ak-btn-primary { padding: 0 18px 0 16px; gap: 8px; }
       .ak-eyebrow { gap: 10px; }
       .ak-eyebrow::before, .ak-eyebrow::after { width: 14px; }
-      .ak-showcase-mobile { width: 96px; }
+      .ak-showcase-mobile { width: 88px; }
     }
 
     /* --- reduced motion safety net ---------------------------------------------------------- */
@@ -1816,7 +1817,7 @@
           <div class="ak-hero-inner">
             <h1 class="ak-h1 ak-h1-brand ak-rise" style="--d:0ms">ANI&#8209;KUTA</h1>
 
-            <p class="ak-hero-sub ak-rise" style="--d:80ms"><b>Anime, streamed your way.</b> Bring your own extensions and press play — library, offline downloads and AniList sync built in.</p>
+            <p class="ak-hero-sub ak-rise" style="--d:80ms"><b>maybe something better.</b></p>
 
             <div class="ak-cta ak-rise" style="--d:240ms" id="download">
               <div class="ak-cta-row">
@@ -1953,7 +1954,6 @@
               <div class="ak-desktop-panel" aria-hidden="true">
                 <p class="ak-dp-eyebrow" id="ak-dp-eyebrow">Now showing</p>
                 <h3 class="ak-dp-title" id="ak-dp-title">The player</h3>
-                <p class="ak-dp-desc" id="ak-dp-desc">Branded, buffer-free playback with the episode list one flick away.</p>
                 <div class="ak-dp-meta">
                   <p class="ak-dp-idx" id="ak-dp-idx">01 / 07</p>
                   <div class="ak-dp-dots" id="ak-dp-dots"></div>
@@ -3283,12 +3283,12 @@
           var img = front.querySelector("img");
           front.style.setProperty("--tour-name", "ak-tour-" + (img.dataset.tour || "sweep"));
           front.style.setProperty("--tour", (img.dataset.dur || "9500") + "ms");
-          /* desktop narration panel mirrors the front card */
-          var info = SHOWCASE_INFO[teaserName(front)] || { title: "ANI-KUTA", desc: "" };
+          /* desktop narration panel mirrors the front card — name only,
+             round-21: the per-screen descriptions are gone */
+          var info = SHOWCASE_INFO[teaserName(front)] || { title: "ANI-KUTA" };
           var title = document.getElementById("ak-dp-title");
           if (title) {
             title.textContent = info.title;
-            document.getElementById("ak-dp-desc").textContent = info.desc;
             document.getElementById("ak-dp-idx").textContent =
               (deckIdx + 1 < 10 ? "0" : "") + (deckIdx + 1) + " / 07";
             var dots = document.getElementById("ak-dp-dots");
