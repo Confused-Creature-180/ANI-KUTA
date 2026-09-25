@@ -66,6 +66,17 @@
          shows all 13 full-height, clean captures with a lightbox;
        - teasers are posterized + pixelated + duotone-mapped into the
          brand greens — idea-level legibility, not full detail.
+       Direction (user round-16):
+       - the treatment becomes manga screentone: green halftone dots over
+         the untouched capture (dots density follows shadow);
+       - the front card tours the WHOLE screenshot — object-position sweep
+         top → middle → bottom on an 11.5s clock, shuffle locked to it;
+       - phones swipe the deck left/right; tap-through is suppressed for
+         the swipe gesture;
+       - desktop gets its own look: solo screen + trailing queue + a thin
+         accent progress line that tracks the tour;
+       - teasers stream in incrementally (front ±2 ranks), pending cards
+         carry a quiet shimmer; nothing else changes on the CTA/probe.
        ========================================================================== */
     :root {
       color-scheme: dark;
@@ -793,24 +804,150 @@
       display: block;
     }
 
-    .ak-showcase-card.is-front { opacity: 1; transform: none; z-index: 3; }
-    .ak-showcase-card.is-behind { opacity: 0.5; transform: translateX(30%) scale(0.88) rotate(2.5deg); z-index: 2; }
-    .ak-showcase-card.is-far { opacity: 0.26; transform: translateX(54%) scale(0.78) rotate(5deg); z-index: 1; }
+    /* round-16: a card whose teaser hasn't streamed in yet shows a quiet
+       sweeping sheen instead of a blank pane */
+    .ak-showcase-card.is-pending::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, transparent 32%, rgba(var(--accent-rgb), 0.09) 50%, transparent 68%);
+      transform: translateX(-100%);
+    }
 
     @media (prefers-reduced-motion: no-preference) {
+      .ak-showcase-card.is-pending::before { animation: ak-shimmer 1.8s linear infinite; }
+      @keyframes ak-shimmer {
+        to { transform: translateX(100%); }
+      }
+    }
+
+    .ak-showcase-card.is-front { opacity: 1; transform: none; z-index: 3; }
+    .ak-showcase-card.is-behind { opacity: 0.5; transform: translateX(27%) translateY(-3.5%) scale(0.87) rotate(2.5deg); z-index: 2; }
+    .ak-showcase-card.is-far { opacity: 0.26; transform: translateX(48%) translateY(3%) scale(0.75) rotate(5deg); z-index: 1; }
+
+    /* round-17: the front card's scroll tour is per-image now. Each teaser
+       carries data-tour/data-dur; JS feeds them to this card as CSS vars.
+       Tours were designed from the captures themselves: two-stop for shots
+       with distinct top + bottom zones (player, details, profile stats),
+       a smooth top-to-bottom sweep for uniform grids (search, library,
+       downloads), and a single glide to the one key area for the quality
+       sheet. The deck shuffles when the tour ends — same clock. */
+    @media (prefers-reduced-motion: no-preference) {
       .ak-showcase::before { animation: ak-breathe 5.5s ease-in-out infinite; }
-      .ak-showcase-card.is-front img { animation: ak-kenburns 9s ease-in-out infinite; }
+      .ak-showcase-card.is-front img {
+        animation-name: var(--tour-name, ak-tour-sweep);
+        animation-duration: var(--tour, 9500ms);
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+      }
       @keyframes ak-breathe {
         0%, 100% { opacity: 0.55; transform: scale(0.96); }
         50% { opacity: 1; transform: scale(1.04); }
       }
-      /* the teaser is cropped ~6% taller than the 3:4 frame, so the drift
-         always has fresh pixels to reveal — no edges ever show */
-      @keyframes ak-kenburns {
-        0%, 100% { transform: scale(1.04) translateY(1.6%); }
-        50% { transform: scale(1.1) translateY(-2%); }
+      @keyframes ak-tour-two {
+        0%, 15% { object-position: 50% 0%; }
+        45%, 100% { object-position: 50% 100%; }
+      }
+      @keyframes ak-tour-sweep {
+        0%, 8% { object-position: 50% 0%; }
+        82%, 100% { object-position: 50% 100%; }
+      }
+      @keyframes ak-tour-one {
+        0%, 12% { object-position: 50% 0%; }
+        52%, 100% { object-position: 50% 88%; }
       }
     }
+
+    /* round-17: desktop tells a different story than the phone — a solo
+       screen with the tour playing inside it, and a glass side panel that
+       narrates what's on screen (title, line, index, tour dots). No deck
+       peeking on desktop; the stack look stays mobile-only. */
+    @media (min-width: 641px) {
+      .ak-showcase-desktop { display: flex; gap: 20px; align-items: stretch; width: auto; align-self: center; }
+      .ak-desktop-stage { position: relative; width: clamp(230px, 20vw, 270px); aspect-ratio: 3 / 4; flex: none; align-self: flex-start; }
+      .ak-showcase-desktop .ak-showcase-card.is-behind,
+      .ak-showcase-desktop .ak-showcase-card.is-far { opacity: 0; }
+
+      .ak-desktop-panel {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: 6px;
+        width: 220px;
+        padding: 18px 20px 22px;
+        border: 1px solid var(--border-strong);
+        border-radius: 10px;
+        background:
+          linear-gradient(180deg, var(--glass-hi), rgba(255, 255, 255, 0.018) 38%, var(--glass-lo)),
+          rgba(19, 27, 22, 0.66);
+        backdrop-filter: blur(18px) saturate(150%);
+        -webkit-backdrop-filter: blur(18px) saturate(150%);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.09),
+          0 18px 42px -12px rgba(0, 0, 0, 0.5);
+      }
+
+      .ak-dp-eyebrow {
+        font-family: var(--font-mono);
+        font-size: 9.5px;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--text-3);
+      }
+
+      .ak-dp-title {
+        font-family: var(--font-display);
+        font-stretch: 118%;
+        font-weight: 800;
+        font-size: 21px;
+        line-height: 1.15;
+        color: var(--text-1);
+      }
+
+      .ak-dp-desc { font-size: 13px; line-height: 1.5; color: var(--text-2); }
+
+      .ak-dp-idx {
+        margin-top: 10px;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        color: var(--text-3);
+      }
+
+      .ak-dp-dots { display: flex; gap: 6px; margin-top: 10px; }
+
+      .ak-dp-dot {
+        width: 16px;
+        height: 3px;
+        border-radius: 2px;
+        background: rgba(var(--accent-rgb), 0.22);
+        transition: background-color 240ms var(--ease-out);
+      }
+
+      .ak-dp-dot.is-on { background: var(--accent); box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.5); }
+    }
+
+      @media (prefers-reduced-motion: no-preference) and (min-width: 641px) {
+        .ak-showcase-desktop .ak-showcase-card.is-front::after {
+          content: "";
+          position: absolute;
+          left: 10px;
+          right: 10px;
+          bottom: 8px;
+          height: 3px;
+          border-radius: 2px;
+          background: rgba(var(--accent-rgb), 0.92);
+          box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.65);
+          transform-origin: left;
+          animation: ak-progress var(--tour, 9500ms) linear infinite;
+        }
+        @keyframes ak-progress {
+          from { transform: scaleX(0); }
+          to { transform: scaleX(1); }
+        }
+      }
 
     /* round-15: from small tablets up the hero splits — text keeps the left
        axis, the deck takes the empty right side. */
@@ -826,10 +963,8 @@
       .ak-hero-inner > .ak-hero-sub,
       .ak-hero-inner > .ak-cta { grid-column: 1; }
       .ak-showcase-desktop {
-        display: block;
         grid-column: 2;
         grid-row: 1 / span 3;
-        width: clamp(210px, 22vw, 280px);
       }
     }
 
@@ -1652,25 +1787,25 @@
 
                 <div class="ak-showcase ak-showcase-mobile" aria-hidden="true">
                   <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                    <img src="img/teasers/player.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                    <img src="img/teasers/player.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="two" data-dur="10500">
                   </a>
-                  <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                    <img src="img/teasers/details.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                  <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
+                    <img data-src="img/teasers/details.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="two" data-dur="10500">
                   </a>
-                  <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                    <img src="img/teasers/search.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                  <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
+                    <img data-src="img/teasers/search.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="sweep" data-dur="9500">
                   </a>
-                  <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                    <img src="img/teasers/library.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                  <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
+                    <img data-src="img/teasers/library.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="sweep" data-dur="9500">
                   </a>
-                  <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                    <img src="img/teasers/downloads.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                  <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
+                    <img data-src="img/teasers/downloads.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="sweep" data-dur="9500">
                   </a>
-                  <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                    <img src="img/teasers/profile-stats.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                  <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
+                    <img data-src="img/teasers/profile-stats.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="two" data-dur="10500">
                   </a>
-                  <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                    <img src="img/teasers/quality-sources.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                  <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
+                    <img data-src="img/teasers/quality-sources.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="one" data-dur="10000">
                   </a>
                 </div>
               </div>
@@ -1734,27 +1869,37 @@
             </div>
 
             <div class="ak-showcase ak-showcase-desktop" aria-hidden="true">
+              <div class="ak-desktop-stage">
               <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                <img src="img/teasers/player.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                <img src="img/teasers/player.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="two" data-dur="10500">
               </a>
-              <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                <img src="img/teasers/details.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+              <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
+                <img data-src="img/teasers/details.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="two" data-dur="10500">
               </a>
-              <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                <img src="img/teasers/search.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+              <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
+                <img data-src="img/teasers/search.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="sweep" data-dur="9500">
               </a>
-              <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                <img src="img/teasers/library.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+              <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
+                <img data-src="img/teasers/library.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="sweep" data-dur="9500">
               </a>
-              <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                <img src="img/teasers/downloads.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+              <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
+                <img data-src="img/teasers/downloads.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="sweep" data-dur="9500">
               </a>
-              <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                <img src="img/teasers/profile-stats.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+              <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
+                <img data-src="img/teasers/profile-stats.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="two" data-dur="10500">
               </a>
-              <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
-                <img src="img/teasers/quality-sources.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+              <a class="ak-showcase-card is-pending" href="screenshots.html" tabindex="-1">
+                <img data-src="img/teasers/quality-sources.webp" alt="" width="600" height="1333" loading="lazy" decoding="async" data-tour="one" data-dur="10000">
               </a>
+              </div>
+
+              <div class="ak-desktop-panel" aria-hidden="true">
+                <p class="ak-dp-eyebrow" id="ak-dp-eyebrow">Now showing</p>
+                <h3 class="ak-dp-title" id="ak-dp-title">The player</h3>
+                <p class="ak-dp-desc" id="ak-dp-desc">Branded, buffer-free playback with the episode list one flick away.</p>
+                <p class="ak-dp-idx" id="ak-dp-idx">01 / 07</p>
+                <div class="ak-dp-dots" id="ak-dp-dots"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -3016,31 +3161,129 @@
       }
 
       /* ==========================================================================
-         SHOWCASE DECK (round-15) — three stylized teasers stay visible while
-         the deck shuffles forward every few seconds. Runs on both instances
-         (desktop hero + mobile CTA row), but only the one actually laid out
-         ticks (offsetParent check); skipped entirely under reduced motion —
-         the global net would turn the shuffle into instant teleporting.
+         SHOWCASE DECK (round-17) — three cards stay visible; the front one
+         plays ITS OWN tour (per-image focus points analyzed from each
+         capture: two-stop for shots with distinct zones, a full sweep for
+         uniform grids, a single glide to the one key area). Shuffle locks
+         to the tour's clock. Teasers stream in incrementally (front ±2
+         ranks). Phones swipe the deck; the tap-through to the gallery is
+         suppressed for the gesture that just happened. Desktop additionally
+         narrates: the side panel mirrors what's on screen.
          ========================================================================== */
+      var SHOWCASE_INFO = {
+        player:          { title: "The player",       desc: "Branded, buffer-free playback with the episode list one flick away." },
+        details:         { title: "Anime details",    desc: "Backdrop art, genres, synopsis — everything before you press play." },
+        search:          { title: "Search & discover", desc: "Every extension source behind one search bar." },
+        library:         { title: "Your library",     desc: "Posters, categories, progress — hundreds of titles, no clutter." },
+        downloads:       { title: "Offline downloads", desc: "Take episodes anywhere — quality and size shown up front." },
+        "profile-stats": { title: "AniList sync",     desc: "Stats, streaks and watch flow, straight from your AniList." },
+        "quality-sources": { title: "Source & quality", desc: "Pick the stream and resolution that fits — SUB or DUB." }
+      };
+
       document.querySelectorAll(".ak-showcase").forEach(function (deck) {
         var cards = deck.querySelectorAll(".ak-showcase-card");
         if (cards.length < 2) return;
         var deckIdx = 0;
+        var deckTimer = null;
         var RANKS = ["is-front", "is-behind", "is-far"];
+
+        function teaserName(card) {
+          var img = card.querySelector("img");
+          var m = (img.getAttribute("data-src") || img.getAttribute("src") || "").match(/teasers\/([\w-]+)\.webp/);
+          return m ? m[1] : "";
+        }
+        function feed(i) {
+          var img = cards[i].querySelector("img");
+          if (!img.getAttribute("src")) {
+            img.addEventListener("load", function () {
+              cards[i].classList.remove("is-pending");
+            }, { once: true });
+            img.src = img.dataset.src;
+          } else if (img.complete) {
+            cards[i].classList.remove("is-pending");
+          }
+        }
+        function supply() {
+          for (var d = -1; d <= 2; d++) {
+            feed((deckIdx + d + cards.length) % cards.length);
+          }
+        }
         function deal() {
+          var front = cards[deckIdx];
           for (var i = 0; i < cards.length; i++) {
             var r = (i - deckIdx + cards.length) % cards.length;
             for (var k = 0; k < RANKS.length; k++) cards[i].classList.remove(RANKS[k]);
             if (r < RANKS.length) cards[i].classList.add(RANKS[r]);
           }
+          /* the front card carries its own tour into CSS (attrs live on the img) */
+          var img = front.querySelector("img");
+          front.style.setProperty("--tour-name", "ak-tour-" + (img.dataset.tour || "sweep"));
+          front.style.setProperty("--tour", (img.dataset.dur || "9500") + "ms");
+          /* desktop narration panel mirrors the front card */
+          var info = SHOWCASE_INFO[teaserName(front)] || { title: "ANI-KUTA", desc: "" };
+          var title = document.getElementById("ak-dp-title");
+          if (title) {
+            title.textContent = info.title;
+            document.getElementById("ak-dp-desc").textContent = info.desc;
+            document.getElementById("ak-dp-idx").textContent =
+              (deckIdx + 1 < 10 ? "0" : "") + (deckIdx + 1) + " / 07";
+            var dots = document.getElementById("ak-dp-dots");
+            if (dots.children.length !== cards.length) {
+              dots.innerHTML = "";
+              for (var d = 0; d < cards.length; d++) {
+                var dot = document.createElement("span");
+                dot.className = "ak-dp-dot";
+                dots.appendChild(dot);
+              }
+            }
+            for (var di = 0; di < dots.children.length; di++) {
+              dots.children[di].classList.toggle("is-on", di === deckIdx);
+            }
+          }
+        }
+        function arm() {
+          if (deckTimer) clearTimeout(deckTimer);
+          if (reduceMotionMq.matches) return;
+          deckTimer = setTimeout(function () {
+            if (document.hidden || !deck.offsetParent) { arm(); return; }
+            deckIdx = (deckIdx + 1) % cards.length;
+            deal();
+            supply();
+            arm();
+          }, parseInt(cards[deckIdx].querySelector("img").dataset.dur || "9500", 10));
+        }
+        function step(dir) {
+          deckIdx = (deckIdx + dir + cards.length) % cards.length;
+          deal();
+          supply();
+          arm();
         }
         deal();
-        if (reduceMotionMq.matches) return;
-        setInterval(function () {
-          if (document.hidden || !deck.offsetParent) return;
-          deckIdx = (deckIdx + 1) % cards.length;
-          deal();
-        }, 3800);
+        supply();
+        arm();
+
+        var touchX = 0, touchY = 0, swiped = false;
+        deck.addEventListener("touchstart", function (e) {
+          touchX = e.touches[0].clientX;
+          touchY = e.touches[0].clientY;
+          swiped = false;
+        }, { passive: true });
+        deck.addEventListener("touchmove", function (e) {
+          if (swiped) return;
+          var dx = e.touches[0].clientX - touchX;
+          var dy = e.touches[0].clientY - touchY;
+          if (Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+            swiped = true;
+            step(dx < 0 ? 1 : -1);
+          }
+        }, { passive: true });
+        deck.addEventListener("click", function (e) {
+          if (swiped) {
+            e.preventDefault();
+            e.stopPropagation();
+            swiped = false;
+          }
+        }, true);
       });
 
       /* ---- boot ------------------------------------------------------------------ */

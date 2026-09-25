@@ -6,6 +6,7 @@
   <title>ANI-KUTA — Screenshots</title>
   <meta name="description" content="Real ANI-KUTA captures — the player, the library, AniList stats, offline downloads and more. Every screen, as it ships.">
   <meta name="theme-color" content="#101712">
+  <script>document.documentElement.classList.add("js")</script>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <meta property="og:title" content="ANI-KUTA — Screenshots">
   <meta property="og:description" content="Every screen, as it ships. Real captures from the ANI-KUTA player, library, stats and more.">
@@ -238,6 +239,17 @@
 
     .ak-shot { margin: 0; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 
+    /* round-17: staggered scroll-reveal — cards rise in as they enter the
+       viewport. Scoped to .js so the page is fully visible without it. */
+    .js .ak-shot:not(.is-in) {
+      opacity: 0;
+      transform: translateY(22px);
+    }
+
+    .ak-shot {
+      transition: opacity 480ms var(--ease-open), transform 560ms var(--ease-out);
+    }
+
     .ak-shot-frame {
       position: relative;
       display: block;
@@ -321,6 +333,49 @@
 
     .ak-lb.is-open { opacity: 1; }
 
+    /* round-17: each shot rises into the lightbox — the wrap re-plays this
+       on every open and every arrow/swipe step */
+    .ak-lb-img-wrap {
+      opacity: 0;
+      transform: scale(0.965) translateY(10px);
+      transition: opacity 300ms var(--ease-open), transform 380ms var(--ease-out);
+    }
+
+    .ak-lb-img-wrap.is-in {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* round-16: the neighbours hover behind the open shot — blurred, tilted,
+       smaller — so the lightbox reads as one card pulled off a stack */
+    .ak-lb-ghost {
+      position: absolute;
+      top: 50%;
+      z-index: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      opacity: 0.38;
+      filter: blur(2.5px);
+      pointer-events: none;
+    }
+
+    .ak-lb-ghost img { display: block; height: 54svh; width: auto; }
+
+    .ak-lb-ghost-l {
+      left: 5vw;
+      transform: translateY(-50%) scale(0.8) rotate(-3deg);
+    }
+
+    .ak-lb-ghost-r {
+      right: 5vw;
+      transform: translateY(-50%) scale(0.8) rotate(3deg);
+    }
+
+    @media (max-width: 900px) {
+      .ak-lb-ghost { display: none; }
+    }
+
     .ak-lb-figure {
       margin: 0;
       display: flex;
@@ -329,6 +384,8 @@
       gap: 14px;
       min-width: 0;
       max-width: 100%;
+      position: relative;
+      z-index: 1;
     }
 
     .ak-lb-img-wrap {
@@ -422,10 +479,32 @@
       .ak-gallery { margin-top: 40px; }
       .ak-lb-prev, .ak-lb-next { width: 42px; height: 50px; }
       .ak-lb img { max-height: calc(100svh - 140px); }
+      /* the wide landscape capture must never ride over the arrows */
+      .ak-lb-figure { width: 100%; padding-inline: 50px; }
+      .ak-lb img { max-width: 100%; }
     }
 
     @media (min-width: 1025px) {
-      .ak-gallery { grid-template-columns: repeat(4, 1fr); }
+      .ak-gallery { grid-template-columns: repeat(4, 1fr); gap: 30px 22px; }
+    }
+
+    /* round-17: desktop cards drift gently in place — tiny amplitudes so
+       grid gaps are never eaten (no overlaps, ever) */
+    @media (min-width: 1025px) and (prefers-reduced-motion: no-preference) {
+      .ak-shot { animation: var(--drift, none); }
+      @keyframes ak-drift-1 {
+        0%, 100% { transform: translate(0, 0); }
+        50% { transform: translate(4px, -7px); }
+      }
+      @keyframes ak-drift-2 {
+        0%, 100% { transform: translate(0, 0); }
+        50% { transform: translate(-5px, 6px); }
+      }
+      @keyframes ak-drift-3 {
+        0%, 100% { transform: translate(0, 0); }
+        33% { transform: translate(3px, 5px); }
+        66% { transform: translate(-4px, -3px); }
+      }
     }
 
     /* --- reduced motion safety net ------------------------------------------------- */
@@ -478,7 +557,7 @@
         <div class="ak-container">
           <p class="ak-eyebrow">Screenshots</p>
           <h1 class="ak-title">Every screen, <em>as it ships.</em></h1>
-          <p class="ak-page-sub">Real captures from ANI-KUTA — no mockups, no Marketing Glow™. Tap any shot to see it full size.</p>
+          <p class="ak-page-sub">Real captures from ANI-KUTA v1.1.3 — tap any shot to see it full size.</p>
         </div>
       </section>
 
@@ -508,59 +587,59 @@
             </button>
             <figcaption class="ak-shot-cap"><span class="ak-shot-idx">04</span>The player</figcaption>
           </figure>
+          <figure class="ak-shot ak-shot-wide">
+            <button type="button" class="ak-shot-frame" data-caption="Fullscreen landscape playback">
+              <img src="img/player-landscape.webp" alt="Landscape fullscreen video player" width="1080" height="486" loading="lazy" decoding="async">
+            </button>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">05</span>Fullscreen playback</figcaption>
+          </figure>
           <figure class="ak-shot">
             <button type="button" class="ak-shot-frame" data-caption="Episodes at a glance — big cards, big numbers">
               <img src="img/episodes-cards.webp" alt="Numbered episode cards with artwork" width="1080" height="2400" loading="lazy" decoding="async">
             </button>
-            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">05</span>Episode cards</figcaption>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">06</span>Episode cards</figcaption>
           </figure>
           <figure class="ak-shot">
             <button type="button" class="ak-shot-frame" data-caption="Every episode, summarized">
               <img src="img/episodes-synopsis.webp" alt="Episode list with thumbnails and synopses" width="1080" height="2400" loading="lazy" decoding="async">
             </button>
-            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">06</span>Episode details</figcaption>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">07</span>Episode details</figcaption>
           </figure>
           <figure class="ak-shot">
             <button type="button" class="ak-shot-frame" data-caption="Weekly drops, on a timeline">
               <img src="img/episodes-timeline.webp" alt="Episode timeline with air dates" width="1080" height="2400" loading="lazy" decoding="async">
             </button>
-            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">07</span>Timeline view</figcaption>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">08</span>Timeline view</figcaption>
           </figure>
           <figure class="ak-shot">
             <button type="button" class="ak-shot-frame" data-caption="Pick your source &amp; quality — 1080p to 360p, SUB or DUB">
               <img src="img/quality-sources.webp" alt="Source and quality picker sheet" width="1080" height="2400" loading="lazy" decoding="async">
             </button>
-            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">08</span>Source &amp; quality</figcaption>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">09</span>Source &amp; quality</figcaption>
           </figure>
           <figure class="ak-shot">
             <button type="button" class="ak-shot-frame" data-caption="Offline downloads — take episodes anywhere">
               <img src="img/downloads.webp" alt="Downloaded episodes manager" width="1080" height="2400" loading="lazy" decoding="async">
             </button>
-            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">09</span>Offline downloads</figcaption>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">10</span>Offline downloads</figcaption>
           </figure>
           <figure class="ak-shot">
             <button type="button" class="ak-shot-frame" data-caption="AniList sync — stats, streaks, watch flow">
               <img src="img/profile-stats.webp" alt="AniList profile with stats cards and charts" width="1080" height="2400" loading="lazy" decoding="async">
             </button>
-            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">10</span>AniList stats</figcaption>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">11</span>AniList stats</figcaption>
           </figure>
           <figure class="ak-shot">
             <button type="button" class="ak-shot-frame" data-caption="Genre DNA — a radar of your taste">
               <img src="img/profile-genres.webp" alt="Genre radar chart and activity heatmap" width="1080" height="2400" loading="lazy" decoding="async">
             </button>
-            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">11</span>Genre DNA</figcaption>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">12</span>Genre DNA</figcaption>
           </figure>
           <figure class="ak-shot">
             <button type="button" class="ak-shot-frame" data-caption="Make it yours — themes, history, updates">
               <img src="img/more.webp" alt="Settings hub with categories" width="1080" height="2400" loading="lazy" decoding="async">
             </button>
-            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">12</span>Make it yours</figcaption>
-          </figure>
-          <figure class="ak-shot ak-shot-wide">
-            <button type="button" class="ak-shot-frame" data-caption="Fullscreen landscape playback">
-              <img src="img/player-landscape.webp" alt="Landscape fullscreen video player" width="1080" height="486" loading="lazy" decoding="async">
-            </button>
-            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">13</span>Fullscreen playback</figcaption>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">13</span>Make it yours</figcaption>
           </figure>
         </div>
       </section>
@@ -590,6 +669,8 @@
   </div>
 
   <div class="ak-lb" id="ak-lb" hidden>
+    <div class="ak-lb-ghost ak-lb-ghost-l" aria-hidden="true"><img alt=""></div>
+    <div class="ak-lb-ghost ak-lb-ghost-r" aria-hidden="true"><img alt=""></div>
     <figure class="ak-lb-figure">
       <div class="ak-lb-img-wrap"><img id="ak-lb-img" src="" alt=""></div>
       <figcaption>
@@ -618,9 +699,68 @@
   (function () {
     "use strict";
 
-    /* LIGHTBOX — one overlay, thirteen shots. Arrow keys and buttons walk
-       the list, Esc or the backdrop closes, focus returns to the shot that
-       opened it. Images are the same full-res files the grid loaded. */
+    /* GALLERY (round-17) — staggered scroll-reveal; on desktop the cards
+       drift gently in place (tiny random amplitudes, grid gaps are never
+       eaten) and the grid quietly re-deals itself every few seconds via
+       FLIP: measure, reorder, play every move back. Nothing overlaps. */
+    var figures = Array.prototype.slice.call(document.querySelectorAll(".ak-shot"));
+    var wide = window.matchMedia("(min-width: 1025px)");
+
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+          if (entries[i].isIntersecting) {
+            entries[i].target.classList.add("is-in");
+            io.unobserve(entries[i].target);
+          }
+        }
+      }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
+      figures.forEach(function (f, i) {
+        f.style.transitionDelay = (i % 4) * 70 + "ms";
+        io.observe(f);
+      });
+    } else {
+      figures.forEach(function (f) { f.classList.add("is-in"); });
+    }
+
+    figures.forEach(function (f) {
+      var kind = 1 + Math.floor(Math.random() * 3);
+      var dur = (6 + Math.random() * 4).toFixed(2);
+      var delay = (Math.random() * 3).toFixed(2);
+      f.style.setProperty("--drift", "ak-drift-" + kind + " " + dur + "s ease-in-out " + delay + "s infinite");
+    });
+
+    function rearrange() {
+      if (document.hidden || !wide.matches) return;
+      var gallery = document.querySelector(".ak-gallery");
+      var order = figures.slice();
+      for (var i = order.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = order[i];
+        order[i] = order[j];
+        order[j] = tmp;
+      }
+      var first = new Map(figures.map(function (f) { return [f, f.getBoundingClientRect()]; }));
+      order.forEach(function (f) { gallery.appendChild(f); });
+      figures.forEach(function (f) {
+        var a = first.get(f);
+        var b = f.getBoundingClientRect();
+        var dx = a.left - b.left;
+        var dy = a.top - b.top;
+        if (dx || dy) {
+          f.animate(
+            [{ transform: "translate(" + dx + "px," + dy + "px)" }, { transform: "translate(0,0)" }],
+            { duration: 720, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+          );
+        }
+      });
+    }
+    if (wide.matches) setInterval(rearrange, 8000);
+
+    /* LIGHTBOX — one overlay, thirteen shots. Arrow keys, swipe, or the
+       buttons walk the list; Esc or the backdrop closes; focus returns to
+       the shot that opened it. Images are the same full-res files the
+       grid already loaded. */
     var lb = document.getElementById("ak-lb");
     var lbImg = document.getElementById("ak-lb-img");
     var lbCap = document.getElementById("ak-lb-cap");
@@ -629,13 +769,24 @@
     var lbOpen = false;
     var lbIdx = 0;
     var lastFocus = null;
+    var lbWrap = document.querySelector(".ak-lb-img-wrap");
 
     function render() {
       var btn = shots[lbIdx];
+      var n = shots.length;
       lbImg.src = btn.querySelector("img").src;
       lbImg.alt = btn.querySelector("img").alt;
       lbCap.textContent = btn.getAttribute("data-caption") || "";
       lbCount.textContent = (lbIdx + 1) + " / " + shots.length;
+      /* neighbours behind the shot (desktop only — they hide on small screens) */
+      document.querySelector(".ak-lb-ghost-l img").src =
+        shots[(lbIdx - 1 + n) % n].querySelector("img").src;
+      document.querySelector(".ak-lb-ghost-r img").src =
+        shots[(lbIdx + 1) % n].querySelector("img").src;
+      /* the shot rises into place on every open and every step */
+      lbWrap.classList.remove("is-in");
+      void lbWrap.offsetWidth;
+      lbWrap.classList.add("is-in");
     }
 
     function openLb(idx, trigger) {
@@ -686,6 +837,19 @@
       else if (e.key === "ArrowLeft") step(-1);
       else if (e.key === "ArrowRight") step(1);
     });
+
+    /* round-17: phones swipe the lightbox — left for the next shot, right
+       for the previous one */
+    var lbTouchX = null;
+    lb.addEventListener("touchstart", function (e) {
+      lbTouchX = e.touches[0].clientX;
+    }, { passive: true });
+    lb.addEventListener("touchend", function (e) {
+      if (lbTouchX === null) return;
+      var dx = e.changedTouches[0].clientX - lbTouchX;
+      lbTouchX = null;
+      if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+    }, { passive: true });
   })();
   </script>
 </body>
