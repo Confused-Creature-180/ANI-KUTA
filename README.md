@@ -28,13 +28,9 @@
 
 ## Screenshots
 
-| Player | Search | Library |
+| Library | Details | Stats |
 |---|---|---|
-| <img src="assets/player.webp" width="250"/> | <img src="assets/search.webp" width="250"/> | <img src="assets/library.webp" width="250"/> |
-
-| Details | Stats | Downloads |
-|---|---|---|
-| <img src="assets/details.webp" width="250"/> | <img src="assets/profile-stats.webp" width="250"/> | <img src="assets/downloads.webp" width="250"/> |
+| <img src="assets/library.webp" width="250"/> | <img src="assets/details.webp" width="250"/> | <img src="assets/profile-stats.webp" width="250"/> |
 
 **[More screenshots →](https://confused-creature-180.github.io/ANI-KUTA/screenshots.html)**
 
