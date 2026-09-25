@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ANI-KUTA — Screenshots</title>
+  <meta name="description" content="Real ANI-KUTA captures — the player, the library, AniList stats, offline downloads and more. Every screen, as it ships.">
+  <meta name="theme-color" content="#101712">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <meta property="og:title" content="ANI-KUTA — Screenshots">
+  <meta property="og:description" content="Every screen, as it ships. Real captures from the ANI-KUTA player, library, stats and more.">
+  <meta property="og:url" content="https://confused-creature-180.github.io/ANI-KUTA/screenshots.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,110..125,600..800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       ANI-KUTA — Screenshots gallery (round-15)
+       Same "living green" system as the landing page, standalone by design:
+       - a light static scene (drifting blobs, no scene JS) instead of the
+         landing page's goo canvas — this page is about the captures;
+       - 13 full-height, clean, metadata-free WebP captures in a grid that
+         goes 2-up on phones, 3-up on tablets, 4-up on desktops;
+       - tap any shot for the lightbox: fade/zoom in, arrow-key + button
+         navigation, Esc or backdrop to close, focus restored on exit.
+       ========================================================================== */
+    :root {
+      color-scheme: dark;
+      --bg: #101712;
+      --bg-rgb: 16, 23, 18;
+      --surface: rgba(21, 30, 24, 0.72);
+      --glass-hi: rgba(255, 255, 255, 0.055);
+      --glass-lo: rgba(255, 255, 255, 0.008);
+      --border: rgba(163, 192, 170, 0.14);
+      --border-strong: rgba(163, 192, 170, 0.26);
+      --accent: #B4FF39;
+      --accent-rgb: 180, 255, 57;
+      --text-1: #F1F7F1;
+      --text-2: #B3C1B5;
+      --text-3: #8A9A8D;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-open: cubic-bezier(0.2, 0.8, 0.2, 1);
+      --font-display: "Archivo", system-ui, sans-serif;
+      --font-body: "Instrument Sans", system-ui, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { background: var(--bg); scrollbar-gutter: stable; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text-1);
+      font-family: var(--font-body);
+      font-size: 17px;
+      line-height: 1.6;
+      overflow-x: clip;
+      -webkit-font-smoothing: antialiased;
+      text-shadow:
+        0 1px 2px rgba(6, 10, 8, 0.85),
+        0 0 5px rgba(6, 10, 8, 0.55),
+        0 0 16px rgba(6, 10, 8, 0.35);
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    a { color: inherit; }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    /* --- light static scene — drifting blobs, no canvas ---------------------- */
+    .ak-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .ak-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+    }
+
+    .ak-blob-1 { width: 44vw; height: 44vw; left: -10vw; top: -12vh; background: rgba(84, 158, 52, 0.5); animation: ak-drift-a 26s ease-in-out infinite; }
+    .ak-blob-2 { width: 36vw; height: 36vw; right: -8vw; top: 22vh; background: rgba(28, 116, 106, 0.42); animation: ak-drift-b 32s ease-in-out infinite; }
+    .ak-blob-3 { width: 30vw; height: 30vw; left: 18vw; bottom: -14vh; background: rgba(64, 138, 58, 0.4); animation: ak-drift-a 38s ease-in-out infinite reverse; }
+    .ak-blob-4 { width: 20vw; height: 20vw; right: 26vw; bottom: 10vh; background: rgba(165, 216, 243, 0.12); animation: ak-drift-b 29s ease-in-out infinite reverse; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      @keyframes ak-drift-a {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(9vw, 7vh) scale(1.12); }
+      }
+      @keyframes ak-drift-b {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(-7vw, -9vh) scale(0.92); }
+      }
+    }
+
+    .ak-scene-veil {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(62% 50% at 50% 42%, rgba(var(--bg-rgb), 0.64), rgba(var(--bg-rgb), 0) 74%),
+        linear-gradient(180deg, rgba(var(--bg-rgb), 0.56) 0%, rgba(var(--bg-rgb), 0) 26%, rgba(var(--bg-rgb), 0) 66%, rgba(var(--bg-rgb), 0.64) 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 160px 160px;
+    }
+
+    /* --- shell / nav --------------------------------------------------------- */
+    .ak-shell { position: relative; z-index: 2; display: flex; flex-direction: column; min-height: 100vh; min-height: 100svh; }
+    .ak-container { width: 100%; max-width: 1080px; margin-inline: auto; padding-inline: 24px; }
+
+    .ak-nav {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100% - 32px, 1000px);
+      height: 60px;
+      border-radius: 20px;
+      border: 1px solid rgba(var(--accent-rgb), 0.20);
+      background:
+        linear-gradient(112deg, rgba(var(--accent-rgb), 0.14), rgba(var(--accent-rgb), 0.045) 34%, rgba(17, 24, 19, 0.38) 58%, rgba(17, 24, 19, 0.54) 100%),
+        rgba(15, 22, 17, 0.40);
+      backdrop-filter: blur(20px) saturate(170%);
+      -webkit-backdrop-filter: blur(20px) saturate(170%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.10),
+        0 14px 40px rgba(0, 0, 0, 0.42);
+      z-index: 50;
+    }
+
+    .ak-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      padding-inline: 20px;
+    }
+
+    .ak-brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+    .ak-brand svg { width: 22px; height: 22px; filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.45)); }
+    .ak-brand-name {
+      font-family: var(--font-display);
+      font-stretch: 125%;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.01em;
+      color: var(--text-1);
+    }
+
+    .ak-nav-links { display: inline-flex; align-items: center; gap: 4px; }
+
+    .ak-nav-link {
+      display: inline-flex;
+      align-items: center;
+      height: 36px;
+      padding: 0 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-2);
+      text-decoration: none;
+      transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out);
+    }
+
+    .ak-nav-link:hover { background: rgba(var(--accent-rgb), 0.10); color: var(--text-1); }
+    .ak-nav-link.is-here { color: var(--accent); }
+
+    .ak-nav-gh-m { display: none; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 14px; color: var(--text-2); text-decoration: none; }
+    .ak-nav-gh-m svg { width: 20px; height: 20px; }
+
+    /* --- page head ------------------------------------------------------------ */
+    .ak-page-head { padding-top: clamp(120px, 17vh, 168px); }
+
+    .ak-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    .ak-eyebrow::before, .ak-eyebrow::after {
+      content: "";
+      width: 22px;
+      height: 1px;
+      background: var(--border-strong);
+    }
+
+    .ak-title {
+      margin-top: 24px;
+      font-family: var(--font-display);
+      font-stretch: 118%;
+      font-weight: 800;
+      font-size: clamp(2.2rem, 5.4vw, 3.6rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      text-wrap: balance;
+    }
+
+    .ak-title em { font-style: normal; color: var(--accent); }
+
+    .ak-page-sub {
+      margin-top: 18px;
+      max-width: 560px;
+      font-size: clamp(1.02rem, 1.7vw, 1.16rem);
+      line-height: 1.55;
+      color: var(--text-2);
+    }
+
+    /* --- gallery grid ---------------------------------------------------------- */
+    .ak-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px 16px;
+      margin-top: 52px;
+    }
+
+    .ak-shot { margin: 0; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+
+    .ak-shot-frame {
+      position: relative;
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      background: var(--surface);
+      overflow: hidden;
+      cursor: zoom-in;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 18px 42px -12px rgba(0, 0, 0, 0.55),
+        0 34px 80px -20px rgba(0, 0, 0, 0.5);
+      transition: transform 220ms var(--ease-out), border-color 220ms var(--ease-out), box-shadow 220ms var(--ease-out);
+    }
+
+    .ak-shot-frame:hover {
+      transform: translateY(-4px);
+      border-color: rgba(var(--accent-rgb), 0.45);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 24px 52px -12px rgba(0, 0, 0, 0.6),
+        0 40px 90px -20px rgba(0, 0, 0, 0.55),
+        0 0 0 1px rgba(var(--accent-rgb), 0.18);
+    }
+
+    .ak-shot-frame:active { transform: translateY(-1px) scale(0.99); }
+
+    .ak-shot-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 9 / 20;
+      object-fit: cover;
+    }
+
+    /* the one landscape capture spans the grid, cinematic-style */
+    .ak-shot-wide { grid-column: 1 / -1; }
+    .ak-shot-wide .ak-shot-frame img { aspect-ratio: auto; }
+
+    .ak-shot-cap {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 13.5px;
+      line-height: 1.45;
+      color: var(--text-2);
+    }
+
+    .ak-shot-cap .ak-shot-idx {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--text-3);
+      flex: none;
+    }
+
+    /* --- lightbox ---------------------------------------------------------------- */
+    .ak-lb {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(14px, 3vw, 40px);
+      background:
+        radial-gradient(80% 70% at 50% 40%, rgba(var(--bg-rgb), 0.55), rgba(5, 9, 6, 0.88)),
+        rgba(5, 9, 6, 0.82);
+      backdrop-filter: blur(18px) saturate(130%);
+      -webkit-backdrop-filter: blur(18px) saturate(130%);
+      opacity: 0;
+      transition: opacity 260ms var(--ease-open);
+    }
+
+    /* keep the hidden attribute authoritative — the flex display above
+       would otherwise win and leave an invisible click-blocking sheet */
+    .ak-lb[hidden] { display: none; }
+
+    .ak-lb.is-open { opacity: 1; }
+
+    .ak-lb-figure {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .ak-lb-img-wrap {
+      min-height: 0;
+      max-width: 100%;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--surface);
+      box-shadow: 0 40px 110px -20px rgba(0, 0, 0, 0.8);
+    }
+
+    .ak-lb img {
+      display: block;
+      max-width: 100%;
+      max-height: calc(100svh - 160px);
+      width: auto;
+      height: auto;
+    }
+
+    .ak-lb-cap { text-align: center; font-size: 14.5px; color: var(--text-2); max-width: 560px; }
+    .ak-lb-count { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; color: var(--text-3); }
+
+    .ak-lb-btn {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+      background: rgba(15, 22, 17, 0.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: var(--text-1);
+      cursor: pointer;
+      transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out), border-color 160ms var(--ease-out), transform 160ms var(--ease-out);
+    }
+
+    .ak-lb-btn:hover { background: rgba(var(--accent-rgb), 0.14); border-color: rgba(var(--accent-rgb), 0.45); color: var(--accent); }
+    .ak-lb-btn:active { transform: scale(0.94); }
+    .ak-lb-btn svg { width: 20px; height: 20px; }
+
+    .ak-lb-x { top: 18px; right: 18px; width: 44px; height: 44px; }
+    .ak-lb-prev, .ak-lb-next { top: 50%; transform: translateY(-50%); width: 48px; height: 56px; }
+    .ak-lb-prev { left: 14px; }
+    .ak-lb-next { right: 14px; }
+    .ak-lb-prev:active, .ak-lb-next:active { transform: translateY(-50%) scale(0.94); }
+
+    /* open animation — the shot rises into place */
+    .ak-lb-figure { transform: translateY(14px) scale(0.97); transition: transform 300ms var(--ease-out); }
+    .ak-lb.is-open .ak-lb-figure { transform: none; }
+
+    /* --- footer ---------------------------------------------------------------- */
+    .ak-footer { margin-top: clamp(72px, 10vh, 120px); padding-bottom: 28px; }
+
+    .ak-footer-plate {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background:
+        linear-gradient(180deg, var(--glass-hi), rgba(255, 255, 255, 0.018) 38%, var(--glass-lo)),
+        rgba(19, 27, 22, 0.66);
+      backdrop-filter: blur(18px) saturate(150%);
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
+      padding: 22px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .ak-footer-brand { display: inline-flex; align-items: center; gap: 10px; }
+    .ak-footer-brand svg { width: 20px; height: 20px; }
+    .ak-footer-name { font-family: var(--font-display); font-stretch: 125%; font-weight: 700; font-size: 14px; }
+    .ak-footer-note { font-size: 12.5px; color: var(--text-3); }
+    .ak-footer-links { display: flex; gap: 18px; font-size: 13.5px; }
+    .ak-footer-links a { color: var(--text-2); text-decoration: none; }
+    .ak-footer-links a:hover { color: var(--text-1); text-decoration: underline; text-underline-offset: 3px; }
+
+    /* --- responsive --------------------------------------------------------------- */
+    @media (min-width: 641px) {
+      .ak-gallery { grid-template-columns: repeat(3, 1fr); gap: 26px 20px; }
+    }
+
+    @media (max-width: 640px) {
+      .ak-nav { top: 12px; height: 54px; border-radius: 18px; }
+      .ak-nav-inner { padding-inline: 14px; }
+      .ak-nav-links { display: none; }
+      .ak-nav-gh-m { display: inline-flex; }
+      .ak-container { padding-inline: 18px; }
+      .ak-gallery { margin-top: 40px; }
+      .ak-lb-prev, .ak-lb-next { width: 42px; height: 50px; }
+      .ak-lb img { max-height: calc(100svh - 140px); }
+    }
+
+    @media (min-width: 1025px) {
+      .ak-gallery { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    /* --- reduced motion safety net ------------------------------------------------- */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ak-scene" aria-hidden="true">
+    <div class="ak-blob ak-blob-1"></div>
+    <div class="ak-blob ak-blob-2"></div>
+    <div class="ak-blob ak-blob-3"></div>
+    <div class="ak-blob ak-blob-4"></div>
+    <div class="ak-scene-veil"></div>
+  </div>
+
+  <div class="ak-shell">
+    <header class="ak-nav">
+      <div class="ak-nav-inner">
+        <a class="ak-brand" href="index.html">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+            <rect width="24" height="24" rx="7" fill="#B4FF39"/>
+            <path d="M9.6 7.5 14.7 12l-5.1 4.5" stroke="#0B130B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="ak-brand-name">ANI-KUTA</span>
+        </a>
+        <div class="ak-nav-links" aria-label="Primary">
+          <a class="ak-nav-link" href="index.html">Download</a>
+          <a class="ak-nav-link is-here" href="screenshots.html" aria-current="page">Screenshots</a>
+          <a class="ak-nav-link" href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+        <a class="ak-nav-gh-m" href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer" aria-label="ANI-KUTA on GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <section class="ak-page-head">
+        <div class="ak-container">
+          <p class="ak-eyebrow">Screenshots</p>
+          <h1 class="ak-title">Every screen, <em>as it ships.</em></h1>
+          <p class="ak-page-sub">Real captures from ANI-KUTA — no mockups, no Marketing Glow™. Tap any shot to see it full size.</p>
+        </div>
+      </section>
+
+      <section class="ak-container" aria-label="App screenshots">
+        <div class="ak-gallery">
+          <figure class="ak-shot">
+            <button type="button" class="ak-shot-frame" data-caption="Search &amp; discover — every extension source, one bar">
+              <img src="img/search.webp" alt="Search page with anime poster grid" width="1080" height="2400" decoding="async">
+            </button>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">01</span>Search &amp; discover</figcaption>
+          </figure>
+          <figure class="ak-shot">
+            <button type="button" class="ak-shot-frame" data-caption="Your library — this one runs 651 titles deep">
+              <img src="img/library.webp" alt="Library grid of anime posters" width="1080" height="2400" loading="lazy" decoding="async">
+            </button>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">02</span>Your library</figcaption>
+          </figure>
+          <figure class="ak-shot">
+            <button type="button" class="ak-shot-frame" data-caption="Anime details — backdrop art, genres, synopsis">
+              <img src="img/details.webp" alt="Anime details page for Tokyo Ghoul" width="1080" height="2400" loading="lazy" decoding="async">
+            </button>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">03</span>Anime details</figcaption>
+          </figure>
+          <figure class="ak-shot">
+            <button type="button" class="ak-shot-frame" data-caption="The player — currently playing episode 6">
+              <img src="img/player.webp" alt="ANI-KUTA player page with episode list" width="1080" height="2400" loading="lazy" decoding="async">
+            </button>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">04</span>The player</figcaption>
+          </figure>
+          <figure class="ak-shot">
+            <button type="button" class="ak-shot-frame" data-caption="Episodes at a glance — big cards, big numbers">
+              <img src="img/episodes-cards.webp" alt="Numbered episode cards with artwork" width="1080" height="2400" loading="lazy" decoding="async">
+            </button>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">05</span>Episode cards</figcaption>
+          </figure>
+          <figure class="ak-shot">
+            <button type="button" class="ak-shot-frame" data-caption="Every episode, summarized">
+              <img src="img/episodes-synopsis.webp" alt="Episode list with thumbnails and synopses" width="1080" height="2400" loading="lazy" decoding="async">
+            </button>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">06</span>Episode details</figcaption>
+          </figure>
+          <figure class="ak-shot">
+            <button type="button" class="ak-shot-frame" data-caption="Weekly drops, on a timeline">
+              <img src="img/episodes-timeline.webp" alt="Episode timeline with air dates" width="1080" height="2400" loading="lazy" decoding="async">
+            </button>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">07</span>Timeline view</figcaption>
+          </figure>
+          <figure class="ak-shot">
+            <button type="button" class="ak-shot-frame" data-caption="Pick your source &amp; quality — 1080p to 360p, SUB or DUB">
+              <img src="img/quality-sources.webp" alt="Source and quality picker sheet" width="1080" height="2400" loading="lazy" decoding="async">
+            </button>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">08</span>Source &amp; quality</figcaption>
+          </figure>
+          <figure class="ak-shot">
+            <button type="button" class="ak-shot-frame" data-caption="Offline downloads — take episodes anywhere">
+              <img src="img/downloads.webp" alt="Downloaded episodes manager" width="1080" height="2400" loading="lazy" decoding="async">
+            </button>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">09</span>Offline downloads</figcaption>
+          </figure>
+          <figure class="ak-shot">
+            <button type="button" class="ak-shot-frame" data-caption="AniList sync — stats, streaks, watch flow">
+              <img src="img/profile-stats.webp" alt="AniList profile with stats cards and charts" width="1080" height="2400" loading="lazy" decoding="async">
+            </button>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">10</span>AniList stats</figcaption>
+          </figure>
+          <figure class="ak-shot">
+            <button type="button" class="ak-shot-frame" data-caption="Genre DNA — a radar of your taste">
+              <img src="img/profile-genres.webp" alt="Genre radar chart and activity heatmap" width="1080" height="2400" loading="lazy" decoding="async">
+            </button>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">11</span>Genre DNA</figcaption>
+          </figure>
+          <figure class="ak-shot">
+            <button type="button" class="ak-shot-frame" data-caption="Make it yours — themes, history, updates">
+              <img src="img/more.webp" alt="Settings hub with categories" width="1080" height="2400" loading="lazy" decoding="async">
+            </button>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">12</span>Make it yours</figcaption>
+          </figure>
+          <figure class="ak-shot ak-shot-wide">
+            <button type="button" class="ak-shot-frame" data-caption="Fullscreen landscape playback">
+              <img src="img/player-landscape.webp" alt="Landscape fullscreen video player" width="1080" height="486" loading="lazy" decoding="async">
+            </button>
+            <figcaption class="ak-shot-cap"><span class="ak-shot-idx">13</span>Fullscreen playback</figcaption>
+          </figure>
+        </div>
+      </section>
+    </main>
+
+    <footer class="ak-footer">
+      <div class="ak-container">
+        <div class="ak-footer-plate">
+          <div>
+            <div class="ak-footer-brand">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                <rect width="24" height="24" rx="7" fill="#B4FF39"/>
+                <path d="M9.6 7.5 14.7 12l-5.1 4.5" stroke="#0B130B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="ak-footer-name">ANI-KUTA</span>
+            </div>
+            <p class="ak-footer-note">An anime streaming app for Android, built around the extensions you choose.</p>
+          </div>
+          <nav class="ak-footer-links" aria-label="Footer">
+            <a href="index.html">Download</a>
+            <a href="screenshots.html">Screenshots</a>
+            <a href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </nav>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="ak-lb" id="ak-lb" hidden>
+    <figure class="ak-lb-figure">
+      <div class="ak-lb-img-wrap"><img id="ak-lb-img" src="" alt=""></div>
+      <figcaption>
+        <div class="ak-lb-cap" id="ak-lb-cap"></div>
+        <div class="ak-lb-count" id="ak-lb-count"></div>
+      </figcaption>
+    </figure>
+    <button type="button" class="ak-lb-btn ak-lb-x" id="ak-lb-x" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+      </svg>
+    </button>
+    <button type="button" class="ak-lb-btn ak-lb-prev" id="ak-lb-prev" aria-label="Previous screenshot">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <path d="m15 18-6-6 6-6"/>
+      </svg>
+    </button>
+    <button type="button" class="ak-lb-btn ak-lb-next" id="ak-lb-next" aria-label="Next screenshot">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <path d="m9 18 6-6-6-6"/>
+      </svg>
+    </button>
+  </div>
+
+  <script>
+  (function () {
+    "use strict";
+
+    /* LIGHTBOX — one overlay, thirteen shots. Arrow keys and buttons walk
+       the list, Esc or the backdrop closes, focus returns to the shot that
+       opened it. Images are the same full-res files the grid loaded. */
+    var lb = document.getElementById("ak-lb");
+    var lbImg = document.getElementById("ak-lb-img");
+    var lbCap = document.getElementById("ak-lb-cap");
+    var lbCount = document.getElementById("ak-lb-count");
+    var shots = Array.prototype.slice.call(document.querySelectorAll(".ak-shot-frame"));
+    var lbOpen = false;
+    var lbIdx = 0;
+    var lastFocus = null;
+
+    function render() {
+      var btn = shots[lbIdx];
+      lbImg.src = btn.querySelector("img").src;
+      lbImg.alt = btn.querySelector("img").alt;
+      lbCap.textContent = btn.getAttribute("data-caption") || "";
+      lbCount.textContent = (lbIdx + 1) + " / " + shots.length;
+    }
+
+    function openLb(idx, trigger) {
+      lbIdx = idx;
+      lastFocus = trigger || null;
+      lbOpen = true;
+      render();
+      lb.hidden = false;
+      /* force a frame so the transition plays every time */
+      requestAnimationFrame(function () { lb.classList.add("is-open"); });
+      document.body.style.overflow = "hidden";
+      document.getElementById("ak-lb-x").focus();
+    }
+
+    function closeLb() {
+      lbOpen = false;
+      lb.classList.remove("is-open");
+      document.body.style.overflow = "";
+      var done = function () {
+        lb.hidden = true;
+        lbImg.src = "";
+      };
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) done();
+      else setTimeout(done, 280);
+      if (lastFocus) { lastFocus.focus(); lastFocus = null; }
+    }
+
+    function step(dir) {
+      lbIdx = (lbIdx + dir + shots.length) % shots.length;
+      render();
+    }
+
+    shots.forEach(function (btn, i) {
+      btn.addEventListener("click", function () { openLb(i, btn); });
+    });
+
+    document.getElementById("ak-lb-x").addEventListener("click", closeLb);
+    document.getElementById("ak-lb-prev").addEventListener("click", function () { step(-1); });
+    document.getElementById("ak-lb-next").addEventListener("click", function () { step(1); });
+
+    lb.addEventListener("click", function (e) {
+      if (e.target === lb) closeLb();
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (!lbOpen) return;
+      if (e.key === "Escape") closeLb();
+      else if (e.key === "ArrowLeft") step(-1);
+      else if (e.key === "ArrowRight") step(1);
+    });
+  })();
+  </script>
+</body>
+</html>

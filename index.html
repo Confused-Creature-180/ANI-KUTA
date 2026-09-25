@@ -55,6 +55,17 @@
          the frame drifts on a slow float loop with a breathing accent
          glow while the screenshots crossfade every few seconds. The
          desktop hero is untouched from round-13.
+       Direction (user round-15):
+       - the showcase becomes a deck: three 3:4 green-comic teasers stay
+         visible (front + two receding cards), the front one drifts on a
+         slow Ken Burns pan/zoom, and the deck shuffles forward every few
+         seconds; corners drop to the site's 10px radius;
+       - the deck now lives on desktop too — the hero splits into a
+         two-column grid and the deck takes the empty right side;
+       - every card links to the new screenshots.html gallery page, which
+         shows all 13 full-height, clean captures with a lightbox;
+       - teasers are posterized + pixelated + duotone-mapped into the
+         brand greens — idea-level legibility, not full detail.
        ========================================================================== */
     :root {
       color-scheme: dark;
@@ -735,59 +746,90 @@
 
     .ak-ghost svg { width: 16px; height: 16px; }
 
-    /* --- mobile showcase (round-14) — app screenshots in a floating frame.
-       Hidden on desktop; on phones it rises to the right of the CTA, one
-       image crossfading to the next every few seconds. --- */
-    .ak-showcase { display: none; }
-
-    .ak-showcase-frame {
+    /* --- screenshot showcase (round-15) — a deck of stylized green-comic
+       teasers. Three cards stay visible: the front card carries a slow
+       Ken Burns drift while the other two recede behind it, scaled and
+       tilted; every few seconds the deck shuffles forward. Any tap opens
+       the full gallery (screenshots.html). Corners stay at the site's
+       10px CTA radius — deliberately not round. --- */
+    .ak-showcase {
       position: relative;
-      width: 100%;
-      aspect-ratio: 480 / 1067;
+      display: none;
+      aspect-ratio: 3 / 4;
+    }
+
+    .ak-showcase::before {
+      content: "";
+      position: absolute;
+      inset: -14% -20%;
+      z-index: 0;
+      background: radial-gradient(closest-side, rgba(var(--accent-rgb), 0.16), rgba(var(--accent-rgb), 0.045) 55%, transparent 75%);
+      filter: blur(10px);
+    }
+
+    .ak-showcase-card {
+      position: absolute;
+      inset: 0;
+      display: block;
       border: 1px solid var(--border-strong);
-      border-radius: 18px;
+      border-radius: 10px;
       background: var(--surface);
       overflow: hidden;
+      opacity: 0;
+      transform: translateX(72%) scale(0.72);
       box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.08),
         0 18px 42px -12px rgba(0, 0, 0, 0.55),
         0 34px 80px -20px rgba(0, 0, 0, 0.5);
+      transition:
+        transform 620ms var(--ease-out),
+        opacity 480ms var(--ease-open);
     }
 
-    .ak-showcase-img {
-      position: absolute;
-      inset: 0;
+    .ak-showcase-card img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0;
-      transform: scale(1.05);
-      transition: opacity 650ms var(--ease-open), transform 1100ms var(--ease-out);
+      display: block;
     }
 
-    .ak-showcase-img.is-active {
-      opacity: 1;
-      transform: scale(1);
-    }
+    .ak-showcase-card.is-front { opacity: 1; transform: none; z-index: 3; }
+    .ak-showcase-card.is-behind { opacity: 0.5; transform: translateX(30%) scale(0.88) rotate(2.5deg); z-index: 2; }
+    .ak-showcase-card.is-far { opacity: 0.26; transform: translateX(54%) scale(0.78) rotate(5deg); z-index: 1; }
 
     @media (prefers-reduced-motion: no-preference) {
-      .ak-showcase-frame { animation: ak-float 7.5s ease-in-out infinite; }
-      .ak-showcase::before {
-        content: "";
-        position: absolute;
-        inset: -12% -18%;
-        z-index: -1;
-        background: radial-gradient(closest-side, rgba(var(--accent-rgb), 0.18), rgba(var(--accent-rgb), 0.05) 55%, transparent 75%);
-        filter: blur(10px);
-        animation: ak-breathe 5.5s ease-in-out infinite;
-      }
-      @keyframes ak-float {
-        0%, 100% { transform: translateY(0) rotate(0.4deg); }
-        50% { transform: translateY(-9px) rotate(-0.6deg); }
-      }
+      .ak-showcase::before { animation: ak-breathe 5.5s ease-in-out infinite; }
+      .ak-showcase-card.is-front img { animation: ak-kenburns 9s ease-in-out infinite; }
       @keyframes ak-breathe {
         0%, 100% { opacity: 0.55; transform: scale(0.96); }
         50% { opacity: 1; transform: scale(1.04); }
+      }
+      /* the teaser is cropped ~6% taller than the 3:4 frame, so the drift
+         always has fresh pixels to reveal — no edges ever show */
+      @keyframes ak-kenburns {
+        0%, 100% { transform: scale(1.04) translateY(1.6%); }
+        50% { transform: scale(1.1) translateY(-2%); }
+      }
+    }
+
+    /* round-15: from small tablets up the hero splits — text keeps the left
+       axis, the deck takes the empty right side. */
+    @media (min-width: 641px) {
+      .ak-hero-inner {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        column-gap: 56px;
+        align-items: center;
+        max-width: 1080px;
+      }
+      .ak-hero-inner > .ak-h1,
+      .ak-hero-inner > .ak-hero-sub,
+      .ak-hero-inner > .ak-cta { grid-column: 1; }
+      .ak-showcase-desktop {
+        display: block;
+        grid-column: 2;
+        grid-row: 1 / span 3;
+        width: clamp(210px, 22vw, 280px);
       }
     }
 
@@ -1469,10 +1511,9 @@
         gap: 14px;
         align-items: end;
       }
-      .ak-showcase {
-        position: relative;
+      .ak-showcase-mobile {
         display: block;
-        width: clamp(88px, 27vw, 118px);
+        width: clamp(108px, 27vw, 128px);
         justify-self: end;
       }
       .ak-probe { margin-top: 52px; }
@@ -1518,7 +1559,7 @@
       .ak-btn-primary { padding: 0 18px 0 16px; gap: 8px; }
       .ak-eyebrow { gap: 10px; }
       .ak-eyebrow::before, .ak-eyebrow::after { width: 14px; }
-      .ak-showcase { width: 72px; }
+      .ak-showcase-mobile { width: 96px; }
     }
 
     /* --- reduced motion safety net ---------------------------------------------------------- */
@@ -1564,6 +1605,7 @@
           <nav class="ak-nav-links" aria-label="Primary">
             <a class="ak-nav-link" href="#probe">Probe</a>
             <a class="ak-nav-link" href="#details">Features</a>
+            <a class="ak-nav-link" href="screenshots.html">Screenshots</a>
             <a class="ak-nav-link" href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer">GitHub</a>
           </nav>
           <a class="ak-nav-gh-m" href="https://github.com/Confused-Creature-180/ANI-KUTA" target="_blank" rel="noopener noreferrer" aria-label="ANI-KUTA on GitHub">
@@ -1608,16 +1650,28 @@
                   </div>
                 </div>
 
-                <div class="ak-showcase" id="ak-showcase" aria-hidden="true">
-                  <div class="ak-showcase-frame">
-                    <img class="ak-showcase-img is-active" src="img/player.webp" alt="" width="480" height="1067" loading="lazy" decoding="async">
-                    <img class="ak-showcase-img" src="img/details.webp" alt="" width="480" height="1067" loading="lazy" decoding="async">
-                    <img class="ak-showcase-img" src="img/search.webp" alt="" width="480" height="1067" loading="lazy" decoding="async">
-                    <img class="ak-showcase-img" src="img/library.webp" alt="" width="480" height="1067" loading="lazy" decoding="async">
-                    <img class="ak-showcase-img" src="img/downloads.webp" alt="" width="480" height="1067" loading="lazy" decoding="async">
-                    <img class="ak-showcase-img" src="img/profile-stats.webp" alt="" width="480" height="1067" loading="lazy" decoding="async">
-                    <img class="ak-showcase-img" src="img/quality-sources.webp" alt="" width="480" height="1067" loading="lazy" decoding="async">
-                  </div>
+                <div class="ak-showcase ak-showcase-mobile" aria-hidden="true">
+                  <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
+                    <img src="img/teasers/player.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                  </a>
+                  <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
+                    <img src="img/teasers/details.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                  </a>
+                  <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
+                    <img src="img/teasers/search.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                  </a>
+                  <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
+                    <img src="img/teasers/library.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                  </a>
+                  <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
+                    <img src="img/teasers/downloads.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                  </a>
+                  <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
+                    <img src="img/teasers/profile-stats.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                  </a>
+                  <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
+                    <img src="img/teasers/quality-sources.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+                  </a>
                 </div>
               </div>
 
@@ -1676,6 +1730,30 @@
                   <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
                 </svg>
                 Releases on GitHub
+              </a>
+            </div>
+
+            <div class="ak-showcase ak-showcase-desktop" aria-hidden="true">
+              <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
+                <img src="img/teasers/player.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+              </a>
+              <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
+                <img src="img/teasers/details.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+              </a>
+              <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
+                <img src="img/teasers/search.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+              </a>
+              <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
+                <img src="img/teasers/library.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+              </a>
+              <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
+                <img src="img/teasers/downloads.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+              </a>
+              <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
+                <img src="img/teasers/profile-stats.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
+              </a>
+              <a class="ak-showcase-card" href="screenshots.html" tabindex="-1">
+                <img src="img/teasers/quality-sources.webp" alt="" width="600" height="849" loading="lazy" decoding="async">
               </a>
             </div>
           </div>
@@ -2938,22 +3016,32 @@
       }
 
       /* ==========================================================================
-         MOBILE SHOWCASE (round-14) — the screenshots in the floating frame
-         crossfade every few seconds. Decorative: aria-hidden container, no
-         interaction, and the cycle never starts under reduced motion (the
-         global safety net would make the swaps instant flashes instead).
+         SHOWCASE DECK (round-15) — three stylized teasers stay visible while
+         the deck shuffles forward every few seconds. Runs on both instances
+         (desktop hero + mobile CTA row), but only the one actually laid out
+         ticks (offsetParent check); skipped entirely under reduced motion —
+         the global net would turn the shuffle into instant teleporting.
          ========================================================================== */
-      var showcase = document.getElementById("ak-showcase");
-      if (showcase && !reduceMotionMq.matches) {
-        var showcaseImgs = showcase.querySelectorAll(".ak-showcase-img");
-        var showcaseIdx = 0;
+      document.querySelectorAll(".ak-showcase").forEach(function (deck) {
+        var cards = deck.querySelectorAll(".ak-showcase-card");
+        if (cards.length < 2) return;
+        var deckIdx = 0;
+        var RANKS = ["is-front", "is-behind", "is-far"];
+        function deal() {
+          for (var i = 0; i < cards.length; i++) {
+            var r = (i - deckIdx + cards.length) % cards.length;
+            for (var k = 0; k < RANKS.length; k++) cards[i].classList.remove(RANKS[k]);
+            if (r < RANKS.length) cards[i].classList.add(RANKS[r]);
+          }
+        }
+        deal();
+        if (reduceMotionMq.matches) return;
         setInterval(function () {
-          if (document.hidden || showcaseImgs.length < 2) return;
-          showcaseImgs[showcaseIdx].classList.remove("is-active");
-          showcaseIdx = (showcaseIdx + 1) % showcaseImgs.length;
-          showcaseImgs[showcaseIdx].classList.add("is-active");
-        }, 4200);
-      }
+          if (document.hidden || !deck.offsetParent) return;
+          deckIdx = (deckIdx + 1) % cards.length;
+          deal();
+        }, 3800);
+      });
 
       /* ---- boot ------------------------------------------------------------------ */
       renderTags();
