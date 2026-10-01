@@ -44,11 +44,11 @@ Not sure which build fits? **universal** runs on any Android device.
 
 | File | For |
 |---|---|
-| [`Ani-Kuta-arm64-v8a.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.3/Ani-Kuta-arm64-v8a.apk) | **Most modern phones** — 64-bit ARM |
-| [`Ani-Kuta-armeabi-v7a.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.3/Ani-Kuta-armeabi-v7a.apk) | Older devices — 32-bit ARM |
-| [`Ani-Kuta-x86_64.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.3/Ani-Kuta-x86_64.apk) | Emulators, Chromebooks — 64-bit Intel |
-| [`Ani-Kuta-x86.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.3/Ani-Kuta-x86.apk) | Older x86 devices and boxes — 32-bit Intel |
-| [`Ani-Kuta-universal.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.3/Ani-Kuta-universal.apk) | Every architecture in one APK (largest) |
+| [`Ani-Kuta-arm64-v8a.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.14/Ani-Kuta-arm64-v8a.apk) | **Most modern phones** — 64-bit ARM |
+| [`Ani-Kuta-armeabi-v7a.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.14/Ani-Kuta-armeabi-v7a.apk) | Older devices — 32-bit ARM |
+| [`Ani-Kuta-x86_64.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.14/Ani-Kuta-x86_64.apk) | Emulators, Chromebooks — 64-bit Intel |
+| [`Ani-Kuta-x86.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.14/Ani-Kuta-x86.apk) | Older x86 devices and boxes — 32-bit Intel |
+| [`Ani-Kuta-universal.apk`](https://github.com/Confused-Creature-180/ANI-KUTA/releases/download/v1.1.14/Ani-Kuta-universal.apk) | Every architecture in one APK (largest) |
 
 Prefer a smaller download? Every build above also ships as a **highly compressed ZIP** — pick **APK** or **ZIP** on the website and grab `Ani-Kuta-<build>.zip` from the same release.
 
@@ -68,4 +68,4 @@ Requires **Android 7.0 or higher**.
 
 ## License
 
-Not finalized yet — this is only the first release.
+Not finalized yet.
